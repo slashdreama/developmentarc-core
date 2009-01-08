@@ -73,7 +73,7 @@ hash.remove(person);
 hash.removeAll();
 }}}
 
-= Considerations =
+== Considerations ==
 
 With any API/Data set there are always considerations that need to be made when using the technology.  Its always better to know about these potential issues before hand, rather then implementing the technology and then realizing it does not behave the way that was originally intended.
 
