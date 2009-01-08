@@ -1,4 +1,4 @@
-#summary The !HashTable is a key/value pair data structure for use in all !ActionScript 3 / Flash Platform applications.
+#summary The HashTable is a key/value pair data structure for use in all ActionScript 3 / Flash Platform applications.
 #labels Phase-Implementation,Phase-Support
 
 = Introduction =
