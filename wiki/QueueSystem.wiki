@@ -1,0 +1,14 @@
+#summary The Queue system allows for items to be stored and retrieved a specified order depending on the Queue structure used.
+#labels Phase-Implementation,Phase-Support
+
+= Introduction =
+
+The goal of the Queue system is to allow any type of mixed data, from scalars to complex objects, to be stored in a specified sequential order and then retrieved in that order when required. The Queue system is made up of two different Data Structures, the standard Queue and the !PriorityQueue.  The standard Queue stores data linearly in the order added and the returned based on either First in First out (FIFO) or Last in First Out (LIFO) order.  The !PriorityQueue stores data in order of priority, which is assigned at the time of addition to the queue.  This means that higher priority items are always returned before lower priority items.  The queues are relatively simple data structures that enable other functionality within Core, such as the Task System yet they can also be leveraged by any Flash Platform application that uses Core.
+
+= The Standard Queue =
+
+The standard Queue is a First in First out (FIFO) or Last in First Out (LIFO) ordered collection that uses an internal Array to store the content of the item. Items are stored in the order they are added and the returned based on the sort order direction for the queue.  The Queue offers the ability to both reorder the queue by removing items and then adding items at specific places and has other convenience methods to verify the number of items in the queue or if queue contains any items.
+
+[QueueDataStructure Read more about the standard Queue data structure]
+
+= The !PriorityQueue = 
