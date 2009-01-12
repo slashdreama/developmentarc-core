@@ -93,6 +93,11 @@ The SelectionController provides low-level control of a group of selectable item
 == Creating a SelectionGroup ==
 You can create a group either by MXML of ActionScript.
 === MXML ===
+Note: When creating with MXML, you can define the items in the group during the declaration.
 {{{
 <controllers:SelectionGroup id="selectionGroup" items="{[item1,item2,item3,item4]}"/>
 }}}
+=== ActionScript ===
+{{{
+var selectionGroup:SelectionGroup = new SelectionGroup();
+}}
