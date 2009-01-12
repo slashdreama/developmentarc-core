@@ -6,7 +6,13 @@ The Selection Management system provides a way to make any object selectable and
 
 = Creating a Selectable Item =
 
-To create a selectable item, simple implement the !ISelectable interface and define a get and set method for the selected attribute.
+To create a selectable item, implement the !ISelectable interface and define a get and set method for the selected attribute. The set method should analyze the Boolean value provided and display the correct state of the object based on the value.  If the value is true, the object should show the selected state, otherwise unselected.  
+
+In the example below, we will look at the value and set the classname based on its value.  The current selected value is saved inside of a private variable "selected".  
+
+
+
+
 
 = Using The !SelectionController =
 
