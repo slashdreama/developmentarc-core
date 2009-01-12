@@ -10,10 +10,24 @@ To create a selectable item, implement the !ISelectable interface and define a g
 
 In the example below, we will look at the value and set the classname based on its value.  The current selected value is saved inside of a private variable "selected".  
 
-
-
-
-
+{{{
+public class SelectionGroupObject extends Container implements ISelectable
+{
+  private var __selected:Boolean;
+		
+  public function get selected():Boolean
+  {
+     return __selected;
+  }
+  
+  public function set selected(value:Boolean):void
+  {
+     __selected = value;
+			
+    className = (__selected) ? "selectedItem" : "unSelectedItem";
+  }
+}
+}}}
 = Using The !SelectionController =
 
 = Using The !SelectionGroup =
