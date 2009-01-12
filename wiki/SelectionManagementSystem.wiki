@@ -51,8 +51,7 @@ Items can be removed one by one using removeItem.
 SelectionController.removeItem(selectionItem,_groupId);
 }}}
 == Selecting an item ==
-To select an item you must call the selectItem method on the controller. The controller will take responsibility for calling the selected property on each item in the group.  The item passed into selectItem() will be passed a value of true, all others will be given false.
-
+To select an item you must call the selectItem method on the controller. The controller will take responsibility for setting the selected property on each item in the group.  The item passed in will get a value of true, all others will be set to false. Remember it is up to the ISelectionItem implementation to actually change the state of the object.  The controller simple sets boolean values on each object in the group.
 {{{
 SelectionController.selectItem(selectionItem);
 }}}
