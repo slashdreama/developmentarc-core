@@ -11,7 +11,7 @@ To create a selectable item, implement the ISelectable interface and define a ge
 In the example below, we will look at the value and set the classname based on its value.  The current selected value is saved inside of a private variable "selected".  
 
 {{{
-public class SelectionGroupObject extends Container implements ISelectable
+public class SelectionGroupObject extends UIComponent implements ISelectable
 {
   private var __selected:Boolean;
 		
@@ -29,5 +29,23 @@ public class SelectionGroupObject extends Container implements ISelectable
 }
 }}}
 = Using The !SelectionController =
+The !SelectionController is the main class of the system.  Developers have a choice to interact directly with this class or use the SelectionGroup to bypass direct interaction. with the controller.  Developers who want full control over selecting and unselecting items should use the controller directly.  An example use case is for a custom tab based system where each tab object is part of a selection group and upon selection, the tab should not select until data is returned from the server. In order to execute this behavior, the invoking class would have to listen to both the selection of the item and an event from the service layer indicating data has been returned from the server.  Below we will learn how to create a selection group from the controller, add/remove items, and how to select an item and deselect all items in the group.
+
+
+== Creating a Group ==
+
+== Adding items ==
+
+== Removing an item ==
+
+== Selecting an item ==
+
+== Deselecting all items ==
+
+
+
+
+
+
 
 = Using The !SelectionGroup =
