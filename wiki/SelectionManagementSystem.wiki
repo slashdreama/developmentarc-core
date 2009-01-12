@@ -29,11 +29,15 @@ public class SelectionGroupObject extends UIComponent implements ISelectable
 }
 }}}
 = Using The !SelectionController =
-The !SelectionController is the main class of the system.  Developers have a choice to interact directly with this class or use the SelectionGroup to bypass direct interaction. with the controller.  Developers who want full control over selecting and unselecting items should use the controller directly.  An example use case is for a custom tab based system where each tab object is part of a selection group and upon selection, the tab should not select until data is returned from the server. In order to execute this behavior, the invoking class would have to listen to both the selection of the item and an event from the service layer indicating data has been returned from the server.  Below we will learn how to create a selection group from the controller, add/remove items, and how to select an item and deselect all items in the group.
+The !SelectionController is the main class of the system.  This class is a Singleton and provides static method to encapsulate the singleton instance.  Developers have a choice to interact directly with this class or use the !SelectionGroup to bypass direct interaction. with the controller.  Developers who want full control over selecting and unselecting items should use the controller directly.  An example use case is for a custom tab based system where each tab object is part of a selection group and upon selection, the tab should not select until data is returned from the server. In order to execute this behavior, the invoking class would have to listen to both the selection of the item and an event from the service layer indicating data has been returned from the server.  Below we will learn how to create a selection group from the controller, add/remove items, and how to select an item and deselect all items in the group.
 
 
 == Creating a Group ==
+The selection controller generates a group id via the !generateNewId method.  This id is passed into all method to access the group and perform various operations such as adding and removing items.
 
+{{{
+_groupId = SelectionController.generateNewId();
+}}}
 == Adding items ==
 
 == Removing an item ==
