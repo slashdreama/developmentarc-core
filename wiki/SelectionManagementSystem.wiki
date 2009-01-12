@@ -140,7 +140,7 @@ In the code below, we define one custom event and one event from the Flash API.T
 </mx:HBox>
 }}}
 
-=== ActionScript ===
+=== !ActionScript ===
 A thing to note, that become apparent in AcionScript, the set of events must be defined before the items are selected. This is because, when items are added to a group, the events are added as event listeners. If the events are not defined, then the default event MouseEvent.CLICK will be assigned.
 
 {{{
