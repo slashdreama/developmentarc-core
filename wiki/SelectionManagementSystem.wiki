@@ -107,7 +107,7 @@ var selectionGroup:SelectionGroup = new SelectionGroup();
 When adding items to a group, it must be an Array. Each time the items property on SelectionGroup is set, the current set of items will be removed from the group and the new group will be applied.  If the group is created in MXML, the items proprerty can be set during declaration. In ActionScript the items must be declared and assigned to an array before they are added to the group.
 === MXML ===
 {{{
-<controllers:SelectionGroup id="selectionGroup" items="\{[item1,item2]\}" />
+<controllers:SelectionGroup id="selectionGroup" items="[item1,item2]" />
 <mx:HBox horizontalGap="30">
    <local:SelectableItem id="item1" width="10" height="10"/>
    <local:SelectableItem id="item2" width="10" height="10"/>
