@@ -45,15 +45,14 @@ Items are added to a group one by one via the addItem method.
 var selectionItem:SelectionItem = new SelectionItem();
 SelectionController.addItem(selectionItem, _groupId);
 }}}
-== Removing an item ==
+== Removing an single item ==
 Items can be removed one by one using removeItem or all items can be removed using removeAllItems.
 {{{
 SelectionController.removeItem(selectionItem,_groupId);
-// or
-var selectionItem2:SelectionItem = new SelectionItem();
-SelectionController.addItem(selectionItem, _groupId);
-SelectionController.addItem(selectionItem2, _groupId);
 
+== Removing all items from a group ==
+If you have more than one item in a group and want to remove all items in that group use removeAllItems.
+{{{
 SelectionController.removeAllItems(_groupId);
 }}}
 == Selecting an item ==
