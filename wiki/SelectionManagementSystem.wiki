@@ -88,6 +88,7 @@ var items:Array = SelectionController.getAllItemsInGroup(_groupId);
 
 = Using The !SelectionGroup =
 The SelectionController provides low-level control of a group of selectable items.  However, in most cases, this extra control is not needed. Also, by using the SelectionController, the ability to declare add items via MXML into a group is not possible. This is where a SelectionGroup comes in. To use a SelectioGroup a developer will define an instance of the group and assign items to that group. The group will encapsulate the interaction with the SelectionController (the controller still does the work).  The group allows developers define items into a group and be done with it. This means, you wont have to write extra code to select and unselect items.  The group by default will listen to the click event of each item in the group and will select/deselect items based on the event. A SelectionGroup allows developers to define a set of events the group should listen to. These events can be custom, Flex, or Flash API events.  Below we will explore how to create a SelectionGroup via MXML and ActionScript and how to assign items to the new group.  Also, we will show you how to employ custom events.
+Remember, the goal of the SelectionGroup is to limit the amount of code a developer has to write in order to select and deselect items. The group does all this work for you, so you can focus on business logic and not generic behavior.
 
 Note, that the SelectionGroup will listen to events on the ISelectable items, so the class must implement or extend from a class that defines !IEventDispatcher.  
 
@@ -104,7 +105,7 @@ var selectionGroup:SelectionGroup = new SelectionGroup();
 }}}
 
 == Adding Items ==
-When adding items to a group, it must be an Array. Each time the items property on SelectionGroup is set, the current set of items will be removed from the group and the new group will be applied.  If the group is created in MXML, the items proprerty can be set during declaration. In ActionScript the items must be declared and assigned to an array before they are added to the group.
+When adding items to a group, it must be an Array. Each time the items property on SelectionGroup is set, the current set of items will be removed from the group and the new set will be applied.  If the group is created in MXML, the items property can be set during declaration. In ActionScript the items must be declared and assigned to an array before they are added to the group.
 === MXML ===
 {{{
 <controllers:SelectionGroup id="selectionGroup" items="{[item1,item2]}" />
@@ -122,5 +123,34 @@ var items:Array = [item1,item2]
 
 var selectionGroup:SelectionGroup = new SelectionGroup();
 
+selectionGroup.items = items;
+}}}
+
+== Adding Custom Events ==
+With the SelectionGroup you can define a set of events that the group will listen for on each item in the group.  The set of events is defined as a comma seperated list of strings, that define the event type.  The group will handle each event and select the item that dispatched the event, while deselecting all others.  The events can be custom events defined by you, or out-of-the-box events in the Flex or Flash API.  If no events are defined in the group, the default event will be MouseEvent.CLICK.
+
+=== MXML ===
+In the code below, we define one custom event and one event from the Flash API.The group will select and deselect when either event is dispatched.
+
+{{{
+<controllers:SelectionGroup id="selectionGroup" items="{[item1,item2]}" events="{MouseEvent.CLICK}, {CustomEvent.FIRE}"/>
+<mx:HBox horizontalGap="30">
+   <local:SelectableItem id="item1" width="10" height="10"/>
+   <local:SelectableItem id="item2" width="10" height="10"/>
+</mx:HBox>
+}}}
+
+=== ActionScript ===
+A thing to note, that become apparent in AcionScript, the set of events must be defined before the items are selected. This is because, when items are added to a group, the events are added as event listeners. If the events are not defined, then the default event MouseEvent.CLICK will be assigned.
+
+{{{
+var item1:SelectionItem = new SelectionItem();
+var item2:SelectionItem = new SelectionItem();
+
+var items:Array = [item1,item2]
+
+var selectionGroup:SelectionGroup = new SelectionGroup();
+
+selectionGroup.events = [MouseEvent.CLICK, CustomEvent.FIRE].join(",");
 selectionGroup.items = items;
 }}}
