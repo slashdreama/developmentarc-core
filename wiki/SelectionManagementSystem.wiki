@@ -87,3 +87,12 @@ var items:Array = SelectionController.getAllItemsInGroup(_groupId);
 
 
 = Using The !SelectionGroup =
+The SelectionController provides low-level control of a group of selectable items.  However, in most cases, this extra control is not needed. Also, by using the SelectionController, the ability to declare add items via MXML into a group is not possible. This is where a SelectionGroup comes in. To use a SelectioGroup a developer will define an instance of the group and assign items to that group. The group will encapsulate the interaction with the SelectionController (the controller still does the work).  The group allows developers define items into a group and be done with it. This means, you wont have to write extra code to select and unselect items.  The group by default will listen to the click event of each item in the group and will select/deselect items based on the event. A SelectionGroup allows developers to define a set of events the group should listen to. These events can be custom, Flex, or Flash API events.  Below we will explore how to create a SelectionGroup via MXML and ActionScript and how to assign items to the new group.  Also, we will show you how to employ custom events.
+
+
+== Creating a SelectionGroup ==
+You can create a group either by MXML of ActionScript.
+=== MXML ===
+{{{
+<controllers:SelectionGroup id="selectionGroup" items="{[item1,item2,item3,item4]}"/>
+}}}
