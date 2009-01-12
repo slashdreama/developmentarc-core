@@ -73,9 +73,17 @@ If you want to reset the group and deselect all items and not have to write extr
 SelectionController.deselectAll(_groupId);
 }}}
 
+== Get Item Group ==
+If for some reason you dont have access to the group id, but do have access to an ISelectable item, you can figure out the group id by using getItemGroup. Simply pass in the ISelectable item and the method will return the group id. If the ISelectable item is not part of a group, the method will return -1.
+{{{
+var groupId:int = SelectionController.getItemGroup(selectionItem);
+}}}
 
-
-
+== Get All Items in a Group ==
+With a group id you can retrieve an array containing all items in the group. Use getAllItemsInGroup to perform this functionality.
+{{{
+var items:Array = SelectionController.getAllItemsInGroup(_groupId);
+}}}
 
 
 = Using The !SelectionGroup =
