@@ -61,8 +61,17 @@ To select an item you must call the selectItem method on the controller. The con
 SelectionController.selectItem(selectionItem);
 }}}
 
+== Get selected item ==
+If you need to identify and gain reference to the currently selected items (there can be more than one if you set it up to do so) you can use getSelected.
+{{{
+var items:Array = SelectionController.getSelected(_groupId);
+}}}
+ 
 == Deselecting all items ==
-
+If you want to reset the group and deselect all items and not have to write extra code to identify the current selected item and then use a remove for each item, there is a handy method that can do it for you in one line, deselectAll.
+{{{
+SelectionController.deselectAll
+}}}
 
 
 
