@@ -46,9 +46,15 @@ var selectionItem:SelectionItem = new SelectionItem();
 SelectionController.addItem(selectionItem, _groupId);
 }}}
 == Removing an item ==
-Items can be removed one by one using removeItem.
+Items can be removed one by one using removeItem or all items can be removed using removeAllItems.
 {{{
 SelectionController.removeItem(selectionItem,_groupId);
+// or
+var selectionItem2:SelectionItem = new SelectionItem();
+SelectionController.addItem(selectionItem, _groupId);
+SelectionController.addItem(selectionItem2, _groupId);
+
+SelectionController.removeAllItems(_groupId);
 }}}
 == Selecting an item ==
 To select an item you must call the selectItem method on the controller. The controller will take responsibility for setting the selected property on each item in the group.  The item passed in will get a value of true, all others will be set to false. Remember it is up to the ISelectionItem implementation to actually change the state of the object.  The controller simple sets boolean values on each object in the group.
