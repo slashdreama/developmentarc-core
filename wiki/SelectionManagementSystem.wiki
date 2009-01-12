@@ -46,7 +46,7 @@ var selectionItem:SelectionItem = new SelectionItem();
 SelectionController.addItem(selectionItem, _groupId);
 }}}
 == Removing an single item ==
-Items can be removed one by one using removeItem or all items can be removed using removeAllItems.
+Items can be removed one by one using removeItem.
 {{{
 SelectionController.removeItem(selectionItem,_groupId);
 }}}
