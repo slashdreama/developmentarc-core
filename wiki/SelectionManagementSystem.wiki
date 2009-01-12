@@ -11,7 +11,7 @@ To create a selectable item, implement the ISelectable interface and define a ge
 In the example below, we will look at the value and set the classname based on its value.  The current selected value is saved inside of a private variable "selected".  
 
 {{{
-public class SelectionGroupObject extends UIComponent implements ISelectable
+public class SelectionItem extends UIComponent implements ISelectable
 {
   private var __selected:Boolean;
 		
@@ -33,15 +33,23 @@ The !SelectionController is the main class of the system.  This class is a Singl
 
 
 == Creating a Group ==
-The selection controller generates a group id via the !generateNewId method.  This id is passed into all method to access the group and perform various operations such as adding and removing items.
+The selection controller generates a group id via the generateNewId method.  This id is passed into all method to access the group and perform various operations such as adding and removing items.
 
 {{{
 _groupId = SelectionController.generateNewId();
 }}}
 == Adding items ==
+Items are added to a group one by one via the addItem method.  
 
+{{{
+var selectionItem:SelectionItem = new SelectionItem();
+SelectionController.addItem(selectionItem, _groupId);
+}}}
 == Removing an item ==
-
+Items can be removed one by one using removeItem.
+{{{
+SelectionController.removeItem(selectionItem,_groupId);
+}}}
 == Selecting an item ==
 
 == Deselecting all items ==
