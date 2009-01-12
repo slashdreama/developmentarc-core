@@ -51,6 +51,11 @@ Items can be removed one by one using removeItem.
 SelectionController.removeItem(selectionItem,_groupId);
 }}}
 == Selecting an item ==
+To select an item you must call the selectItem method on the controller. The controller will take responsibility for calling the selected property on each item in the group.  The item passed into selectItem() will be passed a value of true, all others will be given false.
+
+{{{
+SelectionController.selectItem(selectionItem);
+}}}
 
 == Deselecting all items ==
 
