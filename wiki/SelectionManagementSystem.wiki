@@ -49,7 +49,7 @@ SelectionController.addItem(selectionItem, _groupId);
 Items can be removed one by one using removeItem or all items can be removed using removeAllItems.
 {{{
 SelectionController.removeItem(selectionItem,_groupId);
-
+}}}
 == Removing all items from a group ==
 If you have more than one item in a group and want to remove all items in that group use removeAllItems.
 {{{
