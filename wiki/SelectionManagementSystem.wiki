@@ -6,6 +6,8 @@ The Selection Management system provides a way to make any object selectable and
 
 = Creating a Selectable Item =
 
+To create a selectable item, simple implement the !ISelectable interface and define a get and set method for the selected attribute.
+
 = Using The !SelectionController =
 
 = Using The !SelectionGroup =
