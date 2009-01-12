@@ -70,7 +70,7 @@ var items:Array = SelectionController.getSelected(_groupId);
 == Deselecting all items ==
 If you want to reset the group and deselect all items and not have to write extra code to identify the current selected item and then use a remove for each item, there is a handy method that can do it for you in one line, deselectAll.
 {{{
-SelectionController.deselectAll
+SelectionController.deselectAll(_groupId);
 }}}
 
 
