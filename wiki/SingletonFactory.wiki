@@ -56,7 +56,7 @@ A single instance can be removed from the factory by utilizing the clearSingleto
 }}}
 
 == All Instances ==
-If an application needs to fully reset and all singletons need to be removed, you can use the clearAllSingletonInstances method to do so.
+If an application needs to fully reset and all singletons are to be removed, you can use the clearAllSingletonInstances method to do so.
 
 {{{
     // Get current user
