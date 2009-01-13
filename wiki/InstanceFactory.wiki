@@ -6,7 +6,7 @@ The !InstanceFactory provides a means to creating a single instance of a class. 
 
 = Creating an Singleton Instance =
 To create a singleton instance, pass a class type into the 	
-getSingletonInstance method. If the instance has not already been created, the factory will create the instance and store it in a key/value table, otherwise the instance will be looked up and returned. In the example below, we have an application which keeps state in mutliple sections of the application. These states, are not shared across the different sections so storing them in application scope is not required, therefore we will use the InstanceFactory instead.
+getSingletonInstance method. If the instance has not already been created, the factory will create the instance and store it in a key/value table, otherwise the instance will be looked up and returned. In the example below, we have an application which keeps state in mutliple sections of the application. These states, are not shared across the different sections so storing them in application scope is not required, therefore we will use the !InstanceFactory instead.
 
 == Our Model Class ==
 Here's the model class we will use throughout this documentation.
