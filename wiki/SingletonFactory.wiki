@@ -1,14 +1,75 @@
 #summary Utility class used to turn any object into a singleton.
 
 = Introduction =
-The SingletonFactory can be used to turn any object in your application into a singleton. A singleton is a pattern that restricts the instantiation of an object to one instance.  Using this factory only one object will be created per Class Type.  However, outside of the factory, there is no restriction or control.  Below we will detail the working of the class.
+The !SingletonFactory can be used to turn any object in your application into a singleton. A singleton is a pattern that restricts the instantiation of an object to one instance.  Using this factory only one object will be created per Class Type.  However, outside of the factory, there is no restriction or control.  The SingletonFactory is itself a singleton (via a SingletonLock) but encapsulates the single instance inside of static methods. That way developers can use the SingletonFactory as if it was a static utility class.   Below we will detail the available APIs for the class.
 
 
 = Creating an Singleton Instance =
 To create a singleton instance, pass a class type into the 	
-getSingletonInstance method. If the instance has not already been created, the factory will create the instance and store it in a key/value table, otherwise the instance will be looked up and returned.  A good use case is the Model Locator pattern. In many applications, there is a need to an application wide Model class. We could either make the Model class a singleton via an [http://blog.vivisectingmedia.com/2008/06/the-extendable-singleton-pattern ActionScript Singleton pattern], or utilize the SingletonFactory out-of-box.
+getSingletonInstance method. If the instance has not already been created, the factory will create the instance and store it in a key/value table, otherwise the instance will be looked up and returned.  A good use case is the model locator pattern. In many applications, there is a need to an application wide user model class. We could either make the model class a singleton via a [http://blog.vivisectingmedia.com/2008/06/the-extendable-singleton-pattern !ActionScript Singleton pattern], or utilize the !SingletonFactory out-of-box. The !SingletonFactory provides an easy means to accomplishing the pattern with less code.  
+
+== Our Model Class ==
+Here's our model class, we will use through out this documentation.
+{{{
+   public class UserModel {
+      public var id:uint;
+      public var firstName:String;
+      public var lastName:String 
+   }   
+}}}
+
+== Creating a Singleton ==
 
 {{{
+   // The instance is created and stored in the factory
+   var user:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+   user.id = 1;
+   // The stored instance is retrieved and passed back.
+   var user2:UserModel = SingletonFactory.getSingletonInstance(UserModel);
 
+   // This will evaluate true
+   if(user.id == user2.id) {
+      Alert.show("Users are identical")
+   }
+}}}
+
+= Remove an Instance(s) =
+The SingletonFactory provides two method to clear instances from the factory. One removes a specific instance (clearSingletonInstance) and another removes all instances in the factory (clearAllSingletonInstances).
+
+== Single Instance ==
+A single instance can be removed from the factory by utilizing the clearSingletonInstance method. This method is useful when you are resetting an application. In the case of our user, if a user logs off and logs on with a different user, we would want to make sure we have removed the old user from the system before setting a new one. 
+
+{{{
+    // Get current user
+    var currentUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+    // Remove current user
+    SingletonFactory.clearSingletonInstance(UserModel);
+
+    // Create new user
+    newUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+
+    // This will evaluate false
+   if(currentUser != newUser) {
+      Alert.show("Users are not the same instance")
+   }
+    
+}}}
+
+== All Instances ==
+If an application needs to fully reset and all singletons need to be removed, you can use the clearAllSingletonInstances method to do so.
+
+{{{
+    // Get current user
+    var currentUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+    // Remove all models, including the UserModel
+    SingletonFactory.clearAllSingletonInstances();
+
+    // Create new user
+    newUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+
+    // This will still evaluate false
+   if(currentUser != newUser) {
+      Alert.show("Users are not the same instance")
+   }
 
 }}}
