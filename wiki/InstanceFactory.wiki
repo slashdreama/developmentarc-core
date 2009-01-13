@@ -3,6 +3,79 @@
 = Introduction =
 The !InstanceFactory provides a means to creating a single instance of a class. The goal is to provide a way for different areas of an application to create and hold onto single instances of objects, without the overhead of managing their creation and retrieval.  The !InstanceFactory is similar to the SingletonFactory in that is creates a class one time, and holds on to that class until it is removed or the end of the application's life.  The available API is identical to the SingletonFactory.  The only different between the two factories is, the !InstanceFactory must be instantiated where as the SingletonFactory is used as static class and methods.  Below we will demonstrate if of the available methods.
 
+= Create an Instance of the Factory =
+Unlike the SingletonFactory you must create an instance of the InstanceFactory before you can begin using it.  
 
+{{{
+  var instanceFactory:InstanceFactory = new InstanceFactory();
+}}}
 
+= Creating an Singleton Instance =
+To create a singleton instance, pass a class type into the 	
+getSingletonInstance method. If the instance has not already been created, the factory will create the instance and store it in a key/value table, otherwise the instance will be looked up and returned.  A good instance of using 
 
+== Our Model Class ==
+Here's the model class we will use throughout this documentation.
+{{{
+   public class UserModel {
+      public var id:uint;
+      public var firstName:String;
+      public var lastName:String 
+   }   
+}}}
+
+== Creating a Singleton ==
+
+{{{
+   // The instance is created and stored in the factory
+   var user:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+   user.id = 1;
+   // The stored instance is retrieved and passed back.
+   var user2:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+
+   // This will evaluate true
+   if(user.id == user2.id) {
+      Alert.show("Users are identical")
+   }
+}}}
+
+= Remove an Instance(s) =
+The SingletonFactory provides two method to clear instances from the factory. One removes a specific instance (clearSingletonInstance) and another removes all instances in the factory (clearAllSingletonInstances).
+
+== Single Instance ==
+A single instance can be removed from the factory by utilizing the clearSingletonInstance method. This method is useful when you are resetting an application. In the case of our user, if a user logs off and logs on with a different user, we would want to make sure we have removed the old user from the system before setting a new one. 
+
+{{{
+    // Get current user
+    var currentUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+    // Remove current user
+    SingletonFactory.clearSingletonInstance(UserModel);
+
+    // Create new user
+    newUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+
+    // This will evaluate false
+   if(currentUser != newUser) {
+      Alert.show("Users are not the same instance")
+   }
+    
+}}}
+
+== All Instances ==
+If an application needs to fully reset and all singletons are to be removed, you can use the clearAllSingletonInstances method to do so.
+
+{{{
+    // Get current user
+    var currentUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+    // Remove all models, including the UserModel
+    SingletonFactory.clearAllSingletonInstances();
+
+    // Create new user
+    newUser:UserModel = SingletonFactory.getSingletonInstance(UserModel);
+
+    // This will still evaluate false
+   if(currentUser != newUser) {
+      Alert.show("Users are not the same instance")
+   }
+
+}}}
