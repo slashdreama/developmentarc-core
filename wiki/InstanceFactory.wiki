@@ -20,7 +20,7 @@ Here's the model class we will use throughout this documentation.
 
 
 = Create an Instance of the Factory =
-Unlike the SingletonFactory you must create an instance of the InstanceFactory before you can begin using it.  
+Unlike the SingletonFactory you must create an instance of the !InstanceFactory before you can begin using it.  
 
 {{{
   var instanceFactory:InstanceFactory = new InstanceFactory();
@@ -29,7 +29,7 @@ Unlike the SingletonFactory you must create an instance of the InstanceFactory b
 == Creating a Singleton ==
 
 {{{
-   // Use our new InstanceFactory and create an instance of the SectionModel and store it
+   // Use our new !InstanceFactory and create an instance of the SectionModel and store it
    // in the factory
    var sectionModel:SectionModel = instanceFactory.getSingletonInstance(SectionModel);
    sectionModel.isShowing = true;
