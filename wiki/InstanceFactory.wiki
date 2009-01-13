@@ -1,14 +1,8 @@
 #summary A factory class that provides the ability to create single instances at any level of scope within an application
 
 = Introduction =
-The !InstanceFactory provides a mean to creating a single instance of a class similar to a !ClassFactory. The goal is to provide a way for different areas of an application to create and hold onto single instances of objects, without the overhead of managing their creation and retrieval.  The InstanceFactory is similar to the SingletonFactory in that is creates a class one time, and holds on to that class until it is removed or the end of the application's life.  
-
-Add your content here.
+The !InstanceFactory provides a means to creating a single instance of a class. The goal is to provide a way for different areas of an application to create and hold onto single instances of objects, without the overhead of managing their creation and retrieval.  The !InstanceFactory is similar to the SingletonFactory in that is creates a class one time, and holds on to that class until it is removed or the end of the application's life.  The available API is identical to the SingletonFactory.  The only different between the two factories is, the !InstanceFactory must be instantiated where as the SingletonFactory is used as static class and methods.  Below we will demonstrate if of the available methods.
 
 
-= Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+
