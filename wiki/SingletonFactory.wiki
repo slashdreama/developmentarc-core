@@ -6,7 +6,7 @@ The !SingletonFactory can be used to turn any object in your application into a 
 
 = Creating an Singleton Instance =
 To create a singleton instance, pass a class type into the 	
-getSingletonInstance method. If the instance has not already been created, the factory will create the instance and store it in a key/value table, otherwise the instance will be looked up and returned.  A good use case is the model locator pattern. In many applications, there is a need to an application wide user model class. We could either make the model class a singleton via a [http://blog.vivisectingmedia.com/2008/06/the-extendable-singleton-pattern !ActionScript Singleton pattern], or utilize the !SingletonFactory out-of-box. The !SingletonFactory provides an easy means to accomplishing the pattern with less code.  
+getSingletonInstance method. If the instance has not already been created, the factory will create the instance and store it in a key/value table, otherwise the instance will be looked up and returned.  A good use case for using the !SingletonFactory is the model locator pattern. In many applications, there is a need to an application wide user model class. We could either make the model class a singleton via a [http://blog.vivisectingmedia.com/2008/06/the-extendable-singleton-pattern !ActionScript Singleton pattern], or utilize the !SingletonFactory out-of-box. The !SingletonFactory provides an easy means to accomplishing the pattern with less code.  
 
 == Our Model Class ==
 Here's our model class, we will use through out this documentation.
