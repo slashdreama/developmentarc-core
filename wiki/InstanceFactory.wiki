@@ -29,11 +29,11 @@ Unlike the SingletonFactory you must create an instance of the InstanceFactory b
 == Creating a Singleton ==
 
 {{{
-   // user our InstanceFactory and create an instance of the SecionModel and store
+   // Use our new InstanceFactory and create an instance of the SectionModel and store it
    // in the factory
    var sectionModel:SectionModel = instanceFactory.getSingletonInstance(SectionModel);
    sectionModel.isShowing = true;
-   // The stored instance is retrieved and passed back.
+   // Retrieve the stored instance.
    var sectionModel2:SectionModel = instanceFactory.getSingletonInstance(SectionModel);
 
    // This will evaluate true
@@ -46,7 +46,7 @@ Unlike the SingletonFactory you must create an instance of the InstanceFactory b
 The !InstanceFactory provides two method to clear instances from the factory. One removes a specific instance (clearSingletonInstance) and another removes all instances in the factory (clearAllSingletonInstances).
 
 == Single Instance ==
-A single instance can be removed from the factory by utilizing the clearSingletonInstance method. This method is useful when you want to clean up dead instances when a section of your application is discard at runtime. By removing your instance before the section is removed (maybe it a module that is unloaded), you can clean up all instances to ensure all references have been removed so GC can occur.  
+A single instance can be removed from the factory by utilizing the clearSingletonInstance method. This method is useful when you want to clean up dead instances when a section of your application. By removing your instance before the section is removed (maybe it a module that is unloaded), you can clean up all instances to ensure all references have been removed so GC can occur.  
 
 {{{
     // Remove current section model
@@ -56,7 +56,7 @@ A single instance can be removed from the factory by utilizing the clearSingleto
 }}}
 
 == All Instances ==
-In most cases however,when you are unloading a module, you would want to make sure all instances are cleared from the InstanceFactory, therefor you would use clearAllSingletonInstances to remove all instances.
+In most cases however,when you are unloading a module, you would want to make sure all instances are cleared from the !InstanceFactory, therefor you would use clearAllSingletonInstances to remove all instances.
 
 {{{
     // Remove all instances
