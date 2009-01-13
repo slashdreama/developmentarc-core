@@ -34,7 +34,7 @@ Here's the model class we will use throughout this documentation.
 }}}
 
 = Remove an Instance(s) =
-The SingletonFactory provides two method to clear instances from the factory. One removes a specific instance (clearSingletonInstance) and another removes all instances in the factory (clearAllSingletonInstances).
+The !SingletonFactory provides two method to clear instances from the factory. One removes a specific instance (clearSingletonInstance) and another removes all instances in the factory (clearAllSingletonInstances).
 
 == Single Instance ==
 A single instance can be removed from the factory by utilizing the clearSingletonInstance method. This method is useful when you are resetting an application. In the case of our user, if a user logs off and logs on with a different user, we would want to make sure we have removed the old user from the system before setting a new one. 
