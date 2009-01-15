@@ -12,3 +12,7 @@ The standard Queue is a First in First out (FIFO) or Last in First Out (LIFO) or
 [QueueDataStructure Read more about the standard Queue data structure]
 
 = The !PriorityQueue = 
+
+The !PriorityQueue is a sort ordered queue based on a specified priority assigned to the item when it is added to the queue.  When an item is added, the queue handles looking at existing items, evaluates their priority value and then re-sorts the queue based on the give priorities of the new item and the existing items.  Higher priority items are always kept at the top of the queue and lower priority items are kept at the end of the queue.  Unlike the standard Queue, the !PriorityQueue does not have a direction value, all sorting and retrieval are based on the assigned priority value.
+
+[PriorityQueue Read more about the !PriorityQueue data structure]
