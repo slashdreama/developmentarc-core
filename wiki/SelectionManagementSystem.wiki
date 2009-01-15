@@ -1,4 +1,5 @@
-#summary The Selection Management system enables any type of object the ability to become selectable and be treated as part of a group similar to a Flex's !RadioButtonGroup.
+#summary The Selection Management system enables any type of object the ability to become selectable and be treated as part of a group similar to a Flex's RadioButtonGroup.
+#labels Phase-Implementation,Phase-Support
 
 = Introduction =
 
