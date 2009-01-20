@@ -2,36 +2,27 @@
 
 = Introduction =
 
-Task System is a priority queuing system that enables an application to execute specific bundles of business and/or server logic in a specific order based on priority and overrides.   These bundles are encapsulated inside of Tasks, which can be bundled inside of a specific data structure called TaskGroups.  Tasks and task groups have the ability to take priority over other tasks or task groups inside of the queue, as well as replace existing tasks in the queue based on a set of overrides an individual task can define.
+Task System is a priority queuing system that enables an application to execute specific bundles of business and/or server logic in a specific order based on priority and overrides.   These bundles are encapsulated inside of Tasks, which can be bundled inside of a specific data structure called !TaskGroups.  Tasks and task groups have the ability to take priority over other tasks or task groups inside of the queue, as well as replace existing tasks in the queue based on a set of overrides an individual task can define.
 
-The goal of the framework is to prevent stacking of duplicate server calls, such as when update fires over and over.  For the TrackSimple application the existing action system will be the broker for generating specific view tasks such as loading the proper view's data (Dashboard, Overview, Campaign, etc...). The logic to call services will be moved from Actions into individual Tasks and each action will contain a group of tasks required for a particular view.   Note: All FirstEchelon code is MIT licensed and resides under the vivisectingmedia package.
 
-==TaskController==
+==!TaskController==
 
-The TaskController class is the main manager of the task system framework. This class is responsible for managing current tasks in a task system. When a task is added to the controller, the tasks overrides are applied removing any existing tasks from the queue that matches an override. Overrides do pertain to tasks that are currently active, those will be canceled and removed from the queue. Next the task is added to the internal priority queue in the proper order.
+The !TaskController class is the main manager of the task system framework. This class is responsible for managing current tasks in a task system. When a task is added to the controller, the tasks overrides are applied removing any existing tasks from the queue that matches an override. Overrides do pertain to tasks that are currently active, those will be canceled and removed from the queue. Next the task is added to the internal priority queue in the proper order.
+
 The controller starts a set of tasks based on the active task limit set on the controller. By default 2 tasks can be concurrently active within the controller.  When a task is complete the controller will remove the task from the active list and start the next one in the queue, if any.
 
-The TaskController is also responsible for managing overrides.  Overrides enable tasks to prevent other tasks from stacking in the queue.  For example, when a user selects the Overview tab, the controller would receive a task to get the sparkline data.  While this request is out getting data, the user may change tabs requiring different data and a new task is added to the controller.  At this point the sparkline task is no longer needed and should be cancelled.  The override system allow the newly added task to cacnel the sparkline task when it is added to the controller, because it is no longer needed.
+The !TaskController is also responsible for managing overrides.  Overrides enable tasks to prevent other tasks from stacking in the queue.  For example, when a user selects the Overview tab, the controller would receive a task to get the sparkline data.  While this request is out getting data, the user may change tabs requiring different data and a new task is added to the controller.  At this point the sparkline task is no longer needed and should be cancelled.  The override system allow the newly added task to cacnel the sparkline task when it is added to the controller, because it is no longer needed.
 
-The TaskController, by default, is not a singleton and the goal of the framework is to allow multiple Task systems to be running in any given application. For example, one task system can be created to manage server requests while another can be used to control internal business operations. To create multiple systems, simply create multiple instances of the TaskController.
+The !TaskController, by default, is not a singleton and the goal of the framework is to allow multiple Task systems to be running in any given application. For example, one task system can be created to manage server requests while another can be used to control internal business operations. To create multiple systems, simply create multiple instances of the !TaskController.
 
-To use the TaskController as a singleton, utilize the SingletonFactory utility class within the ViviSectingMedia library.  For examples of the SingletonFactory, refer to the DashboardViewAction.
+To use the !TaskController as a singleton, utilize the SingletonFactory utility class within the !ViviSectingMedia library.
 
-==AbstractTask==
+==!AbstractTask==
 
-The AbstractTask is the base class to extend all Tasks from. The TaskController does not require a Task to extend from AbstractTask, but looks for an ITask. The AbstractTask is provided as a starting point to define basic types, events and implementations of the required interface API.
+The !AbstractTask is the base class to extend all Tasks from. The !TaskController does not require a Task to extend from !AbstractTask, but looks for an !ITask. The !AbstractTask is provided as a starting point to define basic types, events and implementations of the required interface API.
 
-==TaskGroup==
+==!TaskGroup==
 
-The TaskGroup is a data structure that allows a set of tasks to be grouped together as a collection. The TaskGroup can then be added to the TaskController and all of the grouped task will be executed first before the next task in the controller is processed.
+The !TaskGroup is a data structure that allows a set of tasks to be grouped together as a collection. The !TaskGroup can then be added to the !TaskController and all of the grouped task will be executed first before the next task in the controller is processed.
 
-When an override is provided to the task controller, the task group acts as a parent type and the task group will remove all tasks if the provided override matches the group type. The individual type of the task is ignored in this case. Tasks added to the group can override the same as if they were added directly to the TaskController. Upon adding a task, the TaskGroup will evaluate the tasks overrides and the tasks selfOverrding value. After this evaluation the TaskGroup will take appropriate action depending on the different settings. The functionality is similar to the TaskController's override mechanism.  Please note, TaskGroups can not contain other TaskGroups.
-
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+When an override is provided to the task controller, the task group acts as a parent type and the task group will remove all tasks if the provided override matches the group type. The individual type of the task is ignored in this case. Tasks added to the group can override the same as if they were added directly to the !TaskController. Upon adding a task, the !TaskGroup will evaluate the tasks overrides and the tasks selfOverrding value. After this evaluation the !TaskGroup will take appropriate action depending on the different settings. The functionality is similar to the !TaskController's override mechanism.  Please note, !TaskGroups can not contain other !TaskGroups.
