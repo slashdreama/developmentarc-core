@@ -4,11 +4,11 @@
 
 The !EventBroker is a publisher/subscriber utility class used to decouple event communication between multiple classes in an application.  Publisher classes can broadcast events without direct knowledge of subscriber classes. When an event is broadcasted, the !EventBroker is responsible to communicating with each subscriber class, calling the callback method on that class. 
 
-The EventBroker class itself is implemented as a Singleton Facade, with a four public static methods that wrap the Singleton instance. Each method and their usage is broken down below.
+The !EventBroker class itself is implemented as a Singleton Facade, with a four public static methods that wrap the Singleton instance. Each method and their usage is broken down below.
 
 
 = Event ==
-Events passed through the system must extend the Event class.  Throughout our examples below we will leverage an event class defined as CustomEvent.  If custom data is not required, a class can simple leverage the Event class passing in a custom event type.   
+Events passed through the system must extend the Event class.  Throughout our examples below we will leverage an event class defined as !CustomEvent.  If custom data is not required, a class can simple leverage the Event class passing in a custom event type.   
 
 {{{
   public class LoadingEvent extends Event {
@@ -52,5 +52,6 @@ public class SubscriberComponent extends UIComponent {
 }
 
 = UnSubscribe =
-When a component is removed from the system
+When a component is removed from the application, all subscriptions should be removed.  The unsuscribe method takes the same a parameters as the subscribe method, an event type and the component's callback method.
+
 
