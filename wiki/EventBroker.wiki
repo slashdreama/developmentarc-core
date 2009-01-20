@@ -2,12 +2,10 @@
 
 = Introduction =
 
-Add your content here.
+The utility class is used to decouple event communication between multiple classes in an application.  A broadcast class sends events 
 
 
-= Details =
+= Publisher Class =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+
+= Subscriber Class =
