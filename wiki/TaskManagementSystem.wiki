@@ -19,7 +19,7 @@ To use the !TaskController as a singleton, utilize the SingletonFactory utility 
 
 ==!AbstractTask==
 
-The !AbstractTask is the base class to extend all Tasks from. The !TaskController does not require a Task to extend from !AbstractTask, but looks for an !ITask. The !AbstractTask is provided as a starting point to define basic types, events and implementations of the required interface API.
+The !AbstractTask is the base class to extend all Tasks from. The !TaskController does not require a Task to extend from !AbstractTask, but looks for an ITask. The !AbstractTask is provided as a starting point to define basic types, events and implementations of the required interface API.
 
 ==!TaskGroup==
 
