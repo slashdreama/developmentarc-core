@@ -4,7 +4,7 @@
 
 The !EventBroker is a publisher/subscriber utility class used to decouple event communication between multiple classes in an application.  Publisher classes can broadcast events without direct knowledge of subscriber classes. When an event is broadcasted, the !EventBroker is responsible to communicating with each subscriber class, calling the callback method on that class. 
 
-The !EventBroker class itself is implemented as a Singleton Facade, with a four public static methods that wrap the Singleton instance. Each method and their usage is broken down below.
+The !EventBroker class itself is implemented as a Singleton Facade, with four public static methods that wrap the Singleton instance. Each method and their usage is broken down below.
 
 
 = Event ==
