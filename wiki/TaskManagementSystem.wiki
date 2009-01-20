@@ -15,7 +15,7 @@ The !TaskController is also responsible for managing overrides.  Overrides enabl
 
 The !TaskController, by default, is not a singleton and the goal of the framework is to allow multiple Task systems to be running in any given application. For example, one task system can be created to manage server requests while another can be used to control internal business operations. To create multiple systems, simply create multiple instances of the !TaskController.
 
-To use the !TaskController as a singleton, utilize the SingletonFactory utility class within the [[http://code.google.com/p/developmentarc-core/w/list ViviSectingMedia ]] library.
+To use the !TaskController as a singleton, utilize the SingletonFactory utility class within the [http://code.google.com/p/developmentarc-core/w/list ViviSectingMedia] library.
 
 ==!AbstractTask==
 
