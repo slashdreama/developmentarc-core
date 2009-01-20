@@ -2,10 +2,55 @@
 
 = Introduction =
 
-The !EventBroker is a publisher/subscriber utility class used to decouple event communication between multiple classes in an application.  Publisher classes can broadcast events without direct knowledge of subscriber classes. When an event is broadcasted, the !EventBroker is responsible to communicating with each subscriber class, calling the callback method on that class.  
+The !EventBroker is a publisher/subscriber utility class used to decouple event communication between multiple classes in an application.  Publisher classes can broadcast events without direct knowledge of subscriber classes. When an event is broadcasted, the !EventBroker is responsible to communicating with each subscriber class, calling the callback method on that class. 
+
+The EventBroker class itself is implemented as a Singleton Facade, with a four public static methods that wrap the Singleton instance. Each method and their usage is broken down below.
 
 
-= Publisher Class =
+= Event ==
+Events passed through the system must extend the Event class.  Throughout our examples below we will leverage an event class defined as CustomEvent.  If custom data is not required, a class can simple leverage the Event class passing in a custom event type.   
 
+{{{
+  public class LoadingEvent extends Event {
+      public static var EVENT_TYPE:String = "CUSTOM_EVENT";
+      
+      // Custom data
+      public var id:uint;
+  }
 
-= Subscriber Class =
+}}}
+
+= Publish =
+A publisher class will use the broadcast method to dispatch events through the event sub-system. The class will send the event to the !EventBroker without any knowledge of those classes subscribing to the event. 
+
+{{{
+public class PublisherComponent extends UIComponent {
+
+  public function sendMessage():void {
+     var event:CustomEvent = new CustomEvent(CustomEvent.EVENT_TYPE);
+     event.id = 1234;
+
+     // Broadcast event to all subscribers
+     EventBroker.broadcast(event);
+
+  }
+}
+}}}
+
+= Subscribe =
+To be notified an event has occurred a class must subscribe to an event type and provide a callback method which will be invoked when the defined event type is published.  Upon the event being broadcasted, the EventBroker, will invoke the defined callback method on each subscriber for that particular event.
+
+public class SubscriberComponent extends UIComponent {
+
+   override public function initialize():void {
+     EventBroker.subscribe(CustomEvent.EVENT_TYPE, handleBroadcastedEvent);
+   }
+   
+   protected function handleBroadcastedEvent(event:CustomEvent) {
+     trace("Event id is " + event.id);
+   }
+}
+
+= UnSubscribe =
+When a component is removed from the system
+
