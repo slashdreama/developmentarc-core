@@ -40,18 +40,40 @@ public class PublisherComponent extends UIComponent {
 = Subscribe =
 To be notified an event has occurred a class must subscribe to an event type and provide a callback method which will be invoked when the defined event type is published.  Upon the event being broadcasted, the EventBroker, will invoke the defined callback method on each subscriber for that particular event.
 
+Architecture Note: When a component subscribes to multiple event types, define two methods, one to subscribe all events and one to unsubscribe. 
+
+{{{
+
 public class SubscriberComponent extends UIComponent {
 
    override public function initialize():void {
-     EventBroker.subscribe(CustomEvent.EVENT_TYPE, handleBroadcastedEvent);
+     addSubscriptions();
    }
    
+   protected function addSubscriptions():void {
+     EventBroker.subscribe(CustomEvent.EVENT_TYPE, handleBroadcastedEvent);
+   }
+
    protected function handleBroadcastedEvent(event:CustomEvent) {
      trace("Event id is " + event.id);
    }
 }
 
-= UnSubscribe =
-When a component is removed from the application, all subscriptions should be removed.  The unsuscribe method takes the same a parameters as the subscribe method, an event type and the component's callback method.
+}}}
+= !UnSubscribe =
+When a component is removed from the application, all subscriptions should be removed.  The unsubscribe method takes the same a parameters as the subscribe method, an event type and the component's callback method.
 
+ 
+{{{
 
+public class SubscriberComponnet extends UIComponent {
+    // Method cleans up internal class references, that possibly could stop GC from occuring when method is removed.
+    public function destroy():void  {
+      removeSubscription();
+    }
+
+    protected function removeSubscriptions():void {
+      EventBroker.unsubscribe(CustomEvent.EVENT_TYPE, handleBroadcastedEvent);       
+    }
+}
+}}}
