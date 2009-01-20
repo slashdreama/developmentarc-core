@@ -77,3 +77,18 @@ public class SubscriberComponnet extends UIComponent {
     }
 }
 }}}
+
+= Clear All Subscriptions =
+Method removes all subscriptions in the !EventBroker sub-system.  This method should be used with caution because it will remove all linkages in the application without direct knowledge of what is actually being removed.
+
+
+{{{
+   public class CustomApplication extends Application {
+
+     private method removeAllSubscriptions():void {
+        // Remove all subscriptions in the application
+        EventBroker.clearAllSubscriptions();
+     }
+   }
+
+}}}
