@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The utility class is used to decouple event communication between multiple classes in an application.  A broadcast class sends events 
+The !EventBroker is a publisher/subscriber utility class used to decouple event communication between multiple classes in an application.  Publisher classes can broadcast events without direct knowledge of subscriber classes. When an event is broadcasted, the !EventBroker is responsible to communicating with each subscriber class, calling the callback method on that class.  
 
 
 = Publisher Class =
