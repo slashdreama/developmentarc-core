@@ -38,7 +38,7 @@ public class PublisherComponent extends UIComponent {
 }}}
 
 = Subscribe =
-To be notified an event has occurred a class must subscribe to an event type and provide a callback method which will be invoked when the defined event type is published.  Upon the event being broadcasted, the EventBroker, will invoke the defined callback method on each subscriber for that particular event.
+To be notified an event has occurred a class must subscribe to an event type and provide a callback method which will be invoked when the defined event type is published.  Upon the event being broadcasted, the !EventBroker, will invoke the defined callback method on each subscriber for that particular event.
 
 Architecture Note: When a component subscribes to multiple event types, define two methods, one to subscribe all events and one to unsubscribe. By creating a common pattern, developers can move from class to class and know where all subscriptions live.
 
