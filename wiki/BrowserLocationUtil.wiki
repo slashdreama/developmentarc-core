@@ -36,7 +36,7 @@ protocal:String
       var path:String = BrowserLocationUtil.path // '/path/is/here/'
       var query:String = BrowserLocationUtil.query // 'param1=value1'
       var parameters:Object = BrowserLocationUtil.parameters // {param1:'value1'}
-      var fragment:String = BrowserLocationUtil.fragment // page2
+      var fragment:String = BrowserLocationUtil.fragment // 'page2'
     }
 
 }}}
