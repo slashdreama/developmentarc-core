@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* ***** BEGIN MIT LICENSE BLOCK *****
+ * 
+ * Copyright (c) 2009 DevelopmentArc LLC
+ * version: 1.0
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ *
+ * ***** END MIT LICENSE BLOCK ***** */
+-->
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute">
+	
+	<!-- CONNECTION CODE -->
+	<mx:Script>
+		<![CDATA[
+			import com.developmentarc.localconnection.LCMessage;
+			import com.developmentarc.framework.utils.events.LocalConnectionEvent;
+			import com.developmentarc.framework.utils.LocalConnectionManager;
+			
+			public var conn:LocalConnectionManager;
+			public var localName:String;
+			public var targetName:String;
+			
+			public function createConnection():void {
+				// update output
+				localName = local_name_text.text;
+				targetName = target_name_text.text;
+				display_output.htmlText += "<font color='#009900'>Attempting to connect to '"+localName+"' connection.</font><br/>";
+				
+				if(!conn) {
+					conn = new LocalConnectionManager(this, localName, null, auto_connect_chk.selected);
+					conn.addEventListener(LocalConnectionEvent.CONNECTION_ERROR, handleLCMEvent);
+					conn.addEventListener(LocalConnectionEvent.SENT_MESSAGE_ERROR, handleLCMEvent);
+					conn.addEventListener(LocalConnectionEvent.STATUS_MESSAGE, handleLCMEvent);
+				}
+				
+				if(!conn.connected || !auto_connect_chk.selected) {
+					// connect
+					conn.connect(localName);
+				}
+				
+				
+			}
+			
+			public function disconnectConnection():void {
+				display_output.htmlText += "<font color='#009900'>Disconnecting from the LocalConnection.</font><br/>";
+				if(conn) {
+					conn.disconnect();
+					conn.removeEventListener(LocalConnectionEvent.CONNECTION_ERROR, handleLCMEvent);
+					conn.removeEventListener(LocalConnectionEvent.SENT_MESSAGE_ERROR, handleLCMEvent);
+					conn.removeEventListener(LocalConnectionEvent.STATUS_MESSAGE, handleLCMEvent);
+				}
+			}
+			
+			public function sendMessage():void {
+				if(!conn) return;
+				var msg:LCMessage = new LCMessage();
+				msg.message = msg_text.text;
+				msg.connId = localName;
+				conn.sendMessage(targetName, "recieveMessage", msg);
+			}
+			
+			public function recieveMessage(msg:LCMessage):void {
+				display_output.htmlText += "<font color='#000099'>Message Sent from '"+msg.connId+"': '"+msg.message+"'.</font><br/>";
+			}
+			
+			public function handleRadioChange(event:Event):void {
+				switch(event.currentTarget) {
+					case radio_1:
+						local_name_text.text = "conn1";
+						target_name_text.text = "conn2";
+					break;
+					
+					case radio_2:
+						local_name_text.text = "conn2";
+						target_name_text.text = "conn1";
+					break;
+				}
+			}
+			
+			protected function handleLCMEvent(event:LocalConnectionEvent):void {
+				switch(event.type) {
+					case LocalConnectionEvent.CONNECTION_ERROR:
+						display_output.htmlText += "<font color='#990000'>Connection Error: "+event.errorMessage+"</font><br/>";
+					break;
+					
+					case LocalConnectionEvent.SENT_MESSAGE_ERROR:
+						display_output.htmlText += "<font color='#990000'>Sent Message Error: "+event.errorMessage+"</font><br/>";
+					break;
+					
+					case LocalConnectionEvent.STATUS_MESSAGE:
+						display_output.htmlText += "Status Message '"+event.statusMessage+"' connection.<br/>";
+					break;
+				}
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<!-- APP UI -->
+	<mx:Panel 
+		title="LCM Test Panel"
+		width="800"
+		height="600" 
+		verticalCenter="0" 
+		horizontalCenter="0">
+		
+		<mx:VDividedBox
+			backgroundColor="#CCCCCC"
+			width="100%" 
+			height="100%" 
+			paddingBottom="10" 
+			paddingLeft="10" 
+			paddingRight="10" 
+			paddingTop="10">
+			<mx:VBox width="100%">
+				<!-- CONNECT / DISCONNECT UI -->
+				<mx:HBox>
+					<mx:RadioButton id="radio_1" groupName="conGroup" label="Connection One" change="handleRadioChange(event)" selected="true" />
+					<mx:RadioButton id="radio_2" groupName="conGroup" label="Connection Two" change="handleRadioChange(event)" />
+				</mx:HBox>
+				<mx:HBox>
+					<mx:Button id="connect_button" label="connect" click="createConnection()" />
+					<mx:Button id="disconnect_button" label="disconnect" click="disconnectConnection()" />
+					<mx:Label text="This Connection:" />
+					<mx:TextInput id="local_name_text" text="conn1" />
+					<mx:Label text="Target Connection:" />
+					<mx:TextInput id="target_name_text" text="conn2" />
+				</mx:HBox>
+				<mx:HBox>
+					<mx:CheckBox id="auto_connect_chk" label="use auto-connect" selected="true" />
+				</mx:HBox>
+				
+				<!-- MESSAGE CONTROLS -->
+				<mx:HBox>
+					<mx:Label text="Message To Send:" />
+					<mx:TextInput id="msg_text" width="300" text="This is a test message." />
+					<mx:Button id="msg_button" label="send message" click="sendMessage()" />
+				</mx:HBox>
+			</mx:VBox>
+			
+			<!-- OUTPUT UI -->
+			<mx:TextArea
+				id="display_output"
+				text="Starting test application..."
+				width="100%" 
+				height="100%" />
+		</mx:VDividedBox>
+	</mx:Panel>
+</mx:Application>
