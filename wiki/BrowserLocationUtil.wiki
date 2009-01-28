@@ -9,10 +9,17 @@ The Utility class provides a series of static properties that retrieve informati
 
 == URL Properties ==
 
+
 {{{
 https://google.com:8080/path/is/here/?param1=value1#page2
 \___/   \________/ \__/\____________/ \___________/ \__/
   |        |        |       |               |        |
-  |   server name  port    path            query  fragment    
-protocal 
+  |        |        |       |               |      fragment:String
+  |        |        |       |           query:String
+  |        |        |       |               |    
+  |        |        |       |             parameters:Object
+  |        |        |      path:String      
+  |        |       port:uint
+  |    serverName:String                       
+protocal:String
 }}}
