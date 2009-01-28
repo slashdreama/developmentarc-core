@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The Utility class provides a series of static properties that retrieve information from the current URL. When a property is accessed, the url is retrieved from the browser via ExternalInterface so the url is always the most current.  No custom JavaScript is necessary for the class to work.  The class simply leverages the window.location.href object, which is available in all browsers.  
+The Utility class provides a series of static properties that retrieve information from the current URL. When a property is accessed, the url is retrieved from the browser via !ExternalInterface so the url is always the most current.  No custom !JavaScript is necessary for the class to work.  The class simply leverages the window.location.href object, which is available in all browsers.  
 
 
 = Details =
