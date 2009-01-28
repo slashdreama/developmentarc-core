@@ -2,12 +2,15 @@
 
 = Introduction =
 
-The utility class provides a series of method to 
+The Utility class provides a series of static properties that retrieve information from the current URL. When a property is accessed, the url is retrieved from the browser via ExternalInterface so the url is always the most current.  No custom JavaScript is necessary for the class to work.  The class simply leverages the window.location.href object, which is available in all browsers.  
 
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== URL Property ==
+
+https://google.com:8080/path/is/here/?param1=value1#page2
+\___/   \________/ \__/\____________/ \___________/ \__/
+  |        |        |       |               |        |
+  |   server name  port    path            query  fragment    
+protocal 
