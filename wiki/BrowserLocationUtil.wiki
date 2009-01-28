@@ -7,7 +7,8 @@ The Utility class provides a series of static properties that retrieve informati
 
 = Details =
 
-== URL Property ==
+== URL Properties ==
+
 {{{
 https://google.com:8080/path/is/here/?param1=value1#page2
 \___/   \________/ \__/\____________/ \___________/ \__/
