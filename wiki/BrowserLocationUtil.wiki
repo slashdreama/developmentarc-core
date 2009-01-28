@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The Utility class provides a series of static properties that retrieve information from the current URL. When a property is accessed, the url is retrieved from the browser via !ExternalInterface so the url is always the most current.  No custom !JavaScript is necessary for the class to work.  The class simply leverages the window.location.href object, which is available in all browsers.  
+The Utility class provides a series of static properties that retrieve information from the current URL. When a property is accessed, the url is retrieved from the browser via !ExternalInterface so the url is always the most current.  No custom !JavaScript is necessary for the class to work.  The class simply leverages the browser's window.location.href object.    
 
 
 = Details =
@@ -14,12 +14,12 @@ The Utility class provides a series of static properties that retrieve informati
 https://google.com:8080/path/is/here/?param1=value1#page2
 \___/   \________/ \__/\____________/ \___________/ \__/
   |        |        |       |               |        |
-  |        |        |       |               |      fragment:String
+  |        |        |       |               |    fragment:String
   |        |        |       |           query:String
   |        |        |       |               |    
-  |        |        |       |             parameters:Object
-  |        |        |      path:String      
-  |        |       port:uint
-  |    serverName:String                       
+  |        |        |       |         parameters:Object
+  |        |        |   path:String      
+  |        |    port:uint
+  |  serverName:String                       
 protocal:String
 }}}
