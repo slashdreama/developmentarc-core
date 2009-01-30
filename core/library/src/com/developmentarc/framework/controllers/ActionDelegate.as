@@ -190,7 +190,7 @@ package com.developmentarc.framework.controllers
 		 */
 		protected function handleCommandChange(event:Event):void {
 			var action:IAction = IAction(event.currentTarget);
-			if(_activeCommands.containsItem(action)) {
+			if(_activeCommands.containsKey(action)) {
 				// unregister previous commands
 				unregisterCommands(action, _activeCommands.getItem(action) as Array);
 			}
