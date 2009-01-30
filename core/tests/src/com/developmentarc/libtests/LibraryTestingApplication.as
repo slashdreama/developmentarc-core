@@ -26,6 +26,7 @@
 package com.developmentarc.libtests
 {
 	import com.developmentarc.flexunit.TestUtils;
+	import com.developmentarc.libtests.tests.ActionDelegateTests;
 	import com.developmentarc.libtests.tests.AdjustableDateTests;
 	import com.developmentarc.libtests.tests.BrowserLocationUtilTest;
 	import com.developmentarc.libtests.tests.EventBrokerTests;
@@ -63,6 +64,7 @@ package com.developmentarc.libtests
 		private var priorityqueue:PriorityQueueTests;
 		private var taskgroup:TaskGroupTests;
 		private var browserLocationUtil:BrowserLocationUtilTest;
+		private var actionDelegateTests:ActionDelegateTests;
 		
 		public function LibraryTestingApplication()
 		{
@@ -98,7 +100,9 @@ package com.developmentarc.libtests
 			suite.addTest( TestUtils.generateFullSuite(PriorityQueueTests) );
 			suite.addTest( TestUtils.generateFullSuite(TaskControllerTests) );
 			suite.addTest( TestUtils.generateFullSuite(BrowserLocationUtilTest) );
+			suite.addTest( TestUtils.generateFullSuite(ActionDelegateTests) );
 			//*/
+			
 			
 			return suite;
 		}
