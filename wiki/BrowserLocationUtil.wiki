@@ -12,14 +12,14 @@ The Utility class provides a series of static properties that retrieve informati
 
 {{{
 https://www.developmentarc.com:8080/path/is/here/?param1=value1#page2
-\___/   \____________________/ \__/\____________/ \___________/ \__/
-  |                |        |       |               |        |
-  |                |        |       |               |    fragment:String
-  |                |        |       |           query:String
-  |                |        |       |               |    
-  |                |        |       |         parameters:Object
-  |                |        |   path:String      
-  |                |    port:uint
+\___/   \____________________/ \__/\____________/ \___________/ \___/
+  |                |             |       |               |        |
+  |                |             |       |               |    fragment:String
+  |                |             |       |           query:String
+  |                |             |       |               |    
+  |                |             |       |         parameters:Object
+  |                |             |   path:String      
+  |                |         port:uint
   |           serverName:String                       
 protocal:String
 }}}
