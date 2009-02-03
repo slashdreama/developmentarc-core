@@ -18,12 +18,22 @@ The controller starts a set of tasks based on the active task limit set on the c
 The !TaskController is also responsible for managing overrides.  When a task is added to the controller, the tasks overrides are applied removing any existing tasks from the queue that matches an override. Overrides do pertain to tasks that are currently active, those will be canceled and removed from the queue. Next the task is added to the internal priority queue in the proper order.
 
 
-==!AbstractTask==
+==!Task==
 
-The !AbstractTask is the base class to extend all Tasks from. The !TaskController does not require a Task to extend from !AbstractTask, instead only the ITask interface is required. The !AbstractTask is provided as a starting point that define basic types, events and common method implementations of the required interface.
+To create a task one can extend from the !AbstractTask, which is the base class that defines basic types, events, and common methods implementations of the required ITask interface. The !TaskController does not require a Task to extend from !AbstractTask, instead only the ITask interface is required.
 
 ==!TaskGroup==
 
 The !TaskGroup is a data structure that allows a set of tasks to be grouped together as a collection. The !TaskGroup can then be added to the !TaskController and all of the grouped task will be executed first before the next task in the controller queue is processed.
 
 When an override is provided to the !TaskController, the !TaskGroup acts as a parent type and the !TaskGroup will remove all tasks if the provided override matches the group type. The individual type of the task is ignored in this case. However, Tasks added to the group can override the same way as if they were added directly to the !TaskController. Upon adding a task, the !TaskGroup will evaluate the tasks overrides and the tasks selfOverrding value. After this evaluation the !TaskGroup will take appropriate action depending on the different settings. The functionality is similar to the !TaskController's override mechanism.  Please note, !TaskGroups can not contain other !TaskGroups.
+
+
+= How To ==
+
+== Create a Task ==
+
+
+== Utilize !TaskGroup ==
+
+== Add Task to !TaskController ==
