@@ -174,7 +174,7 @@ public function applyAction(event:ActionEvent):void {
 == Applying Overrides ==
 One of the most important features one gains by using the Task System is the ability to override other tasks (business logic).  This becomes very useful when user actions drive the execution of these tasks. If a user is "click happy" and clicks on multiple items on a UI, each of which execute a set of business tasks, the system can get overloaded and slow down or pummel the server with unneccessary calls.  The task system helps allievate such use cases by providing the ability for tasks to define a set of overrides. These overrides are Task types. When a task or task group is added to a task system, the overrides types are processed and all tasks that match are removed from the task system.  Tasks or groups that are currently active are stopped and then removed.
 
-In our example below, we will define one new task that defines our previous tasks are overrides. Upon added an instance of the task to the controller, the other tasks are removed.
+In our example below, we will define one new task that defines our previous tasks are overrides. AbstractTask defines a protected property currentOverrides which you can set during construction.  Upon added an instance of the task to the controller, the other tasks are removed.
 
 {{{
 
@@ -190,6 +190,10 @@ public class UserDetailsTask extends AbstractTask {
 	public var userId:uint;
 	
 	public function UserDetailsTask(id:uint){
+               
+               // Task overrides both CompanyDetailsTask and CompanyUserTask
+               currentOverrides = [CompanyDetailsTask.TASK_TYPE, CompanyUsersTask.TASK_TYPE]
+
 		// Set user id
 		userId = id;
 		
@@ -206,5 +210,39 @@ public class UserDetailsTask extends AbstractTask {
 		_httpService.send({userId:userId});
 	}
 }
+
+}}}
+
+In our revised applyAction method, we will add our old tasks as we did before (and pretend there are other tasks already in the queue which will make these tasks queued and not started) and then add our new task right after. This will result in our first two tasks being removed from the task controller. Note we are using individual task and not the task group as we did in the last section.
+
+{{{
+{{{
+public function applyAction(event:CompanyCommand):void {
+	var companyId:uint = event.companyId;
+	var userId:uint = event.userId;
+	
+	// Create tasks
+	var taskCompanyDetails:ITask = new CompanyDetailsTask(companyId);
+	var taskCompanyUsers:ITask = new CompanyUsersTask(companyId);
+
+        // Override task
+        var taskUserDetails:ITask = new UserDetailsTask(userId);
+	 
+	// Retrieve application task controller (we only have one in this example)
+	var taskController:TaskController = SingletonFactory.getSingletonInstance(TaskController);
+			
+	// Add tasks (If no tasks are in queue, tasks are executed the moment they are added to the queue)
+	taskController.addTask(taskCompanyDetails);
+	taskController.addTask(taskCompanyUsers);
+
+       // Add overriding task
+       taskController.addTask(taskUserDetails);
+
+      // Verify only one task is in task system
+      Alert.show(taskController.
+}
+
+}}}
+
 }}}
 == Task Events ==
