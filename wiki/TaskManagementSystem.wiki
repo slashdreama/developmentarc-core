@@ -39,8 +39,15 @@ When an override is provided to the !TaskController, the !TaskGroup acts as a pa
 = How To ==
 
 == Create a Task ==
+As mentioned above under the introduction a task is a bundle of business logic that a developer wishes to run in a queue. One of the best examples of a task implementation is wrapping a server call to be executed in a particular order under the control of a thread count.  In systems that execute large number of service calls a Task system can provide the detailed control to stop, override, and swap order of the queue adding valuable efficiency throughout the system.  Below we will create two tasks that execute service calls to two factitious api on DevelopmentArc's domain. The first will pull details of a company and the second will pull a list of users from the same company id.  Neither task is dependent on the other, however they are related in that the same company id is used by both
 
+{{{
+
+public class
+}}}
+
+== Add Task to !TaskController ==
 
 == Utilize !TaskGroup ==
 
-== Add Task to !TaskController ==
+== Applying Overrides ==
