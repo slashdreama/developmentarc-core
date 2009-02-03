@@ -137,7 +137,8 @@ public function applyAction(event:ActionEvent):void {
 	
 	// Create task group
 	var taskGroup:TaskGroup = new TaskGroup("COMPANY_GROUP", 2);
-	// Create tasks
+	
+       // Create tasks
 	var taskCompanyDetails:ITask = new CompanyDetailsTask(companyId);
 	var taskCompanyUsers:ITask = new CompanyUsersTask(companyId);
 			 
@@ -147,6 +148,7 @@ public function applyAction(event:ActionEvent):void {
 	// Add tasks to group
         taskGroup.addTask(taskCompanyDetails);
 	taskGroup.addTask(taskCompanyUsers);
+
 	// Add task group
 	taskController.addTask(taskGroup);	
 }
