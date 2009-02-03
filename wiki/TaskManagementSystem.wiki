@@ -126,6 +126,30 @@ public function applyAction(event:CompanyCommand):void {
 
 }}}
 
-== Utilize !TaskGroup ==
+== Using a !TaskGroup ==
+In the above example we add two tasks to the controller independently of each other.  In some case we want to group items together to insure each task is run in a paticular order related to it's group tasks. To accomplish this we can add our task to a group and then add that group to the task controller. This will insure no task that enters the system can cut in front of an individual task of the group.  The task group itself can define a priority, that way when added to the system it can cut in front of less important tasks. This goes both ways, if a task group has not started executing a task with higher priority can jump in front of the entire group.  If the group has started, a task or task group with high priority will wait behind the task group.
+
+Notice, below we create the task group and define the type and priority. A task group is handled as a task in side of task controller, so the same properties apply as a task.  We also define the task group dynamically for simplicity sake. If you see the need, extend the !TaskGroup class and add the type and priority similar to how we defined our tasks above.
+
+{{{
+public function applyAction(event:ActionEvent):void {
+	var companyId:uint = event.companyId;
+	
+	// Create task group
+	var taskGroup:TaskGroup = new TaskGroup("COMPANY_GROUP", 2);
+	// Create tasks
+	var taskCompanyDetails:ITask = new CompanyDetailsTask(companyId);
+	var taskCompanyUsers:ITask = new CompanyUsersTask(companyId);
+			 
+	// Retrieve application task controller (we only have one in this example)
+	var taskController:TaskController = SingletonFactory.getSingletonInstance(TaskController);
+			
+	// Add tasks to group
+        taskGroup.addTask(taskCompanyDetails);
+	taskGroup.addTask(taskCompanyUsers);
+	// Add task group
+	taskController.addTask(taskGroup);	
+}
+}}}
 
 == Applying Overrides ==
