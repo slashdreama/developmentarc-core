@@ -106,6 +106,25 @@ public class CompanyUsersTask extends AbstractTask {
 }}}
 
 == Add Task to !TaskController ==
+In most systems you will add tasks at a middle-tier layer of your application code such as Cairngorm's command framework.   This allows for all business logic or in our case construction of business logic to occur in one level of your application. DevelopmentArc has a similar layer in it's framework which we call the Action/Command System.  In a given action, an applyAction method is called when a command is dispatched in the system.  For more information about the Action/Command pattern see [[here]].  In our example below we will illustrate a simple applyAction method that creates our two tasks, based on the company id supplied by the action event and then add both tasks to the task controller. In our example, we have one task controller in the application which we manage via the SingletonFactory.
+
+{{{
+public function applyAction(event:ActionEvent):void {
+		var companyId:uint = event.companyId;
+		
+	// Create tasks
+	var taskCompanyDetails:ITask = new CompanyDetailsTask(companyId);
+	var taskCompanyUsers:ITask = new CompanyUsersTask(companyId);
+	 
+	// Retrieve application task controller (we only have one in this example)
+	var taskController:TaskController = SingletonFactory.getSingletonInstance(TaskController);
+			
+	// Add tasks (If no tasks are in queue, tasks are executed the moment they are added to the queue)
+	taskController.addTask(taskCompanyDetails);
+	taskController.addTask(taskCompanyUsers);
+}
+
+}}}
 
 == Utilize !TaskGroup ==
 
