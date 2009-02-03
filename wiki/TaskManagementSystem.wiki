@@ -43,7 +43,32 @@ As mentioned above under the introduction a task is a bundle of business logic t
 
 {{{
 
-public class
+public class CompanyDetailsTask extends AbstractTask
+	{
+		public static const TASK_TYPE:String = "COMPANY_DETAILS";
+		public static const TASK_PRIORITY:int = 1;
+		
+		private var _httpService:HTTPService;
+		public var companyId:uint;
+		
+		public function CompanyDetailsTask(id:uint)
+		{
+			// Set company id
+			companyId = id;
+			
+			// Call AbstractTask constructor passing in type and priority 
+			super(TASK_TYPE, TASK_PRIORITY);
+		}
+		
+		// Method invoked when task system executes task 
+		override public function start():void {
+			_httpService = new HTTPService();
+			
+			_httpService.url = 'http://www.developmentarc.com/company/details.xml';
+			
+			_httpService.send({companyId:companyId});
+		}
+	}
 }}}
 
 == Add Task to !TaskController ==
