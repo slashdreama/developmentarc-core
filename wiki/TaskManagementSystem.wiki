@@ -213,9 +213,8 @@ public class UserDetailsTask extends AbstractTask {
 
 }}}
 
-In our revised applyAction method, we will add our old tasks as we did before (and pretend there are other tasks already in the queue which will make these tasks queued and not started) and then add our new task right after. This will result in our first two tasks being removed from the task controller. Note we are using individual task and not the task group as we did in the last section.
+In our revised applyAction method, we will add our old tasks as we did before and then add our new task right after. This will result in our first two tasks being removed from the task controller. Note we are using individual task and not the task group as we did in the last section (although you can override a task group too).
 
-{{{
 {{{
 public function applyAction(event:CompanyCommand):void {
 	var companyId:uint = event.companyId;
@@ -241,8 +240,6 @@ public function applyAction(event:CompanyCommand):void {
       // Verify only one task is in task system
       Alert.show(taskController.
 }
-
-}}}
 
 }}}
 == Task Events ==
