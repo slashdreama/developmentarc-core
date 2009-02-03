@@ -7,17 +7,16 @@ Task System is a priority queuing system that enables an application to execute 
 
 ==!TaskController==
 
-The !TaskController class is the main manager of the task system framework. This class is responsible for managing current and new tasks in a task system. 
-
-The controller starts a set of tasks based on the active task limit set on the controller. By default 2 tasks can be concurrently active within the controller.  When a task is complete the controller will remove the task from the active list and start the next one in the queue, if any.
-
-
-
-The !TaskController is also responsible for managing overrides.  When a task is added to the controller, the tasks overrides are applied removing any existing tasks from the queue that matches an override. Overrides do pertain to tasks that are currently active, those will be canceled and removed from the queue. Next the task is added to the internal priority queue in the proper order.
+The !TaskController class is the main manager of the task system framework. This class is responsible for managing current and new tasks in a task system. The class is used as an instance to allow for multiple task to run in the same application.
 
 The !TaskController, by default, is not a singleton and the goal of the framework is to allow multiple Task systems to be running in any given application. For example, one task system can be created to manage server requests while another can be used to control internal business operations. To create multiple systems, simply create multiple instances of the !TaskController.
 
 To use the !TaskController as a singleton, utilize the SingletonFactory utility class within the [http://code.google.com/p/developmentarc-core/w/list ViviSectingMedia] library.
+
+The controller starts a set of tasks based on the active task limit set on the controller. By default 2 tasks can be concurrently active within the controller, however this is configurable in the task controller instance.  When a task is complete the controller will remove the task from the active list and start the next one in the queue, if any.
+
+The !TaskController is also responsible for managing overrides.  When a task is added to the controller, the tasks overrides are applied removing any existing tasks from the queue that matches an override. Overrides do pertain to tasks that are currently active, those will be canceled and removed from the queue. Next the task is added to the internal priority queue in the proper order.
+
 
 ==!AbstractTask==
 
