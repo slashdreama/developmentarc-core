@@ -50,16 +50,15 @@ Second, note that all business logic is defined inside of the start method. This
 /**
  * Company details task
  **/
-public class CompanyDetailsTask extends AbstractTask
-{
+public class CompanyDetailsTask extends AbstractTask {
 	public static const TASK_TYPE:String = "COMPANY_DETAILS";
 	public static const TASK_PRIORITY:int = 1;
 	
 	private var _httpService:HTTPService;
+
 	public var companyId:uint;
 	
-	public function CompanyDetailsTask(id:uint)
-	{
+	public function CompanyDetailsTask(id:uint){
 		// Set company id
 		companyId = id;
 		
@@ -79,16 +78,15 @@ public class CompanyDetailsTask extends AbstractTask
 /**
  * Company users task
  **/
-public class CompanyUsersTask extends AbstractTask
-{
+public class CompanyUsersTask extends AbstractTask {
 	public static const TASK_TYPE:String = "COMPANY_USERS";
 	public static const TASK_PRIORITY:int = 2;
 	
 	private var _httpService:HTTPService;
+
 	public var companyId:uint;
 		
-	public function CompanyUsersTask(id:uint)
-	{
+	public function CompanyUsersTask(id:uint) {
 		// Set company id
 		companyId = id;
 		
