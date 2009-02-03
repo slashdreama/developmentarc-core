@@ -110,7 +110,7 @@ In most systems you will add tasks at a middle-tier layer of your application co
 
 {{{
 public function applyAction(event:ActionEvent):void {
-		var companyId:uint = event.companyId;
+	var companyId:uint = event.companyId;
 		
 	// Create tasks
 	var taskCompanyDetails:ITask = new CompanyDetailsTask(companyId);
