@@ -39,36 +39,72 @@ When an override is provided to the !TaskController, the !TaskGroup acts as a pa
 = How To ==
 
 == Create a Task ==
-As mentioned above under the introduction a task is a bundle of business logic that a developer wishes to run in a queue. One of the best examples of a task implementation is wrapping a server call to be executed in a particular order under the control of a thread count.  In systems that execute large number of service calls a Task system can provide the detailed control to stop, override, and swap order of the queue adding valuable efficiency throughout the system.  Below we will create two tasks that execute service calls to two factitious api on DevelopmentArc's domain. The first will pull details of a company and the second will pull a list of users from the same company id.  Neither task is dependent on the other, however they are related in that the same company id is used by both
+As mentioned above under the introduction a task is a bundle of business logic that a developer wishes to run in a queue. One of the best examples of a task implementation is wrapping a server call to be executed in a particular order under the control of a thread count.  In systems that execute large number of service calls a Task system can provide the detailed control to stop, override, and swap order of the queue adding valuable efficiency throughout the system.  Below we will create two tasks that execute service calls to two factitious api on DevelopmentArc's domain. The first will pull details of a company and the second will pull a list of users from the same company id.  Neither task is dependent on the other, however they are related in that the same company id is used by both.
+
+There are a few things to point out, in most cases the API the !AbstractTask defines can be removed from the constructor of your class. In our case below, we define the task type and task priority inside of the custom class and pass those constants into the super constructor. 
+
+Second, note that all business logic is defined inside of the start method. This method is what the task controller calls when a task is executed.
 
 {{{
 
+/**
+ * Company details task
+ **/
 public class CompanyDetailsTask extends AbstractTask
+{
+	public static const TASK_TYPE:String = "COMPANY_DETAILS";
+	public static const TASK_PRIORITY:int = 1;
+	
+	private var _httpService:HTTPService;
+	public var companyId:uint;
+	
+	public function CompanyDetailsTask(id:uint)
 	{
-		public static const TASK_TYPE:String = "COMPANY_DETAILS";
-		public static const TASK_PRIORITY:int = 1;
+		// Set company id
+		companyId = id;
 		
-		private var _httpService:HTTPService;
-		public var companyId:uint;
-		
-		public function CompanyDetailsTask(id:uint)
-		{
-			// Set company id
-			companyId = id;
-			
-			// Call AbstractTask constructor passing in type and priority 
-			super(TASK_TYPE, TASK_PRIORITY);
-		}
-		
-		// Method invoked when task system executes task 
-		override public function start():void {
-			_httpService = new HTTPService();
-			
-			_httpService.url = 'http://www.developmentarc.com/company/details.xml';
-			
-			_httpService.send({companyId:companyId});
-		}
+		// Call AbstractTask constructor passing in type and priority 
+		super(TASK_TYPE, TASK_PRIORITY);
 	}
+		
+	// Method invoked when task system executes task 
+	override public function start():void {
+		_httpService = new HTTPService();
+			
+		_httpService.url = 'http://www.developmentarc.com/company/details.xml';
+		
+		_httpService.send({companyId:companyId});
+	}
+}
+/**
+ * Company users task
+ **/
+public class CompanyUsersTask extends AbstractTask
+{
+	public static const TASK_TYPE:String = "COMPANY_USERS";
+	public static const TASK_PRIORITY:int = 2;
+	
+	private var _httpService:HTTPService;
+	public var companyId:uint;
+		
+	public function CompanyUsersTask(id:uint)
+	{
+		// Set company id
+		companyId = id;
+		
+		// Call AbstractTask constructor passing in type and priority 
+		super(TASK_TYPE, TASK_PRIORITY);
+	}
+		
+	// Method invoked when task system executes task 
+	override public function start():void {
+		_httpService = new HTTPService();
+			
+		_httpService.url = 'http://www.developmentarc.com/company/users.xml';
+			
+		_httpService.send({companyId:companyId});
+	}
+}		
 }}}
 
 == Add Task to !TaskController ==
