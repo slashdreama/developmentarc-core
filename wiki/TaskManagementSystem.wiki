@@ -73,6 +73,14 @@ public class CompanyDetailsTask extends AbstractTask {
 		_httpService.url = 'http://www.developmentarc.com/company/details.xml';
 		
 		_httpService.send({companyId:companyId});
+
+                // AbstractTask will send event
+                super.start()
+	}
+        // Method invoked when task system cancels task that has been started
+        override public function cancel():void {
+		_httpService.cancel();
+		super.cancel();
 	}
 }
 /**
@@ -101,6 +109,15 @@ public class CompanyUsersTask extends AbstractTask {
 		_httpService.url = 'http://www.developmentarc.com/company/users.xml';
 			
 		_httpService.send({companyId:companyId});
+
+                // AbstractTask will send event
+                super.start()
+	}
+
+        // Method invoked when task system cancels task that has been started
+        override public function cancel():void {
+		_httpService.cancel();
+		super.cancel();
 	}
 }		
 }}}
@@ -155,5 +172,39 @@ public function applyAction(event:ActionEvent):void {
 }}}
 
 == Applying Overrides ==
+One of the most important features one gains by using the Task System is the ability to override other tasks (business logic).  This becomes very useful when user actions drive the execution of these tasks. If a user is "click happy" and clicks on multiple items on a UI, each of which execute a set of business tasks, the system can get overloaded and slow down or pummel the server with unneccessary calls.  The task system helps allievate such use cases by providing the ability for tasks to define a set of overrides. These overrides are Task types. When a task or task group is added to a task system, the overrides types are processed and all tasks that match are removed from the task system.  Tasks or groups that are currently active are stopped and then removed.
 
+In our example below, we will define one new task that defines our previous tasks are overrides. Upon added an instance of the task to the controller, the other tasks are removed.
+
+{{{
+
+/**
+ * User details task
+ **/
+public class UserDetailsTask extends AbstractTask {
+	public static const TASK_TYPE:String = "USER_DETAILS";
+	public static const TASK_PRIORITY:int = 1;
+	
+	private var _httpService:HTTPService;
+
+	public var userId:uint;
+	
+	public function UserDetailsTask(id:uint){
+		// Set user id
+		userId = id;
+		
+		// Call AbstractTask constructor passing in type and priority 
+		super(TASK_TYPE, TASK_PRIORITY);
+	}
+		
+	// Method invoked when task system executes task 
+	override public function start():void {
+		_httpService = new HTTPService();
+			
+		_httpService.url = 'http://www.developmentarc.com/user/details.xml';
+		
+		_httpService.send({userId:userId});
+	}
+}
+}}}
 == Task Events ==
