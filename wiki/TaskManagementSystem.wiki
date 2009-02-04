@@ -205,7 +205,7 @@ public class UserDetailsTask extends AbstractTask {
 
 }}}
 
-In our revised applyAction method, we will add our old tasks as we did before and then add our new task right after. This will result in our first two tasks being removed from the task controller. Note we are using individual task and not the task group as we did in the last section (although you can override a task group too).
+In our revised applyAction method, we will add our old tasks as we did before and then add our new task right after. This will result in our first two tasks being canceled and then removed from the task controller. Note we are using individual task and not the task group as we did in the last section (although you can override a task group too).
 
 {{{
 public function applyAction(event:CompanyCommand):void {
