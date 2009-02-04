@@ -237,13 +237,12 @@ public function applyAction(event:CompanyCommand):void {
 == Task Events ==
 All tasks that extend from AbstractTask or a TaskGroup dispatch a series of !TaskEvents based on their current state in the task systems. Below is a  bullet point list of each of those task and when they are dispatched.  As well the current state is stored in a public property currentPhase.
 
-* TASK_WAITING_FOR_READY - Dispatched when a task is waiting for its ready state to change to true.
-* TASK_READY - ?
-* TASK_QUEUED - Dispatched when a task is in either in the !TaskController Queue or a !TaskGroup queue.
-* TASK_START - Dispatched when a task has been started.
-* TASK_PAUSED - Dispatched when a task has been paused.
-* TASK_CANCEL - Dispatched when a task has been cancelled.
-* TASK_IGNORE - Dispatched when a task is set to ignore. 
-* 
-* TASK_COMPLETE - Dispatched when a task has been completed. 
-* TASK_ERROR - Dispatched when a task has entered an error state.
+ * TASK_WAITING_FOR_READY - Dispatched when a task is waiting for its ready state to change to true.
+ * TASK_READY - ?
+ * TASK_QUEUED - Dispatched when a task is in either in the !TaskController Queue or a !TaskGroup queue.
+ * TASK_START - Dispatched when a task has been started.
+ * TASK_PAUSED - Dispatched when a task has been paused.
+ * TASK_CANCEL - Dispatched when a task has been cancelled.
+ * TASK_IGNORE - Dispatched when a task is set to ignore.  
+ * TASK_COMPLETE - Dispatched when a task has been completed. 
+ * TASK_ERROR - Dispatched when a task has entered an error state.
