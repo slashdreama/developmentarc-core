@@ -17,15 +17,7 @@ The controller starts a set of tasks based on the active task limit set on the c
 
 The !TaskController is also responsible for managing overrides.  When a task is added to the controller, the tasks overrides are applied removing any existing tasks from the queue that matches an override. Overrides do pertain to tasks that are currently active, those will be canceled and removed from the queue. Next the task is added to the internal priority queue in the proper order.
 
-{{{
-
-
-
-
-
-}}}
-
-==!Task==
+==Task==
 
 To create a task one can extend from the !AbstractTask, which is the base class that defines basic types, events, and common methods implementations of the required ITask interface. The !TaskController does not require a Task to extend from !AbstractTask, instead only the ITask interface is required.
 
