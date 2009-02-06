@@ -11,7 +11,7 @@ The !TaskController class is the main manager of the task system framework. This
 
 The !TaskController, by default, is not a singleton and the goal of the framework is to allow multiple Task systems to be running in any given application. For example, one task system can be created to manage server requests while another can be used to control internal business operations. To create multiple systems, simply create multiple instances of the !TaskController.
 
-To use the !TaskController as a singleton, utilize the SingletonFactory utility class within the [http://code.google.com/p/developmentarc-core/w/list ViviSectingMedia] library.
+To use the !TaskController as a singleton, utilize the SingletonFactory utility class within Core.
 
 The controller starts a set of tasks based on the active task limit set on the controller. By default 2 tasks can be concurrently active within the controller, however this is configurable in the task controller instance.  When a task is complete the controller will remove the task from the active list and start the next one in the queue, if any.
 
@@ -31,7 +31,7 @@ When an override is provided to the !TaskController, the !TaskGroup acts as a pa
 = How To ==
 
 == Create a Task ==
-As mentioned above under the introduction a task is a bundle of business logic that a developer wishes to run in a queue. One of the best examples of a task implementation is wrapping a server call to be executed in a particular order under the control of a thread count.  In systems that execute large number of service calls a Task system can provide the detailed control to stop, override, and swap order of the queue adding valuable efficiency throughout the system.  Below we will create two tasks that execute service calls to two factitious api on DevelopmentArc's domain. The first will pull details of a company and the second will pull a list of users from the same company id.  Neither task is dependent on the other, however they are related in that the same company id is used by both.
+As mentioned above under the introduction a task is a bundle of business logic that a developer wishes to run in a queue. One of the best examples of a task implementation is wrapping a server call to be executed in a particular order under the control of a thread count.  In systems that execute large number of service calls a Task system can provide the detailed control to stop, override, and swap order of the queue adding valuable efficiency throughout the system.  Below we will create two tasks that execute service calls to two factitious api on !DevelopmentArc's domain. The first will pull details of a company and the second will pull a list of users from the same company id.  Neither task is dependent on the other, however they are related in that the same company id is used by both.
 
 There are a couple things to point out with our classes below, in most cases the API the !AbstractTask defines can be removed from the constructor signature of your class and define those properties inside of your class. In our case below, we define the task type and task priority inside of the custom class and pass those constants into the super constructor. The rest of the API is left to the defaults defined by !AbstractTask. To see a detailed description of each property, see the ASDoc on the !AbstractTask class itself.
 
@@ -115,7 +115,7 @@ public class CompanyUsersTask extends AbstractTask {
 }}}
 
 == Add Task to !TaskController ==
-In most systems you will add tasks at a middle-tier layer of your application code such as Cairngorm's command framework.   This allows for all business logic or in our case construction of business logic to occur in one level of your application. DevelopmentArc has a similar layer in it's framework which we call the Action/Command System.  In a given action, an applyAction method is called when a command is dispatched in the system.  For more information about the Action/Command pattern see [[here]].  In our example below we will illustrate a simple applyAction method that creates our two tasks, based on the company id supplied by the action event and then add both tasks to the task controller. In our example, we have one task controller in the application which we manage via the SingletonFactory.
+In most systems you will add tasks at a middle-tier layer of your application code such as Cairngorm's command framework.   This allows for all business logic or in our case construction of business logic to occur in one level of your application. !DevelopmentArc has a similar layer in it's framework which we call the Action/Command System.  In a given action, an `applyAction` method is called when a command is dispatched in the system.  For more information about the [CommandActionDelegation Action/Command pattern].  In our example below we will illustrate a simple `applyAction` method that creates our two tasks, based on the company id supplied by the action event and then add both tasks to the task controller. In our example, we have one task controller in the application which we manage via the SingletonFactory.
 
 {{{
 public function applyAction(event:CompanyCommand):void {
@@ -238,7 +238,7 @@ public function applyAction(event:CompanyCommand):void {
 All tasks that extend from !AbstractTask or a !TaskGroup dispatch a series of !TaskEvents based on their current state in the task systems. Below is a  bullet point list of each of those task and when they are dispatched.  As well the current state is stored in a public property currentPhase.
 
  * TASK_WAITING_FOR_READY - Dispatched when a task is waiting for its ready state to change to true.
- * TASK_READY - ?
+ * TASK_READY - Dispatched when a task enters its ready state.
  * TASK_QUEUED - Dispatched when a task is in either in the !TaskController Queue or a !TaskGroup queue.
  * TASK_START - Dispatched when a task has been started.
  * TASK_PAUSED - Dispatched when a task has been paused.
