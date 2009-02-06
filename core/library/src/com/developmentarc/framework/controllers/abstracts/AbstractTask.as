@@ -29,6 +29,13 @@ package com.developmentarc.framework.controllers.abstracts
 	
 	import flash.events.EventDispatcher;
 
+	[Event(name="taskReady",type="com.developmentarc.framework.controllers.events.TaskEvent")]
+	[Event(name="taskCompelte",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
+	[Event(name="taskQueued",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
+	[Event(name="taskStart",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
+	[Event(name="taskPause",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
+	[Event(name="taskCancel",type="com.developmentarc.framework.controllers.events.TaskEvent")]
+	[Event(name="taskError",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
 	/**
 	 * The AbstractTask is the base class to extend all Tasks from.
 	 * The TaskController does not require a Task to extend from AbstractTask, 
@@ -44,13 +51,6 @@ package com.developmentarc.framework.controllers.abstracts
 	 * @see com.developmentarc.framework.controllers.TaskController
 	 * @see com.developmentarc.framework.datastructures.tasks.TaskGroup
 	 */
-	[Event(name="taskReady",type="com.developmentarc.framework.controllers.events.TaskEvent")]
-	[Event(name="taskCompelte",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
-	[Event(name="taskQueued",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
-	[Event(name="taskStart",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
-	[Event(name="taskPause",type="com.developmentarc.framework.controllers.events.TaskEvent")] 
-	[Event(name="taskCancel",type="com.developmentarc.framework.controllers.events.TaskEvent")]
-	[Event(name="taskError",type="com.developmentarc.framework.controllers.events.TaskEvent")]   
 	public class AbstractTask extends EventDispatcher implements ITask
 	{
 		/* STATIC PROPERTIES */

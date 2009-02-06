@@ -52,6 +52,10 @@ package com.developmentarc.framework.controllers
 		
 		// PRIVATE GET/SET VARIABLES
 		
+		/**
+		 * Constructor.  Automatically generates a unique id for the selection group. 
+		 * 
+		 */
 		public function SelectionGroup()
 		{
 			// Generate new Id for group
@@ -69,6 +73,12 @@ package com.developmentarc.framework.controllers
 			SelectionController.addItem(item, this.__groupId);
 		}
 		
+		/**
+		 * Used to remove an item from the selection group.
+		 *  
+		 * @param item The item to remove from the group.
+		 * 
+		 */
 		public function removeItem(item:ISelectable):void {
 			SelectionController.removeItem(item);
 		}

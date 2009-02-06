@@ -41,6 +41,7 @@ package com.developmentarc.framework.utils
 	{
 		/* STATIC PROPERTIES */
 		/**
+		 * @private
 		 * The static instance of the class. 
 		 */
 		static protected var __instance:SingletonFactory;

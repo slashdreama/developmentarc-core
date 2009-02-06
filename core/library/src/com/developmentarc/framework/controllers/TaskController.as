@@ -32,15 +32,57 @@ package com.developmentarc.framework.controllers
 	
 	import flash.events.EventDispatcher;
 
+	/**
+	 * The TaskController class is the main manager of the task system framework. This class is 
+	 * responsible for managing current and new tasks in a task system. The class is used as an 
+	 * instance to allow for multiple task to run in the same application.
+	 * 
+	 * <p>The TaskController, by default, is not a singleton and the goal of the framework is to 
+	 * allow multiple Task systems to be running in any given application. For example, one task 
+	 * system can be created to manage server requests while another can be used to control internal 
+	 * business operations. To create multiple systems, simply create multiple instances of the 
+	 * TaskController. </p>
+	 * 
+	 * <p>To use the TaskController as a singleton, utilize the SingletonFactory utility class within
+	 * the DevelopmentArc Core library.</p>
+	 * 
+	 * <p>The controller starts a set of tasks based on the active task limit set on the controller. 
+	 * By default 2 tasks can be concurrently active within the controller, however this is configurable 
+	 * in the task controller instance. When a task is complete the controller will remove the task 
+	 * from the active list and start the next one in the queue, if any. </p>
+	 * 
+	 * The TaskController is also responsible for managing overrides. When a task is added to the controller, 
+	 * the tasks overrides are applied removing any existing tasks from the queue that matches an override. 
+	 * Overrides do pertain to tasks that are currently active, those will be canceled and removed from the queue. 
+	 * Next the task is added to the internal priority queue in the proper order. </p>
+	 * 
+	 * @author Aaron Pedersen
+	 * 
+	 */
 	public class TaskController extends EventDispatcher
 	{
+		/**
+		 * Stores the current Tasks and TaskGroups within the TaskController. 
+		 */
 		protected var taskQueue:PriorityQueue;
+		
+		/**
+		 * Stores the active Tasks and TaskGroups that are have been started by the controller. 
+		 */		
 		protected var activeTasks:HashTable;
+		
+		/**
+		 * Stores ITasks that returned false for the ready value when attempted to be started by the controller. 
+		 */		
 		protected var notReadyQueue:HashTable;
 		
 		private var __activeTaskLimit:uint = 2;
 		private var __isBlocked:Boolean = false;
 		
+		/**
+		 * Constructor. 
+		 * 
+		 */
 		public function TaskController()
 		{
 			super(this);
@@ -50,16 +92,34 @@ package com.developmentarc.framework.controllers
 			notReadyQueue = new HashTable();
 		}
 		
-		public function set activeTaskLimit(value:uint):void
-		{
-			__activeTaskLimit = value;
-		}
 		
+		/**
+		 * Contains the number of tasks that can be run at the same time.  The defaulf value is 2 tasks.
+		 *  
+		 * @param value The number of simultaneous tasks to be run, 1 through uint.MAX_VALUE.
+		 * 
+		 */
 		public function get activeTaskLimit():uint
 		{
 			return __activeTaskLimit;
 		}
 		
+		public function set activeTaskLimit(value:uint):void
+		{
+			__activeTaskLimit = value;
+		}
+		
+		/**
+		 * When an ITask (task, task group, etc.) is ready to be added to the controller this
+		 * method is called. addTask() puts the item at the end of the queue and then applies
+		 * any overrides assigned by the ITask.  If the current queue contains overrides then
+		 * the override conflict logic is applied to determine if the added item is kept and the
+		 * existing conflicting task is removed or if the existing task is kept and the new one
+		 * is discarded.
+		 * 
+		 * @param task The ITask to add to the controller.
+		 * 
+		 */
 		public function addTask(task:ITask):void
 		{
 			// apply overrides
@@ -170,6 +230,14 @@ package com.developmentarc.framework.controllers
 			return true;
 		}
 		
+		/**
+		 * Checks to see if any task slots are available, if so then the next
+		 * task in the queue is added.  This method is called when tasks are added 
+		 * or change state.  This method is protected to prevent developers from
+		 * directly calling next() and instead letting the controller process the
+		 * queue based on the defined logic. 
+		 * 
+		 */
 		protected function next():void
 		{
 			// make sure we have tasks, if not exit
@@ -237,6 +305,14 @@ package com.developmentarc.framework.controllers
 			}
 		}
 		
+		/**
+		 * Called when a task changes state, such as complete or error.  Handles
+		 * unregistering event listening, checks to see if the queue was blocked and
+		 * then calls next() to continue the process.
+		 *  
+		 * @param event The TaskEvent dispatched from the watched ITask instance.
+		 * 
+		 */
 		protected function handleTaskEvent(event:TaskEvent):void
 		{
 			var task:ITask = ITask(event.currentTarget);

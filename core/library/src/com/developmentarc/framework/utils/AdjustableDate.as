@@ -285,15 +285,16 @@ package com.developmentarc.framework.utils
 		 * 
 		 * @param value
 		 * 
-		 */		
-		public function set date(value:Number):void
-		{
-			_date.date = value;
-		}
-		
+		 */
+		 
 		public function get date():Number
 		{
 			return _date.date;
+		}
+		
+		public function set date(value:Number):void
+		{
+			_date.date = value;
 		}
 		
 		/**
@@ -301,12 +302,12 @@ package com.developmentarc.framework.utils
 		 * according to universal time (UTC).
 		 * 
 		 */
-		public function set dateUTC(value:Number):void {
-			_date.dateUTC = value;
-		}
-		
 		public function get dateUTC():Number {
 			return _date.dateUTC;
+		}
+		
+		public function set dateUTC(value:Number):void {
+			_date.dateUTC = value;
 		}
 		
 		/**
@@ -334,24 +335,24 @@ package com.developmentarc.framework.utils
 		 * system on which Flash Player is running.
 		 * 
 		 */
-		public function set fullYear(value:Number):void {
-			_date.fullYear = value;
-		}
-		
 		public function get fullYear():Number {
 			return _date.fullYear;
+		}
+		
+		public function set fullYear(value:Number):void {
+			_date.fullYear = value;
 		}
 		
 		/**
 		 * The four-digit year of a Date object according to universal time (UTC).
 		 * 
 		 */
-		public function set fullYearUTC(value:Number):void {
-			_date.fullYearUTC = value;
-		}
-		
 		public function get fullYearUTC():Number {
 			return _date.fullYearUTC;
+		}
+		
+		public function set fullYearUTC(value:Number):void {
+			_date.fullYearUTC = value;
 		}
 		
 		/**
@@ -360,12 +361,12 @@ package com.developmentarc.framework.utils
 		 * operating system on which Flash Player is running.
 		 * 
 		 */
-		public function set hours(value:Number):void {
-			_date.hours = value;
-		}
-		
 		public function get hours():Number {
 			return _date.hours;
+		}
+		
+		public function set hours(value:Number):void {
+			_date.hours = value;
 		}
 		
 		/**
@@ -373,12 +374,12 @@ package com.developmentarc.framework.utils
 		 * according to universal time (UTC).
 		 * 
 		 */
-		public function set hoursUTC(value:Number):void {
-			_date.hoursUTC = value;
-		}
-		
 		public function get hoursUTC():Number {
 			return _date.hoursUTC;
+		}
+		
+		public function set hoursUTC(value:Number):void {
+			_date.hoursUTC = value;
 		}
 		
 		/**
@@ -387,12 +388,12 @@ package com.developmentarc.framework.utils
 		 * the operating system on which Flash Player is running
 		 * 
 		 */
-		public function set milliseconds(value:Number):void {
-			_date.milliseconds = value;
-		}
-		
 		public function get milliseconds():Number {
 			return _date.milliseconds;
+		}
+		
+		public function set milliseconds(value:Number):void {
+			_date.milliseconds = value;
 		}
 		
 		/**
@@ -400,12 +401,12 @@ package com.developmentarc.framework.utils
 		 * object according to universal time (UTC).
 		 * 
 		 */
-		public function set millisecondsUTC(value:Number):void {
-			_date.millisecondsUTC = value;
-		}
-		
 		public function get millisecondsUTC():Number {
 			return _date.millisecondsUTC;
+		}
+		
+		public function set millisecondsUTC(value:Number):void {
+			_date.millisecondsUTC = value;
 		}
 		
 		/**
@@ -413,40 +414,40 @@ package com.developmentarc.framework.utils
 		 * according to local time. Local time is determined by the 
 		 * operating system on which Flash Player is running.
 		 */
-		public function set minutes(value:Number):void {
-			_date.minutes = value;
-		}
-		
 		public function get minutes():Number {
 			return _date.minutes;
+		}
+		
+		public function set minutes(value:Number):void {
+			_date.minutes = value;
 		}
 		
 		/**
 		 * The minutes (an integer from 0 to 59) portion of a Date 
 		 * object according to universal time (UTC).
 		 */
-		public function set minutesUTC(value:Number):void {
-			_date.minutesUTC = value;
-		}
-		
 		public function get minutesUTC():Number {
 			return _date.minutesUTC;
 		}
 		
+		public function set minutesUTC(value:Number):void {
+			_date.minutesUTC = value;
+		}
+
 		/**
 		 * The month (0 for January, 1 for February, and so on) portion of 
 		 * a Date object according to local time. Local time is determined 
 		 * by the operating system on which Flash Player is running. 
 		 * 
 		 */
-		public function set month(value:Number):void
-		{
-			_date.month = value;
-		}
-		
 		public function get month():Number
 		{
 			return _date.month;
+		}
+		
+		public function set month(value:Number):void
+		{
+			_date.month = value;
 		}
 		
 		/**
@@ -454,14 +455,14 @@ package com.developmentarc.framework.utils
 		 * according to universal time (UTC).
 		 * 
 		 */
-		public function set monthUTC(value:Number):void
-		{
-			_date.monthUTC = value;
-		}
-		
 		public function get monthUTC():Number
 		{
 			return _date.monthUTC;
+		}
+		
+		public function set monthUTC(value:Number):void
+		{
+			_date.monthUTC = value;
 		}
 		
 		/**
@@ -470,14 +471,14 @@ package com.developmentarc.framework.utils
 		 * operating system on which Flash Player is running.
 		 * 
 		 */
-		public function set seconds(value:Number):void
-		{
-			_date.seconds = value;
-		}
-		
 		public function get seconds():Number
 		{
 			return _date.seconds;
+		}
+		
+		public function set seconds(value:Number):void
+		{
+			_date.seconds = value;
 		}
 		
 		/**
@@ -485,14 +486,14 @@ package com.developmentarc.framework.utils
 		 * according to universal time (UTC).
 		 * 
 		 */
-		public function set secondsUTC(value:Number):void
-		{
-			_date.secondsUTC = value;
-		}
-		
 		public function get secondsUTC():Number
 		{
 			return _date.secondsUTC;
+		}
+		
+		public function set secondsUTC(value:Number):void
+		{
+			_date.secondsUTC = value;
 		}
 		
 		/**
@@ -504,14 +505,14 @@ package com.developmentarc.framework.utils
 		 * @param value The new time in milliseconds.
 		 * 
 		 */
-		public function set time(value:Number):void
-		{
-			_date.time = value;
-		}
-		
 		public function get time():Number
 		{
 			return _date.time;
+		}
+		
+		public function set time(value:Number):void
+		{
+			_date.time = value;
 		}
 		
 		/**
