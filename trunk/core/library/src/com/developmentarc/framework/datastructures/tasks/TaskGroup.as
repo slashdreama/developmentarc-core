@@ -193,14 +193,14 @@ package com.developmentarc.framework.datastructures.tasks
 		 * @param value
 		 * 
 		 */
-		public function set taskOverrides(value:Array):void
-		{
-			__groupOverrides = value;
-		}
-		
 		public function get taskOverrides():Array
 		{
 			return __groupOverrides;
+		}
+		
+		public function set taskOverrides(value:Array):void
+		{
+			__groupOverrides = value;
 		}
 		
 		/**
@@ -361,6 +361,12 @@ package com.developmentarc.framework.datastructures.tasks
 			return taskQueue.items.concat(processedQueue.items);
 		}
 		
+		/**
+		 * Returns the current phase of the TaskGroup, such as started, etc. 
+		 * 
+		 * @return The current phase of the TaskGroup.
+		 * 
+		 */
 		public function get phase():String
 		{
 			return currentPhase;

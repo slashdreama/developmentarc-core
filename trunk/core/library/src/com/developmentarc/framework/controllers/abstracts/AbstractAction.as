@@ -68,7 +68,6 @@ package com.developmentarc.framework.controllers.abstracts
 			throw new Error("The AbstractAction.applyAction() method was not overriden by the implementing class.");
 		}
 		
-		[Bindable(event="commandChange")]
 		/**
 		 * Defines the commands that are registed for this action type.  This Array is a list of
 		 * strings that define the Command types that should call applyAction when dispatched.
@@ -76,16 +75,17 @@ package com.developmentarc.framework.controllers.abstracts
 		 * @param commands An Array of Command Types
 		 * 
 		 */
+		public function get commands():Array {
+			return commandList.getAllKeys();
+		}
+		
+		[Bindable(event="commandChange")]
 		public function set commands(commands:Array):void {
 			commandList.removeAll();
 			for each(var command:String in commands) {
 				commandList.addItem(command, true);
 			}
 			dispatchEvent(new Event("commandChange"));
-		}
-		
-		public function get commands():Array {
-			return commandList.getAllKeys();
 		}
 		
 		[Bindable(event="commandChange")]

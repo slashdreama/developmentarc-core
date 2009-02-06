@@ -67,19 +67,23 @@ package com.developmentarc.framework.controllers
 		 * Commands are assigned.
 		 * 
 		 * @example When assigning code via MXML, use this syntax: <listing version="3.0">
-<controllers:ActionDelegate>
-	<controllers:actions>
-		<mx:Array>
-			<actiontypes:BasicAction commands="{[BasicCommand.MY_BASIC_COMMAND]}" />
-			<actiontypes:MultipleCommandAction commands="{[BasicCommand.A_SECOND_COMMAND, BasicCommand.MY_BASIC_COMMAND]}" />
-		</mx:Array>
-	</controllers:actions>
-</controllers:ActionDelegate>
+&lt;controllers:ActionDelegate&gt;
+	&lt;controllers:actions&gt;
+		&lt;mx:Array&gt;
+			&lt;actiontypes:BasicAction commands="{[BasicCommand.MY_BASIC_COMMAND]}" /&gt;
+			&lt;actiontypes:MultipleCommandAction commands="{[BasicCommand.A_SECOND_COMMAND, BasicCommand.MY_BASIC_COMMAND]}" /&gt;
+		&lt;/mx:Array&gt;
+	&lt;/controllers:actions&gt;
+&lt;/controllers:ActionDelegate&gt;
 		 * </listing>
 		 * 
 		 * @param value
 		 * 
 		 */
+		public function get actions():Array {
+			return _actions.getAllKeys();
+		}
+		
 		public function set actions(value:Array):void {
 			unregisterActions(_actions.getAllKeys());
 			_actions.removeAll();
@@ -89,10 +93,6 @@ package com.developmentarc.framework.controllers
 			}
 			// register the current actions
 			registerActions(_actions.getAllKeys());
-		}
-		
-		public function get actions():Array {
-			return _actions.getAllKeys();
 		}
 		
 		/**

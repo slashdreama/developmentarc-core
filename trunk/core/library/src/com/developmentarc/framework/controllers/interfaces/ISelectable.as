@@ -41,8 +41,10 @@ package com.developmentarc.framework.controllers.interfaces
 		 * @param value The selected state of the ISelectable item.
 		 * 
 		 */
+		function get selected():Boolean
+		
 		function set selected(value:Boolean):void
 		
-		function get selected():Boolean
+		
 	}
 }

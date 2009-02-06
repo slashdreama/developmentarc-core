@@ -11,16 +11,20 @@ package com.developmentarc.framework.utils
 	 * way to retreive the current runtime url and parse all the various parts pieces. Below is a breakdown of a typical url and all
 	 * the properties one can access.
 	 * <br />
-	 * 
+	 * <listing version="3.0">
 	 *    https://google.com:8080/path/is/here/?param1=value1#page2
 	 *    \___/   \________/ \__/\____________/ \___________/ \__/
 	 *      |        |        |       |               |        |
-     *      |   server name  port    path            query  fragment    
-	 *   protocal                 
+     *   |   server name  port    path           query   fragment    
+	 *   protocal 
+	 * </listing>              
 	 */
 	public class BrowserLocationUtil
 	{
 		
+		/**
+		 * @private 
+		 */
 		protected static var _testURL:String;
 		
 		/**
