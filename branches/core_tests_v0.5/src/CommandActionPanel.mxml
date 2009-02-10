@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* ***** BEGIN MIT LICENSE BLOCK *****
+ * 
+ * Copyright (c) 2009 DevelopmentArc LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ *
+ * ***** END MIT LICENSE BLOCK ***** */
+ -->
+<app:CommandActionApplication
+	xmlns:app="com.developmentarc.actions.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controllers="com.developmentarc.framework.controllers.*"
+	xmlns:actiontypes="com.developmentarc.actions.actiontypes.*" 
+	layout="absolute" >
+	
+	<!-- IMPORTS -->
+	<mx:Script>
+		<![CDATA[
+			import com.developmentarc.actions.commands.BasicCommand;
+		]]>
+	</mx:Script>
+	
+	<!-- ACTIONS -->
+	<controllers:ActionDelegate>
+		<controllers:actions>
+			<mx:Array>
+				<actiontypes:BasicAction commands="{[BasicCommand.MY_BASIC_COMMAND]}" />
+				<actiontypes:BasicAction commands="{[BasicCommand.A_SECOND_COMMAND]}" />
+				<actiontypes:MultipleCommandAction commands="{[BasicCommand.A_SECOND_COMMAND, BasicCommand.MY_BASIC_COMMAND]}" />
+			</mx:Array>
+		</controllers:actions>
+	</controllers:ActionDelegate>
+	
+	<!-- UI -->
+	<mx:Panel width="800" height="600">
+		<mx:VBox>
+			<mx:Button label="call basic action" click="callAction(BasicCommand.MY_BASIC_COMMAND)" />
+			<mx:Button label="call second action" click="callAction(BasicCommand.A_SECOND_COMMAND)" />
+		</mx:VBox>
+	</mx:Panel>
+
+</app:CommandActionApplication>
