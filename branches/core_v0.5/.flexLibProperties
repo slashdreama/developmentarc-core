@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="com.developmentarc.framework.utils.events.LocalConnectionEvent"/>
+<classEntry path="com.developmentarc.framework.controllers.TaskController"/>
+<classEntry path="com.developmentarc.framework.utils.SingletonFactory"/>
+<classEntry path="com.developmentarc.framework.controllers.SelectionController"/>
+<classEntry path="com.developmentarc.framework.datastructures.utils.PriorityQueue"/>
+<classEntry path="com.developmentarc.framework.datastructures.utils.Queue"/>
+<classEntry path="com.developmentarc.framework.utils.LocalConnectionManager"/>
+<classEntry path="com.developmentarc.framework.controllers.interfaces.ISelectable"/>
+<classEntry path="com.developmentarc.framework.controllers.interfaces.ITask"/>
+<classEntry path="com.developmentarc.framework.controllers.abstracts.AbstractTask"/>
+<classEntry path="com.developmentarc.framework.utils.InstanceFactory"/>
+<classEntry path="com.developmentarc.framework.controllers.interfaces.ITaskGroup"/>
+<classEntry path="com.developmentarc.framework.utils.logging.DebugLogger"/>
+<classEntry path="com.developmentarc.framework.datastructures.tasks.TaskGroup"/>
+<classEntry path="com.developmentarc.framework.controllers.events.TaskEvent"/>
+<classEntry path="com.developmentarc.framework.controllers.ActionDelegate"/>
+<classEntry path="com.developmentarc.framework.utils.BrowserLocationUtil"/>
+<classEntry path="com.developmentarc.framework.controllers.abstracts.AbstractAction"/>
+<classEntry path="com.developmentarc.framework.datastructures.utils.HashTable"/>
+<classEntry path="com.developmentarc.framework.controllers.SelectionGroup"/>
+<classEntry path="com.developmentarc.framework.utils.logging.ClassDebugLogger"/>
+<classEntry path="com.developmentarc.framework.utils.logging.ExternalInterfaceDebugLogger"/>
+<classEntry path="com.developmentarc.framework.utils.EventBroker"/>
+<classEntry path="com.developmentarc.framework.controllers.abstracts.AbstractCommand"/>
+<classEntry path="com.developmentarc.framework.utils.logging.DebugMessage"/>
+<classEntry path="com.developmentarc.framework.utils.AdjustableDate"/>
+</includeClasses>
+<includeResources/>
+<namespaceManifests/>
+</flexLibProperties>
