@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* ***** BEGIN MIT LICENSE BLOCK *****
+ * 
+ * Copyright (c) 2009 DevelopmentArc LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ *
+ * ***** END MIT LICENSE BLOCK ***** */
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" creationComplete="handleCreation()">
+	<mx:Script>
+		<![CDATA[
+			import com.developmentarc.framework.utils.logging.ClassDebugLogger;
+			import com.developmentarc.framework.utils.logging.DebugLogger;
+			import com.developmentarc.framework.utils.logging.DebugMessage;
+			
+			public var logger:ClassDebugLogger;
+			public var logger2:ClassDebugLogger;
+			
+			public function handleCreation():void
+			{
+				DebugLogger.externalInterfaceEnabled = true;
+				logger = DebugLogger.getClassLogger(devarc_debuglogger_test);
+				logger2 = DebugLogger.getClassLogger(com.developmentarc.framework.utils.logging.ClassDebugLogger);
+				logger.info("creation complete.");
+			}
+			
+			public function testMessage(type:int):void
+			{
+				switch(type)
+				{
+					case DebugMessage.INFO:
+						logger.info("Test INFO statement.");
+					break;
+					
+					case DebugMessage.DEBUG:
+						logger.debug("Test DEBUG statement.");
+					break;
+					
+					case DebugMessage.WARN:
+						logger.warn("Test WARN statement.");
+					break;
+					
+					case DebugMessage.ERROR:
+						logger.error("Test ERROR statement.");
+					break;
+					
+					case DebugMessage.FATAL:
+						logger.fatal("Test FATAL statement.");
+					break;
+				}
+				
+			}
+			
+			public function testClassLogger(type:int):void
+			{
+				switch(type)
+				{
+					case DebugMessage.INFO:
+						logger2.info("Test INFO statement.", "testClassLogger");
+					break;
+					
+					case DebugMessage.DEBUG:
+						logger2.debug("Test DEBUG statement.");
+					break;
+					
+					case DebugMessage.WARN:
+						logger2.warn("Test WARN statement.");
+					break;
+					
+					case DebugMessage.ERROR:
+						logger2.error("Test ERROR statement.");
+					break;
+					
+					case DebugMessage.FATAL:
+						logger2.fatal("Test FATAL statement.");
+					break;
+				}
+				
+			}
+			
+			public function setLevel(level:int):void
+			{
+				DebugLogger.messageLevel = level;
+			}
+			
+			public function disableDebugging():void
+			{
+				DebugLogger.debuggingEnabled = false;
+			}
+			
+			public function disableExternalInterface():void {
+				DebugLogger.externalInterfaceEnabled = false;
+			}
+			
+			public function enableExternalInterface():void {
+				DebugLogger.externalInterfaceEnabled = true;
+			}
+		]]>
+	</mx:Script>
+	<mx:HBox>
+		<mx:Button click="testMessage(DebugMessage.INFO)" label="test INFO" />
+		<mx:Button click="testMessage(DebugMessage.DEBUG)" label="test DEBUG" />
+		<mx:Button click="testMessage(DebugMessage.WARN)" label="test WARN" />
+		<mx:Button click="testMessage(DebugMessage.ERROR)" label="test ERROR" />
+		<mx:Button click="testMessage(DebugMessage.FATAL)" label="test FATAL" />
+	</mx:HBox>
+	
+	<mx:HBox>
+		<mx:Button click="setLevel(DebugMessage.INFO)" label="set level INFO" />
+		<mx:Button click="setLevel(DebugMessage.DEBUG)" label="set level DEBUG" />
+		<mx:Button click="setLevel(DebugMessage.WARN)" label="set level WARN" />
+		<mx:Button click="setLevel(DebugMessage.ERROR)" label="set level ERROR" />
+		<mx:Button click="setLevel(DebugMessage.FATAL)" label="set level FATAL" />
+	</mx:HBox>
+	<mx:Button click="disableDebugging()" label="disable debugging" />
+	<mx:HBox>
+		<mx:Button click="enableExternalInterface()" label="Enable External Interface API" />
+		<mx:Button click="disableExternalInterface()" label="Disable External Interface API" />
+	</mx:HBox>
+	<mx:HBox>
+		<mx:Button click="testClassLogger(DebugMessage.INFO)" label="test class INFO" />
+	</mx:HBox>
+</mx:Application>
