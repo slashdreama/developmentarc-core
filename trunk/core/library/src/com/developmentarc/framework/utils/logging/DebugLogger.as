@@ -270,10 +270,11 @@ import com.developmentarc.framework.utils.LocalConnectionManager;
 import com.developmentarc.framework.utils.events.LocalConnectionEvent;
 import com.developmentarc.framework.utils.logging.DebugLogger;
 import com.developmentarc.framework.utils.logging.DebugMessage;
-import flash.events.TimerEvent;
-import flash.utils.Timer;
 import com.developmentarc.framework.utils.logging.ExternalInterfaceDebugLogger;
+
+import flash.events.TimerEvent;
 import flash.external.ExternalInterface;
+import flash.utils.Timer;
 
 	
 
@@ -331,7 +332,11 @@ class DebugLog
 		// Turn the API on
 		if(value && !_externalInterfaceEnabled) {
 			_externalInterfaceEnabled = value;
-			openExternalInterfaceAPI();
+			try {
+				openExternalInterfaceAPI();
+			} catch (e:Error) {
+				DebugLogger.error("DebugLogger is unable to open the ExternalInterface.  Verify that the application is not running from a local file path and is being hosted via HTTP path.");
+			}
 		}
 		// Turn the API off
 		else if(_externalInterfaceEnabled) {
