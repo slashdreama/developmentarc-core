@@ -28,7 +28,7 @@
 <app:CommandActionApplication
 	xmlns:app="com.developmentarc.actions.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:controllers="com.developmentarc.framework.controllers.*"
+	xmlns:controllers="com.developmentarc.core.actions.*"
 	xmlns:actiontypes="com.developmentarc.actions.actiontypes.*" 
 	layout="absolute" >
 	

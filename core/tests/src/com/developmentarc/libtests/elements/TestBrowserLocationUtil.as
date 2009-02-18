@@ -1,6 +1,6 @@
 package com.developmentarc.libtests.elements
 {
-	import com.developmentarc.framework.utils.BrowserLocationUtil;
+	import com.developmentarc.core.utils.BrowserLocationUtil;
 
 	/**
 	 * Class is used to modify the test url inside of BrowserLocationUtil so we can test various

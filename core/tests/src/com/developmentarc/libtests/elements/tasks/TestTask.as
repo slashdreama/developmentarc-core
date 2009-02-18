@@ -24,8 +24,8 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.elements.tasks
 {
-	import com.developmentarc.framework.controllers.abstracts.AbstractTask;
-	import com.developmentarc.framework.controllers.events.TaskEvent;
+	import com.developmentarc.core.tasks.events.TaskEvent;
+	import com.developmentarc.core.tasks.tasks.AbstractTask;
 
 	public class TestTask extends AbstractTask
 	{

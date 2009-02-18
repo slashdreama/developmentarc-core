@@ -25,7 +25,7 @@
 package com.developmentarc.actions.actiontypes
 {
 	import com.developmentarc.actions.commands.BasicCommand;
-	import com.developmentarc.framework.controllers.abstracts.AbstractAction;
+	import com.developmentarc.core.actions.actions.AbstractAction;
 	
 	import flash.events.Event;
 

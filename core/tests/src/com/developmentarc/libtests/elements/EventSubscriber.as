@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.elements
 {
-	import com.developmentarc.framework.utils.EventBroker;
+	import com.developmentarc.core.utils.EventBroker;
 	import com.developmentarc.libtests.tests.EventBrokerTests;
 	
 	import flash.events.Event;

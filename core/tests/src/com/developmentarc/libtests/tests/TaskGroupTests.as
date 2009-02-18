@@ -24,10 +24,10 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.tests
 {
-	import com.developmentarc.framework.controllers.abstracts.AbstractTask;
-	import com.developmentarc.framework.controllers.events.TaskEvent;
-	import com.developmentarc.framework.controllers.interfaces.ITask;
-	import com.developmentarc.framework.datastructures.tasks.TaskGroup;
+	import com.developmentarc.core.tasks.events.TaskEvent;
+	import com.developmentarc.core.tasks.groups.TaskGroup;
+	import com.developmentarc.core.tasks.tasks.AbstractTask;
+	import com.developmentarc.core.tasks.tasks.ITask;
 	import com.developmentarc.libtests.elements.tasks.TestTask;
 	import com.developmentarc.libtests.elements.tasks.TestTaskPriority0;
 	import com.developmentarc.libtests.elements.tasks.TestTaskPriority1;

@@ -1,6 +1,6 @@
 package com.developmentarc.debugloggerpanel.dataobjects
 {
-	import com.developmentarc.framework.utils.LocalConnectionManager;
+	import com.developmentarc.core.utils.LocalConnectionManager;
 	
 	import flash.events.EventDispatcher;
 

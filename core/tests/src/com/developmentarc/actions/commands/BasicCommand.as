@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.actions.commands
 {
-	import com.developmentarc.framework.controllers.abstracts.AbstractCommand;
+	import com.developmentarc.core.actions.commands.AbstractCommand;
 
 	public class BasicCommand extends AbstractCommand
 	{

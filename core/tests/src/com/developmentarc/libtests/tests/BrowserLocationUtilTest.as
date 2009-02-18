@@ -1,6 +1,6 @@
 package com.developmentarc.libtests.tests
 {
-	import com.developmentarc.framework.utils.BrowserLocationUtil;
+	import com.developmentarc.core.utils.BrowserLocationUtil;
 	import com.developmentarc.libtests.elements.TestBrowserLocationUtil;
 	
 	import flexunit.framework.TestCase;

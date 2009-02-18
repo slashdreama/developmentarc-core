@@ -25,7 +25,7 @@
 package com.developmentarc.libtests.tests
 {
 	import com.developmentarc.flexunit.TestUtils;
-	import com.developmentarc.framework.datastructures.utils.Queue;
+	import com.developmentarc.core.datastructures.utils.Queue;
 	
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;
