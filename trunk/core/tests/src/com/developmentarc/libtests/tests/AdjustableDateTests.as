@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.tests
 {
-	import com.developmentarc.framework.utils.AdjustableDate;
+	import com.developmentarc.core.utils.AdjustableDate;
 	
 	import flexunit.framework.TestCase;
 

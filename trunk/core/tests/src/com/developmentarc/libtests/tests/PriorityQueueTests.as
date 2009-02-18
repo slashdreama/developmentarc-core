@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.tests
 {
-	import com.developmentarc.framework.datastructures.utils.PriorityQueue;
+	import com.developmentarc.core.datastructures.utils.PriorityQueue;
 	
 	import flexunit.framework.TestCase;
 

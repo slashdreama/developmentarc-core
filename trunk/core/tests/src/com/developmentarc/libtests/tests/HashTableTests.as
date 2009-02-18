@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.tests
 {
-	import com.developmentarc.framework.datastructures.utils.HashTable;
+	import com.developmentarc.core.datastructures.utils.HashTable;
 	
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;

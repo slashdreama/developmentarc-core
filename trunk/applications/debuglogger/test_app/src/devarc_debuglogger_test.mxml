@@ -28,9 +28,9 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" creationComplete="handleCreation()">
 	<mx:Script>
 		<![CDATA[
-			import com.developmentarc.framework.utils.logging.ClassDebugLogger;
-			import com.developmentarc.framework.utils.logging.DebugLogger;
-			import com.developmentarc.framework.utils.logging.DebugMessage;
+			import com.developmentarc.core.utils.logging.ClassDebugLogger;
+			import com.developmentarc.core.utils.logging.DebugLogger;
+			import com.developmentarc.core.utils.logging.DebugMessage;
 			
 			public var logger:ClassDebugLogger;
 			public var logger2:ClassDebugLogger;
@@ -39,7 +39,7 @@
 			{
 				DebugLogger.externalInterfaceEnabled = true;
 				logger = DebugLogger.getClassLogger(devarc_debuglogger_test);
-				logger2 = DebugLogger.getClassLogger(com.developmentarc.framework.utils.logging.ClassDebugLogger);
+				logger2 = DebugLogger.getClassLogger(com.developmentarc.core.utils.logging.ClassDebugLogger);
 				logger.info("creation complete.");
 			}
 			

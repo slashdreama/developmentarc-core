@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.elements.selectiongroup
 {
-	import com.developmentarc.framework.controllers.interfaces.ISelectable;
+	import com.developmentarc.core.controllers.interfaces.ISelectable;
 	
 	import mx.core.Container;
 

@@ -34,8 +34,8 @@
 	<mx:Script>
 		<![CDATA[
 			import com.developmentarc.localconnection.LCMessage;
-			import com.developmentarc.framework.utils.events.LocalConnectionEvent;
-			import com.developmentarc.framework.utils.LocalConnectionManager;
+			import com.developmentarc.core.utils.events.LocalConnectionEvent;
+			import com.developmentarc.core.utils.LocalConnectionManager;
 			
 			public var conn:LocalConnectionManager;
 			public var localName:String;

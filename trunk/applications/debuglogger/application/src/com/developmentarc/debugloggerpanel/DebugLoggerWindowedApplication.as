@@ -26,11 +26,11 @@ package com.developmentarc.debugloggerpanel
 {
 	import com.developmentarc.debugloggerpanel.dataobjects.ConnectionDO;
 	import com.developmentarc.debugloggerpanel.models.DataModel;
-	import com.developmentarc.framework.datastructures.utils.HashTable;
-	import com.developmentarc.framework.utils.LocalConnectionManager;
-	import com.developmentarc.framework.utils.events.LocalConnectionEvent;
-	import com.developmentarc.framework.utils.logging.DebugLogger;
-	import com.developmentarc.framework.utils.logging.DebugMessage;
+	import com.developmentarc.core.datastructures.utils.HashTable;
+	import com.developmentarc.core.utils.LocalConnectionManager;
+	import com.developmentarc.core.utils.events.LocalConnectionEvent;
+	import com.developmentarc.core.utils.logging.DebugLogger;
+	import com.developmentarc.core.utils.logging.DebugMessage;
 	
 	import flash.desktop.InteractiveIcon;
 	import flash.display.Bitmap;

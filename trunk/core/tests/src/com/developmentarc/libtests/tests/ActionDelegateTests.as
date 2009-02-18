@@ -26,7 +26,7 @@ package com.developmentarc.libtests.tests
 {
 	import com.developmentarc.actions.actiontypes.AutomateBasicAction;
 	import com.developmentarc.actions.commands.BasicCommand;
-	import com.developmentarc.framework.controllers.ActionDelegate;
+	import com.developmentarc.core.actions.ActionDelegate;
 	
 	import flexunit.framework.TestCase;
 

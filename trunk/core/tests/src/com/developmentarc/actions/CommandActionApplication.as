@@ -25,7 +25,7 @@
 package com.developmentarc.actions
 {
 	import com.developmentarc.actions.commands.BasicCommand;
-	import com.developmentarc.framework.utils.EventBroker;
+	import com.developmentarc.core.utils.EventBroker;
 	
 	import mx.core.Application;
 

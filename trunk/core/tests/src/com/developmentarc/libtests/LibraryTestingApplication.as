@@ -30,10 +30,12 @@ package com.developmentarc.libtests
 	import com.developmentarc.libtests.tests.AdjustableDateTests;
 	import com.developmentarc.libtests.tests.BrowserLocationUtilTest;
 	import com.developmentarc.libtests.tests.EventBrokerTests;
+	import com.developmentarc.libtests.tests.HTTPRequestDispatcherTests;
 	import com.developmentarc.libtests.tests.HashTableTests;
 	import com.developmentarc.libtests.tests.InstanceFactoryTests;
 	import com.developmentarc.libtests.tests.PriorityQueueTests;
 	import com.developmentarc.libtests.tests.QueueTests;
+	import com.developmentarc.libtests.tests.RequestDelegateTests;
 	import com.developmentarc.libtests.tests.SelectionControllerTests;
 	import com.developmentarc.libtests.tests.SelectionGroupTests;
 	import com.developmentarc.libtests.tests.SingletonFactoryTest;
@@ -65,6 +67,8 @@ package com.developmentarc.libtests
 		private var taskgroup:TaskGroupTests;
 		private var browserLocationUtil:BrowserLocationUtilTest;
 		private var actionDelegateTests:ActionDelegateTests;
+		private var httpDispatcherTest:HTTPRequestDispatcherTests;
+		private var requestDelegateTest:RequestDelegateTests;
 		
 		public function LibraryTestingApplication()
 		{
@@ -100,7 +104,9 @@ package com.developmentarc.libtests
 			suite.addTest( TestUtils.generateFullSuite(PriorityQueueTests) );
 			suite.addTest( TestUtils.generateFullSuite(TaskControllerTests) );
 			suite.addTest( TestUtils.generateFullSuite(BrowserLocationUtilTest) );
-			suite.addTest( TestUtils.generateFullSuite(ActionDelegateTests) );
+			suite.addTest( TestUtils.generateFullSuite(ActionDelegateTests) ); 
+			suite.addTest( TestUtils.generateFullSuite(HTTPRequestDispatcherTests) );
+			suite.addTest( TestUtils.generateFullSuite(RequestDelegateTests) );
 			//*/
 			
 			

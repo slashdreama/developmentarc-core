@@ -1,6 +1,6 @@
 package com.developmentarc.libtests.elements.tasks
 {
-	import com.developmentarc.framework.controllers.abstracts.AbstractTask;
+	import com.developmentarc.core.actions.actions.AbstractAction;
 
 	public class TestTaskPriority0 extends TestTask
 	{

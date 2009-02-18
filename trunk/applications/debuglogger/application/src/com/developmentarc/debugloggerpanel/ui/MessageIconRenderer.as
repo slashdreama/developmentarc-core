@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.debugloggerpanel.ui
 {
-	import com.developmentarc.framework.utils.logging.DebugMessage;
+	import com.developmentarc.core.utils.logging.DebugMessage;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Image;

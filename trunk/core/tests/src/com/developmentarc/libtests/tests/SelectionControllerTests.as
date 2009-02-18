@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.tests
 {
-	import com.developmentarc.framework.controllers.SelectionController;
+	import com.developmentarc.core.controllers.SelectionController;
 	import com.developmentarc.libtests.elements.selectiongroup.SelectionObject;
 	
 	import flexunit.framework.TestCase;

@@ -24,7 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.libtests.tests
 {
-	import com.developmentarc.framework.utils.SingletonFactory;
+	import com.developmentarc.core.utils.SingletonFactory;
 	import com.developmentarc.libtests.elements.instances.InstanceClass;
 	import com.developmentarc.libtests.elements.instances.InstanceClassTwo;
 	
