@@ -29,13 +29,13 @@ package com.developmentarc.core.services.requests
 	
 	import flash.events.EventDispatcher;
 	
-	[Event(name="requestCreated",type="com.developmentarc.core.services.events.RequestEvent")]
-	[Event(name="requestDispatched",type="com.developmentarc.core.services.events.RequestEvent")]
-	[Event(name="requestReturned",type="com.developmentarc.core.services.events.RequestEvent")]
-	[Event(name="requestParsing",type="com.developmentarc.core.services.events.RequestEvent")]
-	[Event(name="requestCancel",type="com.developmentarc.core.services.events.RequestEvent")]
-	[Event(name="requestError",type="com.developmentarc.core.services.events.RequestEvent")]
-	[Event(name="requestComplete",type="com.developmentarc.core.services.events.RequestEvent")] 
+	[Event(name="created",type="com.developmentarc.core.services.events.RequestEvent")]
+	[Event(name="dispatched",type="com.developmentarc.core.services.events.RequestEvent")]
+	[Event(name="returned",type="com.developmentarc.core.services.events.RequestEvent")]
+	[Event(name="parsing",type="com.developmentarc.core.services.events.RequestEvent")]
+	[Event(name="cancel",type="com.developmentarc.core.services.events.RequestEvent")]
+	[Event(name="error",type="com.developmentarc.core.services.events.RequestEvent")]
+	[Event(name="complete",type="com.developmentarc.core.services.events.RequestEvent")] 
 	/**
 	 * <p>Abstract class used as the base for all request inside of the DevelopmentArc service layer.
 	 * The responsibility of the request is to define all of the detailed information for a given instance of a service. A request is simply a custom data object

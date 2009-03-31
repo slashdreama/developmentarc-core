@@ -98,6 +98,7 @@ package com.developmentarc.core.services.dispatchers
 			if(service.method == HTTPRequest.METHOD_GET) {
 				// Build query string key / value pairs
 				service.url += buildQueryString(request.params);
+				service.request = null;
 			}
 			else {
 				service.request = request.params;
