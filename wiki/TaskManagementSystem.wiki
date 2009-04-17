@@ -11,7 +11,7 @@ The !TaskController class is the main manager of the task system framework. This
 
 The !TaskController, by default, is not a singleton and the goal of the framework is to allow multiple Task systems to be running in any given application. For example, one task system can be created to manage server requests while another can be used to control internal business operations. To create multiple systems, simply create multiple instances of the !TaskController.
 
-To use the !TaskController as a singleton, utilize the SingletonFactory utility class within !DevelopmentArc<sup>TM</sup>.
+To use the !TaskController as a singleton, utilize the SingletonFactory utility class within !DevelopmentArc<sup>TM</sup> Core.
 
 The controller starts a set of tasks based on the active task limit set on the controller. By default 2 tasks can be concurrently active within the controller, however this is configurable in the task controller instance.  When a task is complete the controller will remove the task from the active list and start the next one in the queue, if any.
 
