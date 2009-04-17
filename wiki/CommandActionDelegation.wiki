@@ -1,4 +1,4 @@
-#summary A command and action delegation system built on top of the DevelopmentArc Core EventBroker.
+#summary A command and action delegation system built on top of the DevelopmentArc<sup>TM</sup> Core EventBroker.
 #labels Phase-Design,Phase-Implementation,Phase-Support
 
 = Introduction =
@@ -8,7 +8,7 @@ The Command and Action Delegation (CAD) system follows the Command Pattern which
 The CAD system is useful when common functionality within an application needs to be triggered by multiple sources.  An example of this would be a save data command.  The action of saving user data (to an Local Shared Object or desktop using AIR) can be triggered by many different scenarios. Users could save via a menu option in a menu bar, the right-click menu, pressing CMD+S, or even an auto-save feature.  The functionality of saving the data is always the same and would therefore be wrapped (encapsulated) within a Save Action.  The different triggers, say auto-save, would dispatch the Save Command which would trigger the Save Action functionality.
 
 == Why CAD? ==
-The !DevelopmentArc Core CAD system is similar to the Cairngorm Command system, which is also built upon the Command Pattern used in other languages such as C++ and Java.  We have added CAD to Core for multiple reasons:
+The !DevelopmentArc<sup>TM</sup> Core CAD system is similar to the Cairngorm Command system, which is also built upon the Command Pattern used in other languages such as C++ and Java.  We have added CAD to Core for multiple reasons:
 
  # *Framework Completeness* - We feel that the CAD system is a common requirement with application development and integrates seamlessly with the [TaskManagementSystem Task Management System].  Without having the CAD system in Core, developers who are not using Cairngorm or another framework that supports the Command pattern would require the developer to implement either a custom solution or implement a new framework/micro-architecture to get this functionality.
  # *MXML Definable* - The CAD Actions are designed to be registered either by adding Actions via ActionScript or by defining them via MXML.  Using MXML makes creating a single Action configuration MXML file very easy and does not require developers to look for an AS Class or file to define the Action/Command Relationship.
@@ -38,7 +38,7 @@ package com.developmentarc.demo {
 }
 }}}
 
-The !SaveAction Class extends the !DevelopmentArc Core !AbstractAction and then overrides the `applyAction()` method.  When a Command is dispatched the `applyAction()` method of an Action is called by the !ActionDelegate.  This method must be overridden or an error will be thrown by the !AbstractAction. For this example, we will not write out real save logic, but just trace out the statement "File saved." when the use triggers the save command.
+The !SaveAction Class extends the !DevelopmentArc<sup>TM</sup> Core !AbstractAction and then overrides the `applyAction()` method.  When a Command is dispatched the `applyAction()` method of an Action is called by the !ActionDelegate.  This method must be overridden or an error will be thrown by the !AbstractAction. For this example, we will not write out real save logic, but just trace out the statement "File saved." when the use triggers the save command.
 
 The next step is to create our Save Command.  Any Command we create must extend the Flash Event class since all commands are routed through the Core EventBroker.  An !AbstractCommand has been provided to make this process of creating and dispatching commands easier.  In our example, we are simply extending the !AbstractCommand and adding a static constant for type declaration.  In a real application we could add custom properties and other data to the command that is required.
 
@@ -173,7 +173,7 @@ protected function handleDataLoadComplete(event:LoadEvent):void {
 }
 }}}
 
-Another ability of the CAD is to tie into the !DevelopmentArc Core Task system and let your Action delegate tasks based on UI states.  For example, when a user changes a Tab you may want to load tab specific data from the server:
+Another ability of the CAD is to tie into the !DevelopmentArc<sup>TM</sup> Core Task system and let your Action delegate tasks based on UI states.  For example, when a user changes a Tab you may want to load tab specific data from the server:
 
 {{{
 override public function applyAction(command:Event) {
