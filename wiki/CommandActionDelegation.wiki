@@ -1,4 +1,4 @@
-#summary A command and action delegation system built on top of the !DevelopmentArc  <sup>TM</sup> Core EventBroker.
+#summary A command and action delegation system built on top of the DevelopmentArc<sup>TM</sup> Core EventBroker.
 #labels Phase-Design,Phase-Implementation,Phase-Support
 
 = Introduction =
