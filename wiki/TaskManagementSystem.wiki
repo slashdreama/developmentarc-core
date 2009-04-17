@@ -1,4 +1,4 @@
-#summary Task System is a priority queuing system that enables an application to execute specific bundles of business and/or server logic in a specific order based on priority and overrides.
+#summary Task System<sup>TM</sup> is a priority queuing system that enables an application to execute specific bundles of business and/or server logic in a specific order based on priority and overrides.
 
 = Introduction =
 
