@@ -1,6 +1,7 @@
 #summary Service Layer provides a componitized approach to handling the data access layer of your Flex application
 
-*Avaible currenty in the HEAD of the source tree. To be released in Version .09*
+*NOTE: Available currently in the HEAD of the source tree. To be released in Version .09*
+
 = Introduction =
 
 Add your content here.
