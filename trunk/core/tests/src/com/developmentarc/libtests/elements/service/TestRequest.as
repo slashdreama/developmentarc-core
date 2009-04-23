@@ -67,9 +67,9 @@ package com.developmentarc.libtests.elements.service
 		 * @param dispatcherClass Class reference to the IDispatcher class
 		 * @param parserClass Class reference to the IParser class
 		 */
-		public function TestRequest(dispatcherClass:Class, parserClass:Class)
+		public function TestRequest(dispatcherClass:Class, parserClass:Class, mode=AbstractRequest.MODE_LIVE, mockDispatcherClass:Class=null)
 		{
-			super("", "", "", dispatcherClass, parserClass);
+			super("", "", "", dispatcherClass, parserClass,mode, mockDispatcherClass);
 			otherRequests = new Array();
 		}
 		

@@ -193,6 +193,7 @@ package com.developmentarc.libtests.tests
 		 * Verify a Get then a Post request both work as expected
 		 */
 		public function testTwoRequestsGetToPost():void {
+			// create requests
 			var getRequest:TestHTTPRequest = new TestHTTPRequest(HTTPRequest.METHOD_GET,'/1.xml');
 			var postRequest:TestHTTPRequest = new TestHTTPRequest(HTTPRequest.METHOD_POST,'.xml');	
 			
@@ -209,7 +210,7 @@ package com.developmentarc.libtests.tests
 			dispatcher.dispatch(getRequest, parser);		
 
 			// SECOND REQUEST
-			dispatcher.addEventListener(DispatcherEvent.RESULT, addAsync(handleTwoRequestsResults, 1000), false, 0, true);
+			dispatcher.addEventListener(DispatcherEvent.RESULT, addAsync(handleTwoRequestsResults, 5000), false, 0, true);
 
 			// set parser 
 			parser = new postRequest.parserClass();

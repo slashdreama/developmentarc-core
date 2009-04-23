@@ -57,8 +57,8 @@ package com.developmentarc.libtests.elements.service
 		 * @param mockClass Class reference to IMockDispatcher. Default is null
 		 * @param mode Strig defining the current mode of the dispatcher. Default is MODE_LIVE
 		 */
-		public function TestDispatcher(mockClass:Class=null,mode:String=MODE_LIVE) {
-			super(mockClass, mode);
+		public function TestDispatcher() {
+			super();
 			map = new HashTable();
 		}
 		

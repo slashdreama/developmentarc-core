@@ -45,7 +45,7 @@ package com.developmentarc.core.services.requests
 	 * <p>
 	 * <b>Properties</b>
 	 * A request can define 5 properties during construction of the request. The goal is for developers to define their own Requests and provide the default into the
-	 * AbstractRequest cosntructor.  The first three properties are custom properties that are used in conjunction with the dispatcher that is associated with this request. It is 
+	 * AbstractRequest constructor.  The first three properties are custom properties that are used in conjunction with the dispatcher that is associated with this request. It is 
 	 * up to the developer to define each to meet the purpose of the request and dispatcher. For an example of usage, look how HTTPRequestDispatcher uses each parameter.  
 	 * </p>
 	 * <p> The final two properties are used to link the request with a dispatcher (IDispatcher) and a parser (IParser).</p>
@@ -64,6 +64,14 @@ package com.developmentarc.core.services.requests
 	 * </p>
 	 * 
 	 * <p>
+	 * <b>Mock</b>
+	 * A Request class can define an IMockDispatcher via a class reference which when the Request and the RequestDelegate are in "mock" mode, will be used
+	 * to fake, the service request and simple return data in the format expected.  This is useful when developing a system that does not yet have a complete service api
+	 * or database constructed.  By having a seperate switch in both the RequestDelegate and the AbstractRequest, developers can toggle on and off from an application and a Request level
+	 * their mock implementation. This allows for easier Unit Testing and parallel development with server teams that are creating the service API.
+ 	 * </p>
+ 	 * 
+	 * <p>
 	 * <b>LifeCycle</b>
 	 * As a request moves through the service layer the request will will enter various lifecycle phases, each of which are defined in this class. See RequestDelegate 
 	 * for definition of each event.
@@ -81,7 +89,11 @@ package com.developmentarc.core.services.requests
 	public class AbstractRequest extends EventDispatcher implements IRequest
 	{
 		
-		// Private get/set properties
+		/* STATIC PROPERTIES */
+		public static const MODE_MOCK:String = "MODE_MOCK";
+		public static const MODE_LIVE:String = "MODE_LIVE";
+		
+		// PRIVATE GET/SET METHODS
 		
 		/**
 		 * @private
@@ -123,6 +135,18 @@ package com.developmentarc.core.services.requests
 		 * The implementation will define the appropriate use.
 		 */
 		private var __params:Object;
+		
+		/**
+		 * @private
+		 * Marks the current mode of the dispatcher
+		 */
+		private var __mode:String;
+		
+		/**
+		 * @private
+		 * Class reference to the IMockDispatcher class
+		 */
+		private var __mockClass:Class
 
 			
 		// Protected properties
@@ -143,12 +167,14 @@ package com.developmentarc.core.services.requests
 		 * @param dispathcerClass Class reference to the dispatcher used by this request.
 		 * @param parserClass Class reference to the parser used to translate raw data from the result of this request in to application specific data.
 		 */
-		public function AbstractRequest(type:String, uri:String, source:String, dispatcherClass:Class, parserClass:Class) {
+		public function AbstractRequest(type:String, uri:String, source:String, dispatcherClass:Class, parserClass:Class, mode:String=MODE_LIVE, mockClass:Class=null) {
 			__type = type;
 			__uri = uri;
 			__source = source;
 			__parserClass = parserClass;
 			__dispatcherClass = dispatcherClass;
+			__mockClass = mockClass;
+			__mode = mode;
 			
 			// Mark as created
 			create();
@@ -231,6 +257,25 @@ package com.developmentarc.core.services.requests
 		public function get phase():String {
 			return currentPhase;
 		}
+		
+		/**
+		 * The current mode of the application. Default is MOCK_LIVE
+		 * 
+		 * @return String Mock mode.
+		 */
+		public function get mode():String {
+			return __mode;
+		}
+		
+		/**
+		 * Reference to the IMockDispatcher used to mock this disptacher.
+		 * 
+		 * @return Class Class reference to IMockDispatcher.
+		 */
+		public function get mockClass():Class {
+			return __mockClass;
+		}
+		
 // Dispatch methods
 		/**
 		 * Method executes this request based on the given dispatcher and parser. The method

@@ -25,18 +25,18 @@
 package com.developmentarc.core.services
 {
 	import com.developmentarc.core.datastructures.utils.HashTable;
-	import com.developmentarc.core.services.dispatchers.AbstractDispatcher;
 	import com.developmentarc.core.services.dispatchers.IDispatcher;
 	import com.developmentarc.core.services.events.DispatcherEvent;
 	import com.developmentarc.core.services.events.RequestEvent;
 	import com.developmentarc.core.services.mocks.IMockDispatcher;
 	import com.developmentarc.core.services.parsers.IParser;
+	import com.developmentarc.core.services.requests.AbstractRequest;
 	import com.developmentarc.core.services.requests.IRequest;
 	import com.developmentarc.core.utils.InstanceFactory;
 	
 	/**
 	 * <p>The RequestDelegate is the central class for DevelopmentArc's service layer.  The job of the delegate is to pass a request through the various points
-	 * of the service layer. Each request going coming into the delegate will provide a class reference to a paticular dispatcher (for retrieving data) and 
+	 * of the service layer. Each request  coming into the delegate will provide a class reference to a paticular dispatcher (for retrieving data) and 
 	 * a parser (processing raw data) and then back to the request for storage.  </p>
 	 * 
 	 * <p>
@@ -65,7 +65,7 @@ package com.developmentarc.core.services
 	 * 
 	 * <p>
 	 * <b>Interacting Directly with RequestDelegate</b>
-	 * The goal is provide access to the RequestDelegate only through the request itself. AbtractRequest provides a start and stop method which handle communication with the RequestDelegate. 
+	 * The goal is to provide access to the RequestDelegate only through the Request itself. AbtractRequest provides a start and stop method which handle communication with the RequestDelegate. 
 	 * Meaning, there is little direct communication with the RequestDelegate.  
 	 * </p>
 	 * 
@@ -227,9 +227,9 @@ package com.developmentarc.core.services
 			// Dispatch request
 			var key:*;
 			// Mock Mode
-			if(mode == MODE_MOCK && dispatcher.mode == AbstractDispatcher.MODE_MOCK) {
+			if(mode == MODE_MOCK && request.mode == AbstractRequest.MODE_MOCK) {
 				// Get mock dispatcher
-				var mock:IMockDispatcher = getMock(dispatcher);
+				var mock:IMockDispatcher = getMock(request);
 				// Dispatch via mock
 				key = mock.dispatch(request, parser);
 			}	
@@ -282,9 +282,9 @@ package com.developmentarc.core.services
 			if(key) {
 				// Cancel request
 				// Mock Mode
-				if(mode == MODE_MOCK && dispatcher.mode == AbstractDispatcher.MODE_MOCK) {
-					var mock:IMockDispatcher = getMock(dispatcher);
-					getMock(dispatcher).cancel(request, key);
+				if(mode == MODE_MOCK && request.mode == AbstractRequest.MODE_MOCK) {
+					var mock:IMockDispatcher = getMock(request);
+					mock.cancel(request, key);
 				}
 				// Live	
 				else {
@@ -350,12 +350,12 @@ package com.developmentarc.core.services
 		 * 
 		 * @return IMockDispatcher Dispatcher who mocks the request.
 		 */
-		private function getMock(dispatcher:IDispatcher):IMockDispatcher {
+		private function getMock(request:IRequest):IMockDispatcher {
 			var mock:IMockDispatcher;
 			
-			var hasInstance:Boolean = _mockFactory.containsInstance(dispatcher.mockClass); 
+			var hasInstance:Boolean = _mockFactory.containsInstance(request.mockClass); 
 			
-			mock = _mockFactory.getInstance(dispatcher.mockClass);
+			mock = _mockFactory.getInstance(request.mockClass);
 			
 			// If instance was not created before - add events
 			if(!hasInstance) {
@@ -415,8 +415,8 @@ package com.developmentarc.core.services
 		}
 		
 		/**
-		 * Method handles fault even from IDispatcher indicating an error occured
-		 * while dispatching ruquest.  method will mark request as error and will remove from
+		 * Method handles fault event from IDispatcher indicating an error occured
+		 * while dispatching request.  Method will mark request as error and will remove from
 		 * delegation system.
 		 * 
 		 * @param event DispatcherEvent from IDispatcher that failed.

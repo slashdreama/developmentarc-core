@@ -32,13 +32,10 @@ package com.developmentarc.core.services.dispatchers
 	/**	
 	 * <p>Interface is used to define the standard API for a dispatcher in DevelopmentArc's
 	 * service layer. The purpose of a dispatcher is to encapsulate a service instance and reuse that
-	 * instance for the life of the application lifecycle.  A dispatcher's task is to use the given request and uses the provided
-	 * data from that request along with it's parser to construct and execute a service call. The implementing class is
+	 * instance for the life of the application lifecycle.  A dispatcher's task is to use the given Request and use it's provided
+	 * data along with it's parser to construct and execute a service call. The implementing class is
 	 * responsible for listening to the service events and upon a success or failure respond dispatch a DispatcherEvent informing 
 	 * the system of the result.</p>
-	 * 
-	 * <p>A mock API is also build in allowing for a service's result to be mocked up in the case a service is not yet completed. This is more for
-	 * development purposes.</p>
 	 * 
 	 * @author Aaron Pedersen
 	 */ 
@@ -61,17 +58,6 @@ package com.developmentarc.core.services.dispatchers
 		 * @param * Unique id used to define the request in the dispatcher.
 		 */
 		function cancel(request:IRequest, key:*):void;
-		
-		/**
-		 * The current mode the dispatcher is in; mock or live.
-		 */
-		function get mode():String;
-		
-		/**
-		 * Class refernce to a IMockDispatcher used to mock up data to imitate a real service request
-		 * 
-		 * @return Class Class reference to IMockDispatcher implementation
-		 */
-		function get mockClass():Class;
+
 	}
 }
