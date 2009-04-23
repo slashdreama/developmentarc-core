@@ -40,14 +40,7 @@ package com.developmentarc.core.services.dispatchers
 	 * 
 	 * <p>A child class must define the dispatch and cancel methods.  The dispatch method is the gateway to executing a paticular request. 
 	 * The RequestDelegate will call this method passing in both the request and parser.  The child class will take the neccessary information out of both
-	 * the request and the parser and construct and execute the appropriate data store call.  Cancel must be defined to halt an already executed request.</p>
-	 * 
-	 * <p>
-	 * <b>Mock</b>
-	 * A dispatcher class can define a IMockDispatcher via  class refernce which when the dispatcher and the RequestDelegate are in "mock" mode, will be used
-	 * to fake, the service request and simple return data in the format expected.  This is useful when developing a system that does not yet have a complete service api
-	 * or database constructed.
- 	 * </p>
+	 * the request and parser and construct and execute the appropriate data store call.  Cancel must be defined to halt an executing request.</p>
 	 * 
 	 * @see com.developmentarc.core.services.parsers.AbstractParser AbstractParser
 	 * @see com.developmentarc.core.services.requests.AbstractRequest AbstractRequest
@@ -57,32 +50,11 @@ package com.developmentarc.core.services.dispatchers
 	 */
 	public class AbstractDispatcher extends EventDispatcher implements IDispatcher
 	{
-		/* STATIC PROPERTIES */
-		public static const MODE_MOCK:String = "MODE_MOCK";
-		public static const MODE_LIVE:String = "MODE_LIVE";
-		
-		/* PRIVATE PROPERTIES */
-		/**
-		 * @private
-		 * Marks the current mode of the dispatcher
-		 */
-		private var __mode:String;
-		
-		/**
-		 * @private
-		 * Class reference to the IMockDispatcher class
-		 */
-		private var __mockClass:Class
-		
 		/**
 		 * Constuctor
-		 * 
-		 * @param mockClass - Class reference to IMockClass
-		 * @param mode - String defining the mode of the dispathcer class. Default is MODE_LIVE
 		 */
-		public function AbstractDispatcher(mockClass:Class=null,mode:String=MODE_LIVE) {
-			__mockClass = mockClass;
-			__mode = mode;
+		public function AbstractDispatcher() {
+
 		}
 		
 		/**
@@ -106,24 +78,6 @@ package com.developmentarc.core.services.dispatchers
 		 */
 		public function cancel(request:IRequest, key:*):void {
 			throw new Error("Child must implement");
-		}
-		
-		/**
-		 * The current mode of the application. Default is MOCK_LIVE
-		 * 
-		 * @return String Mock mode.
-		 */
-		public function get mode():String {
-			return __mode;
-		}
-		
-		/**
-		 * Reference to the IMockDispatcher used to mock this disptacher.
-		 * 
-		 * @return Class Class reference to IMockDispatcher.
-		 */
-		public function get mockClass():Class {
-			return __mockClass;
 		}
 	}
 }

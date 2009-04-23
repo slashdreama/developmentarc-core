@@ -26,6 +26,7 @@ package com.developmentarc.libtests.tests
 {
 	import com.developmentarc.core.services.RequestDelegate;
 	import com.developmentarc.core.services.events.RequestEvent;
+	import com.developmentarc.core.services.requests.AbstractRequest;
 	import com.developmentarc.core.services.requests.HTTPRequest;
 	import com.developmentarc.core.services.requests.IRequest;
 	import com.developmentarc.libtests.elements.service.FaultDispatcher;
@@ -36,9 +37,6 @@ package com.developmentarc.libtests.tests
 	import com.developmentarc.libtests.elements.service.ResultParser;
 	import com.developmentarc.libtests.elements.service.TaskDO;
 	import com.developmentarc.libtests.elements.service.TestHTTPRequest;
-	import com.developmentarc.libtests.elements.service.TestMockLiveModeDispatcher;
-	import com.developmentarc.libtests.elements.service.TestMockModeMockModeDispatcher;
-	import com.developmentarc.libtests.elements.service.TestNoMockMockModeDispatcher;
 	import com.developmentarc.libtests.elements.service.TestRequest;
 	
 	import flash.events.Event;
@@ -422,15 +420,15 @@ package com.developmentarc.libtests.tests
 		 
 // Mock Test Metohds
 		/**
-		 * Verifies real dispatcher is used when delegate mode is "mock",
+		 * Verifies real dipatcher is used when RequestDelegate mode is "mock",
 		 * but Dispatcher is in "live" mode.
 		 */
-		 public function testDelegateMockModeDispatcherModeLive():void {
-			// Set Delegate Mode 
+		 public function testRequestMockModeDispatcherModeLive():void {
+			// Set Delegate Mode to Mock
 			RequestDelegate.mode = RequestDelegate.MODE_MOCK;
 			
 			// Create requests
-			var request:TestRequest = new TestRequest(TestMockLiveModeDispatcher, ResultParser);
+			var request:TestRequest = new TestRequest(ResultDispatcher, ResultParser, AbstractRequest.MODE_LIVE, MockDispatcher);
 			
 			request.name = "MOCKMODEONE";
 			// Listen to last request
@@ -441,16 +439,16 @@ package com.developmentarc.libtests.tests
 			
 		} 
 		/**
-		 * Verifies real dispatcher is used when delegate mode is "mock", 
-		 * and Dispatcher mode is "mock" but no mock dispatcher is designated.
+		 * Verifies real dispatcher is used when RequestDelegate mode is "mock", 
+		 * and Dispatcher mode is "mock" but no mock dispatcher is assigned in the Request.
 		 * This should throw a null exception"
 		 */
-		  public function testDelegateMockModeDispatcherModeMockNoMockDispatcher():void {
+		 public function testDelegateMockModeDispatcherModeMockNoMockDispatcher():void {
 			// Set Delegate Mode 
 			RequestDelegate.mode = RequestDelegate.MODE_MOCK;
 			
 			// Create requests
-			var request:TestRequest = new TestRequest(TestNoMockMockModeDispatcher, ResultParser);
+			var request:TestRequest = new TestRequest(ResultDispatcher, ResultParser, AbstractRequest.MODE_MOCK);
 			
 			// Start requests
 			try {
@@ -462,34 +460,34 @@ package com.developmentarc.libtests.tests
 			}
 			
 			assertTrue("We should not be here, the request should have errored because there is no mock", false);
-		}  
+		} 
 		/**
-		 * Verifies real dispatcher is used when Delegate is in "live" mode and
+		 * Verifies real dispatcher is used when RequestDelegate is in "live" mode and
 		 * the disptacher is in "mock" mode
 		 */
-		  public function testDelegateLiveModeDispatherModeMock():void {
+		 public function testDelegateLiveModeDispatherModeMock():void {
 			
 			RequestDelegate.mode = RequestDelegate.MODE_LIVE;
 			// Create requests
-			var request:TestRequest = new TestRequest(TestMockModeMockModeDispatcher, ResultParser);
+			var request:TestRequest = new TestRequest(ResultDispatcher, ResultParser, AbstractRequest.MODE_LIVE, MockDispatcher);
 			
 			// Listen to last request
 			request.addEventListener(RequestEvent.COMPLETE, addAsync(handleDelegateLiveModeDispatherModeMock, 1000), false, 0, true);
 			
 			// Start requests
 			request.start();
-		}  
+		} 
 		
 		/**
-		 * Verifies mock dispatcher is used when delegate mode is "mock", dispatcher mode is
+		 * Verifies mock dispatcher is used when RequestDelegate mode is "mock", Request mode is
 		 * "mock", and a mock dispatcher is provided"
 		 */
-		 public function testDelegateMockModeDispatcherModeMockWithMockDispatcher():void {
+		public function testDelegateMockModeDispatcherModeMockWithMockDispatcher():void {
 			// Set Delegate Mode 
 			RequestDelegate.mode = RequestDelegate.MODE_MOCK;
 			
 			// Create requests
-			var request:TestRequest = new TestRequest(TestMockModeMockModeDispatcher, ResultParser);
+			var request:TestRequest = new TestRequest(ResultDispatcher, ResultParser, AbstractRequest.MODE_MOCK, MockDispatcher);
 			
 			request.name = 'LASTONE TO NOT WORK';
 			
@@ -498,7 +496,7 @@ package com.developmentarc.libtests.tests
 			
 			// Start requests
 			request.start();
-		} 
+		}
 		
 		
 // Event Method

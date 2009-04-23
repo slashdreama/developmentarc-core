@@ -37,8 +37,8 @@ package com.developmentarc.core.services.dispatchers
 
 	/**
 	 * <p>Class defines a dispatcher that wraps an instance of the HTTPService class provided by flex.  This class should be 
-	 * used for any HTTPService calls made in the serivce layer. The goal is to provide one HTTPService that all requests an use to execute
-	 * their required call.</p>
+	 * used for any HTTPService calls made in the serivce layer. The goal is to provide one HTTPService, 
+	 * that all requests can use to execute their required call.</p>
 	 * 
 	 * <p>When using this dispatcher a HTTPRequest or an extension is necessary to provide the method and content type of
 	 * the incoming request which will be leveraged by the HTTPService.</p>
@@ -46,7 +46,7 @@ package com.developmentarc.core.services.dispatchers
 	 * <p>
 	 * <b>Events</b>
 	 * <br />
-	 * <p>A DispatcherEvent.RESULT is dispatched upon a successful response from the HTTPService.  The dispatcher bundle
+	 * <p>A DispatcherEvent.RESULT is dispatched upon a successful response from the HTTPService.  The dispatcher bundles
 	 * the unique id of the request, the resulting data, and the original event.</p>
 	 * 
 	 * <p>Upon a failure of the HTTPService, a DispatcherEvent.FAULT is dispathced with the unique id and the original event.</p>

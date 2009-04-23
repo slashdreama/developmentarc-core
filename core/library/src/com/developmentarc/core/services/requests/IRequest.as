@@ -27,9 +27,11 @@
 	import flash.events.IEventDispatcher;
 	
 	/**
-	 * The ITask interface allows the implemented class to be treated
+	 * <p>The ITask interface allows the implemented class to be treated
 	 * as a Request object allowing for it to be used through
-	 * DevelopmentArc's service layer via the RequestDelegate.
+	 * DevelopmentArc's service layer via the RequestDelegate.</p>
+	 * 
+	 * <p>A mock API is also build-in allowing for a service's result to be mocked up in the case a service is not yet completed.</p>
 	 *  
 	 * @see com.developmentarc.core.services.requests.AbstractRequest AbstractRequest
 	 * 
@@ -86,6 +88,18 @@
 		 * @return String Current phase		 
 		 */
 		function get phase():String;
+		
+		/**
+		 * The current mode the dispatcher is in; mock or live.
+		 */
+		function get mode():String;
+		
+		/**
+		 * Class refernce to a IMockDispatcher used to mock up data to imitate a real service request
+		 * 
+		 * @return Class Class reference to IMockDispatcher implementation
+		 */
+		function get mockClass():Class;
 		
 		/**
 		 * Starts request.
