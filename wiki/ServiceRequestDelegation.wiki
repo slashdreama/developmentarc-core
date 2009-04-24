@@ -1,10 +1,10 @@
-#summary The Service Request Delegation (SRD) layer of DevelopmentArc<sup>TM</sup> Core provides a componentized architecture to solving your application’s data access needs.
+#summary The Service Request Delegation (SRD) layer of !DevelopmentArc<sup>TM</sup> Core provides a componentized architecture to solving your application’s data access needs.
 
 *NOTE:* SRD is scheduled for release in version .90.  
 
 = Introduction =
 
-The Service Request Delegation (SRD) layer of DevelopmentArc<sup>TM</sup> Core provides a componentized architecture to solving your application’s data access needs.  The architecture breaks up your service layer into 4 distinct parts; Delegation, Requests, Dispatchers, and Parsers.   This model allows for a central theme of reuse throughout your application. 
+The Service Request Delegation (SRD) layer of !DevelopmentArc<sup>TM</sup> Core provides a componentized architecture to solving your application’s data access needs.  The architecture breaks up your service layer into 4 distinct parts; Delegation, Requests, Dispatchers, and Parsers.   This model allows for a central theme of reuse throughout your application. 
 You will be able to combine Requests, Dispatchers, and Parsers in many different ways to solve various data communication and parsing needs that your application may encounter.   In one situation you may need to connect to a local database and retrieve and parse table data while other times the data store could be online via a Rest-ful API.  If in both cases your returning data is in a common format, the same parser could be reused to format your raw data into an application specific format. 
 
 
@@ -166,9 +166,9 @@ Notice each node of the xml is parsed (type converted if necessary) and then the
 
 Our Request will define a specific API for an !HTTPService and will tie the required Dispatcher (!HTTPServiceDispatcher), Parser (!UserParser) to itself for processing. 
 
-To help provide a standard API, DevelopmentArc<sup>TM</sup> Core provides an !HTTPRequest Class to assist in build all your !HTTPService requests on top of. This class extends !AbstractRequest and adds to the constructor api to include properties specific to an !HTTPService.
+To help provide a standard API, !DevelopmentArc<sup>TM</sup> Core provides an !HTTPRequest Class to assist in build all your !HTTPService requests on top of. This class extends !AbstractRequest and adds to the constructor api to include properties specific to an !HTTPService.
 
-For our use case, we will be requesting data from DevelopmentArc’s test service.   The full url will be 'http://test.developmentarc.com/users/1' (Note: The '1' is our user id and will be provided in the UserRequest constructor).
+For our use case, we will be requesting data from !DevelopmentArc’s test service.   The full url will be 'http://test.developmentarc.com/users/1' (Note: The '1' is our user id and will be provided in the UserRequest constructor).
  
 Our constructor will take one parameters for the user id and the method itself will pass all the static data used to request a user from the testing service up to the parent hierarchy.    That data includes:
 
