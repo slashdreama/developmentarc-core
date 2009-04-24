@@ -168,7 +168,7 @@ Our Request will define a specific API for an !HTTPService and will tie the requ
 
 To help provide a standard API, !DevelopmentArc<sup>TM</sup> Core provides an !HTTPRequest Class to assist in build all your !HTTPService requests on top of. This class extends !AbstractRequest and adds to the constructor api to include properties specific to an !HTTPService.
 
-For our use case, we will be requesting data from !DevelopmentArc’s test service.   The full url will be 'http://test.developmentarc.com/users/1' (Note: The '1' is our user id and will be provided in the UserRequest constructor).
+For our use case, we will be requesting data from !DevelopmentArc’s test service.   The full url will be 'http://test.developmentarc.com/users/1' (Note: The '1' is our user id and will be provided in the !UserRequest constructor).
  
 Our constructor will take one parameters for the user id and the method itself will pass all the static data used to request a user from the testing service up to the parent hierarchy.    That data includes:
 
