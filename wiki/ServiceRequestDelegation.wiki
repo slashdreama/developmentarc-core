@@ -58,7 +58,7 @@ After data has returned, the !RequestDelegate will pass the raw data off to the 
 
 == Complete ==
 
-Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the Request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the RequestDelegate.
+Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the Request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the !RequestDelegate.
 
 
 == Cancel ==
