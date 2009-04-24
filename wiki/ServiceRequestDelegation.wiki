@@ -1,0 +1,466 @@
+#summary The Service Request Delegation (SRD) layer of DevelopmentArc Core provides a componentized architecture to solving your application’s data access needs.
+
+*NOTE:* SRD is scheduled for release in version .90.  
+
+= Introduction =
+
+The Service Request Delegation (SRD) layer of DevelopmentArc Core provides a componentized architecture to solving your application’s data access needs.  The architecture breaks up your service layer into 4 distinct parts; Delegation, Requests, Dispatchers, and Parsers.   This model allows for a central theme of reuse throughout your application. 
+You will be able to combine Requests, Dispatchers, and Parsers in many different ways to solve various data communication and parsing needs that your application may encounter.   In one situation you may need to connect to a local database and retrieve and parse table data while other times the data store could be online via a Rest-ful api.  If in both cases your returning data is in a common format, the same parser could be reused to format your raw data into an application specific format. 
+
+
+
+= Component Definitions =
+
+== Delegation ==
+
+The controller of the SRD is the RequestDelegate.  This singleton class is responsible for moving a particular Request through the various phases of the framework’s life cycle.  Note: The application does not directly communicate with the RequestDelegate. Communication is encapsulated inside of Request (AbstractRequest) and invoked when the Request’s  start() and stop() methods are called.
+
+
+== Request ==
+
+A Request defines a particular instance for a unique request to a data store or web service. A Request will define all unique arguments for a request such as it’s uri (root url/database), source (api/table), type, and the dispatcher and parser that should be used to carry out the request invocation by the RequestDelegate.  
+
+
+== Dispatcher ==
+
+The Dispatcher component is responsible for the actual communication with the defined service, which is linked by the Request.  Within SRD, the RequestDelegate will only keep one Dispatcher of a particular class type.  On subsequent Requests the Dispatcher will be reused. 
+
+
+== Parser ==
+
+A Parser is responsible for translating raw data into application specific data.   However, note it is the Requests NOT the Parser’s responsibility to save the new data to the application.  This is to ensure a more generic Parser system tailored for reuse.
+
+
+
+= LifeCycle =
+
+DevelopmentArc’s Core SRD moves a particular Request through a series of phase that make up the life of the Request.  Below is a definition of each phase in order of it’s occurrence.  When the Request enters a new phase, a RequestEvent will be dispatched from the Request with the type set to the phase.  This allows for application code to listen to various phase transitions and take the appropriate action.
+
+== Created ==
+
+When a Request is first instantiated it will initially enter the “Created” phase. 
+
+
+== Dispatched ==
+
+Once a Request has started and been dispatched by it’s defined Dispatcher, the Request will enter this phase.  This “Dispatched” phase indicates a particular request is being executed.  
+
+
+== Returned ==
+
+The "Returned" phase indicates the Dispatcher has handled a successful response and the data is ready to be processed.
+
+
+== Parsing ==
+
+After data has returned, the RequestDelegate will pass the raw data off to the Request’s Parser.  At this point the Request enters the “Parsing” phase, indicating the Request’s returned data is being translated from a raw form into an application specific format.
+
+
+== Complete ==
+
+Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the RequestDelegate.
+
+
+== Cancel ==
+
+If at any point during the lifecycle, a Request it stopped via Request.stop(), the Request will be marked as "Cancel" and the lifecycle will come to an end, removing it from the RequestDelegate.
+
+
+== Error ==
+
+If a fault or error occurs during the dispatching or parsing of a Request, it will enter an "Error" phase and the lifecycle will halt. At this point the RequestDelegate removes the Request from it’s internals.
+
+= How To =
+
+In our basic how-to we will explore the creation of a Request that needs to communicate with a standard HTTP service with an XML response.  To accomplish this we will be responsible for creating a new Request (based on HTTPRequest) and Parser.  Out-of-box we can leverage the HTTPRequestDispatcher, which encapsulates Flex’s HTTPService and provides us with all the means necessary to execute our request with reuse of one HTTPService.
+
+== Create a Parser ==
+
+The parser is responsible for taking raw data and translating it into an application specific format such as a set of Data Objects (DOs).   All parsers must implement the IParser Interface.  In our case we will extend AbstractParser (which implements IParser) so we can define a result format.  A result format is required when defining a Parser used by an HTTP Service and will be leveraged by the Dispatcher.  For this reason it is recommended that all Parsers extend AbstractParser to gain this functionality.
+For our use case we will be receiving user data in xml and translating it into a single data object of type UserDO. First lets look at the xml and the data object
+
+
+=== XML ===
+
+{{{
+<user>
+	<id>4</id>
+	<firstName>Aaron</firstName>
+	<lastName>Pedersen</lastName>
+	<address>123 Market St.</address>
+	<city>San Francisco</city>
+	<state>CA</state>
+	<zipCode>94114</zipCode>
+</user>
+
+}}}
+
+=== UserDO.as ===
+
+
+{{{
+package com.developmentarc.dataobjects
+{
+	public class UserDO
+	{
+		public var id:uint;
+		public var firstName:String;
+		public var lastName:String;
+		public var address:String;
+		public var city:String;
+		public var state:String;
+		public var zipCode:String;
+		
+		public function UserDO()
+		{
+		}
+
+	}
+}
+
+}}}
+
+=== Parser ===
+
+Our parse class must override and define one method called parse(). This method is the meat of the class and does all the translation. In our case, we will convert the generic object provided into an XML instance and parse it into our UserDO.
+
+=== UserParser.as ===
+{{{
+package com.developmentarc.parsers
+{
+	import com.developmentarc.core.services.parsers.AbstractParser;
+	import com.developmentarc.dataobjects.UserDO;
+
+	public class UserParser extends AbstractParser
+	{
+		public function UserParser()
+		{
+			super(AbstractParser.RESULT_FORMAT_E4X);
+		}
+		
+		override public function parse(data:*):* {
+			// convert dynamc object into xml
+			var xml:XML = data as XML;
+			// create user object
+			var user:UserDO = new UserDO;
+			
+			// parse and translate
+			user.id = Number(xml.child("id").toString());
+			user.firstName = xml.child("firstName").toString();
+			user.lastName = xml.child("lastName").toString();
+			user.address = xml.child("address").toString();
+			user.city = xml.child("city").toString();
+			user.state = xml.child("state").toString();
+			user.zipCode = xml.child("zipCode").toString();
+			
+			return user;
+		}
+	}
+} 
+
+}}}
+
+Notice each node of the xml is parsed (type converted if necessary) and then the new UserDO is returned. This is all the parser is responsible for. Saving the User object to the application (most likely in a model) is the responsibility of the Request. This is to ensure the Parser is generic and only has logic regarding parsing, translating, and formatting.
+
+== Request ==
+
+Our Request will define a specific API for an HTTP Service and will tie the required Dispatcher (HTTPServiceDispatcher), Parser (UserParser) to itself for processing. 
+
+To help provide a standard API, DevelopmentArc Core provides an HTTPRequest Class to assist in build all your HTTPService requests on top of. This class extends AbstractRequest and extends the constructor api to include properties specific to an HTTPService.
+
+For our use case, we will be requesting data from DevelopmentArc’s test service.   The full url will be 'http://test.developmentarc.com/users/1' (Note: The '1' is our user id and will be provided in the UserRequest constructor).
+ 
+Our constructor will take one parameters for the user id and the method itself will pass all the static data used to request a user from the testing service up to the parent hierarchy.    That data includes:
+
+*Type* - String used to define a specific type this request will be. Parameter allows for forking requests when data and service urls are similar but there is a need for some uniqueness. This is an advanced topic and is not used in our basic example.
+
+*URI* - String for root address to use for this request. In our case http://test.developmentarc.com/.
+
+*Source* - String for unique parts of the address that may be unique for a particular instance.  For our class ‘users/’ + userId (passed in constructor).
+
+*Dispatcher Class* -  Class reference to the dispatcher used by this request. HTTPServiceDispatcher for our use case.
+
+*Parser Class* - Class reference to the parser used to translate raw data from the result of this request in to application specific data.  UserParser for our use case.
+
+*Mode* - String defining if Request is in Mock or Live mode.  See Mock section below for details.
+
+*Mock Dispathcer Class* - Class reference to dispatcher that mocks data from a live API.  See Mock section below for details.
+
+=== UserRequest.as ===
+
+{{{
+package com.developmentarc.requests
+{
+	import com.developmentarc.core.services.dispatchers.HTTPRequestDispatcher;
+	import com.developmentarc.core.services.requests.HTTPRequest;
+	import com.developmentarc.dataobjects.UserDO;
+	import com.developmentarc.parsers.UserParser;
+	
+	import mx.core.Application;
+
+	public class UserRequest extends HTTPRequest
+	{
+		public function UserRequest(userId:uint)
+		{
+			super(
+				'', 								// Type 
+				'http://test.developmentarc.com/',  // URI
+				'users/' + userId, 					// Source url (api + user id)
+				HTTPRequestDispatcher, 				// Dispatcher
+				UserParser 							// Parser
+				);
+		}
+		
+		override public function saveData(data:*):void {
+			// save data to our application... it's our pretend model
+			Application.application.user = data as UserDO;
+		}
+		
+	}
+}
+
+}}}
+
+In our class we define two methods The first is our constructor which passes up the hierarchical chain the static properties needed to construct and execute an HTTPService request to the User api at test.developmentarc.com.  
+
+It’s the responsibility of the Request class to store the formatted data that was parsed by the Dispatcher. This is the second method.  saveData() will save our new UserDO object to the Application to mimic a central location for our application data (our model).
+
+
+== Application ==
+
+Our Main application file will construct and execute our UserRequest when a user clicks on a “Get User” button.  
+
+=== main.mxml ===
+{{{
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.developmentarc.dataobjects.UserDO;
+			import com.developmentarc.core.services.events.RequestEvent;
+			import com.developmentarc.requests.UserRequest;
+			import com.developmentarc.mocks.UserMock;
+			
+			
+			[Bindable] public var welcome:String;
+			[Bindable] public var address:String;
+			[Bindable] public var city:String;
+			[Bindable] public var state:String;
+			[Bindable] public var zipCode:String;
+			
+			// stored by UserRequest
+			public var user:UserDO;
+			
+			public function getUser():void {
+				var userRequest:UserRequest = new UserRequest(1);
+				
+				// listen to complete event
+				userRequest.addEventListener(RequestEvent.COMPLETE, handleUserRequestComplete);
+				// listen to error event
+				userRequest.addEventListener(RequestEvent.ERROR, handleUserRequestError);
+				// start request
+				userRequest.start();
+			}
+			
+			protected function handleUserRequestComplete(event:RequestEvent):void {
+				welcome_message.visible = true;
+				welcome = "Welcome " + user.firstName + " " + user.lastName + ".  Your address is";
+				address = user.address;
+				city = user.city + ",";
+				state = user.state + " ";
+				zipCode = user.zipCode;
+			}
+			
+			protected function handleUserRequestError(event:RequestEvent):void {
+				welcome_message.visible = true;
+				welcome = "An error has occured during your request!";
+				address = "";
+				city = "";
+				state = "";
+				zipCode = "";
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox>
+		<mx:VBox id="welcome_message" visible="false">
+			<mx:Text text="{welcome}" />
+			<mx:Text text="{address}" />
+			<mx:HBox>
+				<mx:Text text="{city}" /><mx:Text text="{state}" /><mx:Text text="{zipCode}" /> 
+			</mx:HBox>
+		</mx:VBox>
+		<mx:Button label="Get User" click="getUser()"/>
+	</mx:VBox>
+</mx:Application>
+
+}}}
+
+Our class will listen to the “Complete” and “Error” events on the UserRequest and respond accordingly.  When a “Complete” event is dispatched, the application will take the new UserDO object stored in the application and display it with a welcome message. An error will cause the application to display an error message.
+
+Notice, once all setup, the application will only interact with the Request, the Dispatcher, Parsers, and the RequestDelegate are all utilized behind the scenes.  This provides us with a light interaction layer that keeps our server logic isolated.
+
+
+== Mocks ==
+
+In many cases server APIs are developed in parallel with the client application. In these cases it is necessary to create your client application’s SRD layer without the dev or live data store APIs. To assist in this use case, DevelopmentArc Core provides a mock system to allow developers to use a “test” layer. 
+
+The mock system allows Requests to designate a Mock Dispatcher. The goal of your mock dispatcher is to mimic your data request with static data.  This data can be a xml file on the server or the file system or could be hard coded inside of the Class itself.  Below is a Mock Dispatcher that hard codes a the User XML that is returned from the live server.
+
+=== MockDispatcher.as ===
+{{{
+package com.developmentarc.mocks
+{
+	import com.developmentarc.core.services.mocks.AbstractMockDispatcher;
+	import com.developmentarc.core.services.parsers.IParser;
+	import com.developmentarc.core.services.requests.IRequest;
+
+	public class UserMockDispatcher extends AbstractMockDispatcher
+	{
+		public function UserMockDispatcher()
+		{
+			super();
+		}
+		
+	override public function dispatch(request:IRequest, parser:IParser):* {
+			
+			var response:XML =
+			<user>
+				<id>4</id>
+				<firstName>Aaron</firstName>
+				<lastName>Pedersen</lastName>
+				<address>123 Market St.</address>
+				<city>San Francisco</city>
+				<state>CA</state>
+				<zipCode>94114</zipCode>
+			</user>;
+
+			return super.dispatch(request, parser);
+		}
+		
+	}
+}
+}}}
+
+Developers can turn on and off the system via two levels. At an application level developers can set a static property on the RequestDelegate.  If Requests are set to live mode, the would be turned on application wide.  As just mentioned Requests can be controlled individually, this allows for an interative integration with the live API.
+
+By default AbstractRequest assigns all Requests as Live and with no Dispatcher. It is up to the child class to define within its constructor when calling super().  Below is our adjustments to the UserRequest with a mock class and set to Mock mode.  
+
+=== UserRequest.as ===
+{{{
+package com.developmentarc.requests
+{
+	import com.developmentarc.core.services.dispatchers.HTTPRequestDispatcher;
+	import com.developmentarc.core.services.requests.AbstractRequest;
+	import com.developmentarc.core.services.requests.HTTPRequest;
+	import com.developmentarc.dataobjects.UserDO;
+	import com.developmentarc.mocks.UserMock;
+	import com.developmentarc.parsers.UserParser;
+	
+	import mx.core.Application;
+
+	public class UserRequest extends HTTPRequest
+	{
+		public function UserRequest(userId:uint)
+		{
+			super(
+				'', 								// Type 
+				'http://test.developmentarc.com/',  // URI
+				'users/' + userId, 					// Source url (api + user id)
+				HTTPRequestDispatcher, 				// Dispatcher
+				UserParser,							// Parser
+				AbstractRequest.MODE_MOCK,
+				UserMock
+				);
+		}
+		
+		override public function saveData(data:*):void {
+			// save data to our application... it's our pretend model
+			Application.application.user = data as UserDO;
+		}
+		
+	}
+}
+
+}}}
+
+This does not necessarily turn the UserRequest to Mock mode.   We have to activate it at an application level by setting the RequestDelegate’s mock property inside of the application class. Below is an adjusted main.mxml to illustrate.
+
+=== main.mxml ===
+{{{
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.developmentarc.core.services.RequestDelegate;
+			import com.developmentarc.dataobjects.UserDO;
+			import com.developmentarc.core.services.events.RequestEvent;
+			import com.developmentarc.requests.UserRequest;
+			import com.developmentarc.mocks.UserMock;
+			
+			[Bindable] public var welcome:String;
+			[Bindable] public var address:String;
+			[Bindable] public var city:String;
+			[Bindable] public var state:String;
+			[Bindable] public var zipCode:String;
+			
+			// stored by UserRequest
+			public var user:UserDO;
+			
+			public function getUser():void {
+				
+				// set request delegate to mock mode for application level
+				RequestDelegate.mode = RequestDelegate.MODE_MOCK;
+				
+				var userRequest:UserRequest = new UserRequest(1);
+				
+				// listen to complete event
+				userRequest.addEventListener(RequestEvent.COMPLETE, handleUserRequestComplete);
+				// listen to error event
+				userRequest.addEventListener(RequestEvent.ERROR, handleUserRequestError);
+				// start request
+				userRequest.start();
+			}
+			
+			protected function handleUserRequestComplete(event:RequestEvent):void {
+				welcome_message.visible = true;
+				welcome = "Welcome " + user.firstName + " " + user.lastName + ".  Your address is";
+				address = user.address;
+				city = user.city + ",";
+				state = user.state + " ";
+				zipCode = user.zipCode;
+			}
+			
+			protected function handleUserRequestError(event:RequestEvent):void {
+				welcome_message.visible = true;
+				welcome = "An error has occured during your request!";
+				address = "";
+				city = "";
+				state = "";
+				zipCode = "";
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox>
+		<mx:VBox id="welcome_message" visible="false">
+			<mx:Text text="{welcome}" />
+			<mx:Text text="{address}" />
+			<mx:HBox>
+				<mx:Text text="{city}" /><mx:Text text="{state}" /><mx:Text text="{zipCode}" /> 
+			</mx:HBox>
+		</mx:VBox>
+		<mx:Button label="Get User" click="getUser()"/>
+	</mx:VBox>
+</mx:Application>
+
+}}}
+
+Mock modes can be used to help speed up development.  We encourage you to discuss and architect a data format with your server engineers up front and then implement via a mock system until the APIs are ready.
+
+
+== Example Code ==
+
+We have provided a Flex Project Archive here of the above example.  Download and explore the features.  
