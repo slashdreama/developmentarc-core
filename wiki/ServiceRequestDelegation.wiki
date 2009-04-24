@@ -18,7 +18,7 @@ The controller of the SRD is the !RequestDelegate.  This singleton class is resp
 
 == Request ==
 
-A Request defines a particular instance for a unique request to a data store or web service. A Request will define all unique arguments for a request such as it’s uri (root url/database), source (api/table), type, and the dispatcher and parser that should be used to carry out the request invocation by the RequestDelegate.  
+A Request defines a particular instance for a unique request to a data store or web service. A Request will define all unique arguments for a request such as it’s uri (root url/database), source (api/table), type, and the dispatcher and parser that should be used to carry out the request invocation by the !RequestDelegate.  
 
 
 == Dispatcher ==
