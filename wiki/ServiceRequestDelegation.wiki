@@ -203,11 +203,11 @@ package com.developmentarc.requests
 		public function UserRequest(userId:uint)
 		{
 			super(
-				'', 								// Type 
+				'', // Type 
 				'http://test.developmentarc.com/',  // URI
-				'users/' + userId, 					// Source url (api + user id)
-				HTTPRequestDispatcher, 				// Dispatcher
-				UserParser 							// Parser
+				'users/' + userId, // Source url (api + user id)
+				HTTPRequestDispatcher, 	// Dispatcher
+				UserParser // Parser
 				);
 		}
 		
@@ -367,13 +367,13 @@ package com.developmentarc.requests
 		public function UserRequest(userId:uint)
 		{
 			super(
-				'', 								// Type 
+				'', // Type 
 				'http://test.developmentarc.com/',  // URI
-				'users/' + userId, 					// Source url (api + user id)
-				HTTPRequestDispatcher, 				// Dispatcher
-				UserParser,							// Parser
-				AbstractRequest.MODE_MOCK,
-				UserMock
+				'users/' + userId, // Source url (api + user id)
+				HTTPRequestDispatcher, 	// Dispatcher
+				UserParser, // Parser
+				AbstractRequest.MODE_MOCK, // Turning On Mock Mode
+				UserMock // Mock Dispatcher
 				);
 		}
 		
