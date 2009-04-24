@@ -32,7 +32,7 @@ A Parser is responsible for translating raw data into application specific data.
 
 
 
-= LifeCycle =
+= !LifeCycle =
 
 SRD moves a particular Request through a series of phase that make up the life of that Request.  Below is a definition of each phase in order of it’s occurrence.  When the Request enters a new phase, a !RequestEvent will be dispatched from the Request with the type set to the phase.  This allows for application code to listen to various phase transitions and take the appropriate action.
 
