@@ -465,4 +465,4 @@ Mock modes can be used to help speed up development.  We encourage you to discus
 
 == Example Code ==
 
-We have provided a Flex Project Archive [http://www.developmentarc.com/examples/Example-ServiceLayer/ here] of the above example.  Download and explore the features.  
+We have provided a Flex Project Archive [http://www.developmentarc.com/examples/Example-ServiceLayer/Example-ServiceLayer.zip here] of the above example.  Download and explore the features.  
