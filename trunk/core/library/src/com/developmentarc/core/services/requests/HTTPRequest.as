@@ -93,12 +93,12 @@ package com.developmentarc.core.services.requests
 		 * @param contentType String defines the content type of the HTTPService.  Default is CONTENT_TYPE_FORM.
 		 * @param showBusyCursor Boolean flag marking if the busy cursor is to be shown during the HTTPService request. Default is false.
 		 */
-		public function HTTPRequest(type:String, uri:String, source:String, dispatcherClass:Class, parserClass:Class, method:String=METHOD_GET, contentType:String=CONTENT_TYPE_FORM, showBusyCursor:Boolean=false)
+		public function HTTPRequest(type:String, uri:String, source:String, dispatcherClass:Class, parserClass:Class, mode:String=AbstractRequest.MODE_LIVE, mockDispatcher:Class=null, method:String=METHOD_GET, contentType:String=CONTENT_TYPE_FORM, showBusyCursor:Boolean=false)
 		{
 			__method = method;
 			__contentType = contentType;
 			__showBusyCursor = showBusyCursor;
-			super(type, uri, source, dispatcherClass, parserClass);
+			super(type, uri, source, dispatcherClass, parserClass, mode, mockDispatcher);
 		}
 		
 		/**
