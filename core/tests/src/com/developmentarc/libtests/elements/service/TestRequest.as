@@ -66,10 +66,12 @@ package com.developmentarc.libtests.elements.service
 		 * Constructor
 		 * @param dispatcherClass Class reference to the IDispatcher class
 		 * @param parserClass Class reference to the IParser class
+		 * @param mode String to indicate Request's mode.
+		 * @param mockDispatcherClass Class reference to mock dispatcher for fake data
 		 */
-		public function TestRequest(dispatcherClass:Class, parserClass:Class, mode=AbstractRequest.MODE_LIVE, mockDispatcherClass:Class=null)
+		public function TestRequest(dispatcherClass:Class, parserClass:Class, mode:String=AbstractRequest.MODE_LIVE, mockDispatcherClass:Class=null)
 		{
-			super("", "", "", dispatcherClass, parserClass,mode, mockDispatcherClass);
+			super("", "", "", dispatcherClass, parserClass, mode, mockDispatcherClass);
 			otherRequests = new Array();
 		}
 		
