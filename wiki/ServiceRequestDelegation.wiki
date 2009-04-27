@@ -13,7 +13,7 @@ You will be able to combine Requests, Dispatchers, and Parsers in many different
 
 == Delegation ==
 
-The controller of the SRD is the !RequestDelegate.  This singleton class is responsible for moving a particular Request through the various phases of the framework’s life cycle. The class will tie togather the Request, it's Dispathcher and Parser.  Posting or Retrieving data from the data store. Note: The application does not directly communicate with the !RequestDelegate. Communication is encapsulated inside of Request (!AbstractRequest) and invoked when the Request’s  start() and stop() methods are called.
+The controller of the SRD is the !RequestDelegate.  This singleton class is responsible for moving a particular Request through the various phases of the framework’s life cycle. The class will tie togather the Request, it's Dispatcher and Parser.  Posting or Retrieving data from the data store. Note: The application does not directly communicate with the !RequestDelegate. Communication is encapsulated inside of Request (!AbstractRequest) and invoked when the Request’s  start() and stop() methods are called.
 
 
 == Request ==
