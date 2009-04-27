@@ -1,4 +1,4 @@
-#summary The Service Request Delegation (SRD) layer of !DevelopmentArc<sup>TM</sup> Core provides a componentized architecture to solving your application’s data access needs.
+#summary The Service Request Delegation (SRD) layer of DevelopmentArc Core provides a componentized architecture to solving your application’s data access needs.
 
 *NOTE:* SRD is scheduled for release in version .90.  
 
