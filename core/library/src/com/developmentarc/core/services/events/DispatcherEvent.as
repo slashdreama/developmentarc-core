@@ -27,7 +27,7 @@ package com.developmentarc.core.services.events
 	import flash.events.Event;
 
 	/**
-	 * Event class used by the dispatcher's portion of the service layer. Events are fired 
+	 * Event class used by the Dispatcher portion of the service layer. Events are fired 
 	 * when a dispatcher has either a success return of data from the service or whena  failure has occured.
 	 * 
 	 * @author Aaron Pedersen
@@ -55,7 +55,7 @@ package com.developmentarc.core.services.events
 		/**
 		 * Event that might have been dispatched by the encapsulated service. 
 		 */
-		public var originEvent:Event;
+		public var originalEvent:Event;
 		
 		/**
 		 * Constructor

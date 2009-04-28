@@ -33,6 +33,8 @@ package com.developmentarc.core.services.requests
 	 * the content type (see HTTPService), and a boolean to toggle showing the Flex busy cursor during the 
 	 * request's communication with the server.</p>
 	 * 
+	 * <p>* NOTE: HTTPRequest is Flex specific and you will need the Flex 3.0+ SDK.</p>
+	 * 
 	 * <p>Although it is not marked as the default, the HTTPRequestDisptacher has been build to be used with this class
 	 * to provide a seemless solution for the HTTPService.</p>
 	 * 

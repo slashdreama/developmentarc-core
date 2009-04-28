@@ -32,6 +32,8 @@ package com.developmentarc.core.services.events
 	 * informing all listeners of the current state of that request.  See the RequestDispatcher for
 	 * details on the request lifecycle.</p>
 	 * 
+	 * @see com.developmentarc.core.services.RequestDelegate RequestDelegate
+	 * 
 	 * @author Aaron Pedersen
 	 */
 	public class RequestEvent extends Event
@@ -41,14 +43,21 @@ package com.developmentarc.core.services.events
 		public static const RETURNED:String = "requestReturned";
 		public static const PARSING:String = "requestParsing";
 		public static const CANCEL:String = "requestCancel";
+		public static const FAILURE:String = "requestFailure";
 		public static const ERROR:String = "requestError";
 		public static const COMPLETE:String = "requestComplete";
 		
 		/**
-		 * Error message for when a request has entered an error state
+		 * Original Event. Used for type FAILURE
 		 */
-		public var errorMessage:String;
-		
+		 public var originalEvent:Event;
+
+
+		/**
+		 * Original Error. Used for type ERROR.
+		 */
+		public var originalError:Error;	
+
 		/**
 		 * Constructor
 		 */

@@ -25,6 +25,7 @@
 package com.developmentarc.core.services.requests
 {
 	import com.developmentarc.core.services.RequestDelegate;
+	import com.developmentarc.core.services.events.DispatcherEvent;
 	import com.developmentarc.core.services.events.RequestEvent;
 	
 	import flash.events.EventDispatcher;
@@ -34,32 +35,30 @@ package com.developmentarc.core.services.requests
 	[Event(name="returned",type="com.developmentarc.core.services.events.RequestEvent")]
 	[Event(name="parsing",type="com.developmentarc.core.services.events.RequestEvent")]
 	[Event(name="cancel",type="com.developmentarc.core.services.events.RequestEvent")]
+	[Event(name="failure",type="com.developmentarc.core.services.events.RequestEvent")]
 	[Event(name="error",type="com.developmentarc.core.services.events.RequestEvent")]
 	[Event(name="complete",type="com.developmentarc.core.services.events.RequestEvent")] 
 	/**
 	 * <p>Abstract class used as the base for all request inside of the DevelopmentArc service layer.
-	 * The responsibility of the request is to define all of the detailed information for a given instance of a service. A request is simply a custom data object
-	 * that is used by the RequestDelegate, IDispatcher to retreive/save data to a given service. The request's other responsiblity is to save
-	 * the data passed back from the RequestDelegate (after its been parsed) to a paticular location in the application.    
+	 * The responsibility of the Request is to define all of the detailed information for a given instance of a service call. A Request is simply a custom data object
+	 * that is used by the RequestDelegate and the Request's Dispatcher. The Request's other responsiblity is to save
+	 * the data passed back from the RequestDelegate (after it has been parsed) to a paticular location in the application.    
 	 * 
 	 * <p>
 	 * <b>Properties</b>
-	 * A request can define 5 properties during construction of the request. The goal is for developers to define their own Requests and provide the default into the
+	 * A request can define 5 properties during construction of the Request. The goal is for developers to define their own Requests and provide the default into the
 	 * AbstractRequest constructor.  The first three properties are custom properties that are used in conjunction with the dispatcher that is associated with this request. It is 
-	 * up to the developer to define each to meet the purpose of the request and dispatcher. For an example of usage, look how HTTPRequestDispatcher uses each parameter.  
+	 * up to the developer to define each to meet the purpose of the request and dispatcher. For an example of usage, look how HTTPRequestDispatcher's use each parameter.  
+	 * The final two properties are used to link the request with a Dispatcher (IDispatcher) and a Parser (IParser)
 	 * </p>
-	 * <p> The final two properties are used to link the request with a dispatcher (IDispatcher) and a parser (IParser).</p>
+	 * <p> Breakdown Below</p>
 	 * <ul>
-	 *   <li>type - A request can define a type which can be used to toggle between different variables when invoking a service request.  This allows for a single request to be used with slight modifications such as having a type determine
-	 * the parameters being used in a request or a better example would be providing one request that provides each api to be switched base on the type. This example would provide a 
-	 * switch statement that defineds say the source (details) of the api.  The uri would define the root of a the url.  That way a developer wont have to create a different request class for each api when the difference is
-	 * very minor.  If the type is not needed, set it to a blank string.</li>
-	 * 
+	 *   <li>type - A request can define a type which can be used to toggle between different variables when invoking a service request.  If the type is not needed, set it to a blank string.</li>
 	 *   <li>uri - Is used as the root of the service path, which would be the root url in a HTTPService or to define the DB path used when connection to a local SQLLite DB in AIR.</li>
-	 *   <li>source - Can be used to define the the details of a uri. Example, for a HTTPService this would be the specific API of a service.</li>
-	 *   <li>dispatcherClass - Class reference to the associated dispatcher (IDispather). A dispather is responsible for encapsulating a service type and instance and executing this paticular request
+	 *   <li>source - Can be used to define the the details of a uri. Example, for a HTTPService this would be the specific API of a service or for a DB connection the table.</li>
+	 *   <li>dispatcherClass - Class reference to the associated Dispatcher (IDispather). A dispather is responsible for encapsulating a service type and instance and executing this paticular request
 	 * through the service layer</li>
-	 * <li>parserClass - Class reference to the parser responsible for parsing the raw data returned from the dispather</li>
+	 * <li>parserClass - Class reference to the Parser (IParser) which is responsible for parsing the raw data returned from the dispather</li>
 	 * </ul>
 	 * </p>
 	 * 
@@ -80,8 +79,8 @@ package com.developmentarc.core.services.requests
 	 * @see com.developmentarc.core.services.RequestDelegate RequestDelegate
 	 * @see com.developmentarc.core.services.dispatchers.AbstractDispatcher AbstractDispatcher
 	 * @see com.developmentarc.core.services.parsers.AbstractParser AbstractParser
-	 * @see com.developmentarc.core.services.request.HTTPRequest HTTPRequest
-	 * 
+	 * @see com.developmentarc.core.services.requests.HTTPRequest HTTPRequest
+	 *  
 	 * @auther Aaron Pedersen
 	 * </p>
 	 */
@@ -388,23 +387,47 @@ package com.developmentarc.core.services.requests
 		}
 		
 		/**
-		 * <p>This method is invoked through the RequestDelegate when a request has either errored while dispatching or parsing the raw data.
+		 * <p>This method is invoked through the RequestDelegates when the Request's delegate dispatches a DispatcherEvent.FAULT event.
+		 * The RequestDelegate will bundle the orignal event and pass it to this method.  The method will create a new 
+		 * RequestEvent of type FAILURE and add the original event and then dispatch. The current phase will also be changed to Failure.</p>
+		 * <p>
+		 * If more functionality is needed  after a request has errored, overrideing this method is acceptable, but be 
+		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * </p>
+		 * 
+		 * @param originalEvent DispatcherEvent of the originating error event from the dispatcher.
+		 */ 
+		public function failure(originalEvent:DispatcherEvent):void {
+			currentPhase = RequestEvent.FAILURE;
+			
+			var event:RequestEvent = new RequestEvent(RequestEvent.FAILURE);
+			event.originalEvent = originalEvent;
+			
+			dispatchEvent(event);
+		}
+		
+		/**
+		 * <p>This method is invoked through the RequestDelegate when a request has errored while parsing the raw data of a resulting Request.
 		 * The method sets the current phase to RequestEvent.ERROR marking that request has experienced an error. The method will
-		 * also dispatch a RequestEvent.ERROR event updating all listeners.</p>
+		 * dispatch a RequestEvent.ERROR event updating all listeners, providing the original Error object.</p>
 		 * 
 		 * <p>
-		 * NOTE: Method should not to be called outside of this class, it's children or the RequestDispatcher.
+		 * NOTE: Method should not to be called outside of this class, it's children, or the RequestDispatcher.
 		 * </p>
 		 * 
 		 * <p>
 		 * If more functionality is needed  after a request has errored, overrideing this method is acceptable, but be 
 		 * sure to call super.create() to insure the phase is set and the event is dispatched.
 		 * </p>
+		 * 
+		 * @param error Error from the origin.
 		 */ 
-		public function error(message:String):void {
+		public function error(originalError:Error):void {
 			currentPhase = RequestEvent.ERROR;
+			
 			var event:RequestEvent = new RequestEvent(RequestEvent.ERROR);
-			event.errorMessage = message;
+			event.originalError = originalError;
+			
 			dispatchEvent(event);
 		}
 		

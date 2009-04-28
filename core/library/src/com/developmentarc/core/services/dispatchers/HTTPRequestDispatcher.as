@@ -40,6 +40,8 @@ package com.developmentarc.core.services.dispatchers
 	 * used for any HTTPService calls made in the serivce layer. The goal is to provide one HTTPService, 
 	 * that all requests can use to execute their required call.</p>
 	 * 
+	 *  <p>* NOTE: HTTPRequest is Flex specific and you will need the Flex 3.0+ SDK.</p>
+	 * 
 	 * <p>When using this dispatcher a HTTPRequest or an extension is necessary to provide the method and content type of
 	 * the incoming request which will be leveraged by the HTTPService.</p>
 	 * 
@@ -132,7 +134,7 @@ package com.developmentarc.core.services.dispatchers
 			// Mapping origin event to new event
 			dispatcherEvent.uid = event.token;
 			dispatcherEvent.result = event.result;
-			dispatcherEvent.originEvent = event;
+			dispatcherEvent.originalEvent = event;
 			
 			dispatchEvent(dispatcherEvent);
 		}
@@ -147,7 +149,7 @@ package com.developmentarc.core.services.dispatchers
 			var dispatcherEvent:DispatcherEvent = new DispatcherEvent(DispatcherEvent.FAULT);
 			// Mapping origin event to new event
 			dispatcherEvent.uid = event.token;
-			dispatcherEvent.originEvent = event;
+			dispatcherEvent.originalEvent = event;
 			dispatcherEvent.errorMessage = event.fault.faultString;
 			dispatchEvent(dispatcherEvent);
 		}
