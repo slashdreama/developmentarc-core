@@ -29,6 +29,7 @@
 	import com.developmentarc.core.services.parsers.IParser;
 	import com.developmentarc.core.services.requests.IRequest;
 	
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.setTimeout;
 	
@@ -87,8 +88,11 @@
 			var dispatcherEvent:DispatcherEvent = new DispatcherEvent(eventType);
 			dispatcherEvent.uid = generateUID();;
 			dispatcherEvent.result = result;
-			dispatcherEvent.errorMessage = errorMessage;
 			
+			if(eventType == DispatcherEvent.FAULT) {
+				createFaultEvent();
+	
+			}		
 			// Add to map so we can find it when the event is ready to dispatch.
 			map.addItem(request, dispatcherEvent);
 
@@ -105,6 +109,16 @@
 		 * @param key * Unique ID of the request when it was dispatched.
 		 */
 		public function cancel(request:IRequest, key:*):void {
+			throw new Error("Child must implement");
+		}
+		
+		/**
+		 * Method mocks a fault Event of whatever type needed and returns it.
+		 * This method is used when eventType is set to DispatchEvent.FAULT.
+		 * 
+		 * @returns Event of a fault to mimic fault from dispatcher.
+		 */
+		public function createFaultEvent():Event {
 			throw new Error("Child must implement");
 		}
 		

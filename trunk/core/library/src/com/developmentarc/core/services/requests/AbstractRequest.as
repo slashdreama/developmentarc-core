@@ -25,9 +25,9 @@
 package com.developmentarc.core.services.requests
 {
 	import com.developmentarc.core.services.RequestDelegate;
-	import com.developmentarc.core.services.events.DispatcherEvent;
 	import com.developmentarc.core.services.events.RequestEvent;
 	
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	[Event(name="created",type="com.developmentarc.core.services.events.RequestEvent")]
@@ -321,7 +321,7 @@ package com.developmentarc.core.services.requests
 		 * 
 		 * <p>
 		 * If more functionality is needed  after a request has been dispatched, overrideing this method is acceptable, but be 
-		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * sure to call super.dispatch() to insure the phase is set and the event is dispatched.
 		 * </p>
 		 */ 
 		public function dispatch():void {
@@ -340,7 +340,7 @@ package com.developmentarc.core.services.requests
 		 * 
 		 * <p>
 		 * If more functionality is needed  after a request has been returned, overrideing this method is acceptable, but be 
-		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * sure to call super.returned() to insure the phase is set and the event is dispatched.
 		 * </p>
 		 */ 
 		public function returned():void {
@@ -359,7 +359,7 @@ package com.developmentarc.core.services.requests
 		 * 
 		 * <p>
 		 * If more functionality is needed  when a request enters the parsing phase, overrideing this method is acceptable, but be 
-		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * sure to call super.parsing() to insure the phase is set and the event is dispatched.
 		 * </p>
 		 */ 		
 		public function parsing():void {
@@ -378,7 +378,7 @@ package com.developmentarc.core.services.requests
 		 * 
 		 * <p>
 		 * If more functionality is needed  after a request has been canceled, overrideing this method is acceptable, but be 
-		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * sure to call super.cancel() to insure the phase is set and the event is dispatched.
 		 * </p>
 		 */ 
 		public function cancel():void {
@@ -387,17 +387,17 @@ package com.developmentarc.core.services.requests
 		}
 		
 		/**
-		 * <p>This method is invoked through the RequestDelegates when the Request's delegate dispatches a DispatcherEvent.FAULT event.
-		 * The RequestDelegate will bundle the orignal event and pass it to this method.  The method will create a new 
+		 * <p>This method is invoked through the RequestDelegates when the Request's dispatcher faults.
+		 * The RequestDelegate will bundle the orignal event from the service that is encapsulated inside of the Dispatcher and pass it to this method.  The method will create a new 
 		 * RequestEvent of type FAILURE and add the original event and then dispatch. The current phase will also be changed to Failure.</p>
 		 * <p>
-		 * If more functionality is needed  after a request has errored, overrideing this method is acceptable, but be 
-		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * If more functionality is needed  after a request has failed, overrideing this method is acceptable, but be 
+		 * sure to call super.failure() to insure the phase is set and the event is dispatched.
 		 * </p>
 		 * 
-		 * @param originalEvent DispatcherEvent of the originating error event from the dispatcher.
+		 * @param originalEvent Event of the originating fault event from the dispatcher.
 		 */ 
-		public function failure(originalEvent:DispatcherEvent):void {
+		public function failure(originalEvent:Event):void {
 			currentPhase = RequestEvent.FAILURE;
 			
 			var event:RequestEvent = new RequestEvent(RequestEvent.FAILURE);
@@ -417,7 +417,7 @@ package com.developmentarc.core.services.requests
 		 * 
 		 * <p>
 		 * If more functionality is needed  after a request has errored, overrideing this method is acceptable, but be 
-		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * sure to call super.error() to insure the phase is set and the event is dispatched.
 		 * </p>
 		 * 
 		 * @param error Error from the origin.
@@ -442,7 +442,7 @@ package com.developmentarc.core.services.requests
 		 * 
 		 * <p>
 		 * If more functionality is needed  after a request has been completed, overrideing this method is acceptable, but be 
-		 * sure to call super.create() to insure the phase is set and the event is dispatched.
+		 * sure to call super.complete() to insure the phase is set and the event is dispatched.
 		 * </p>
 		 */ 
 		public function complete():void {

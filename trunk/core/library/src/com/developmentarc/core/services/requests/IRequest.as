@@ -24,8 +24,7 @@
  * ***** END MIT LICENSE BLOCK ***** */
  package com.developmentarc.core.services.requests
 {
-	import com.developmentarc.core.services.events.DispatcherEvent;
-	
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	/**
@@ -141,7 +140,7 @@
 		/**
 		 * Marks a request has errored during the dispatching of the request.
 		 */
-		function failure(originalEvent:DispatcherEvent):void;
+		function failure(originalEvent:Event):void;
 		
 		
 		/**

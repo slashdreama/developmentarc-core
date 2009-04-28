@@ -47,12 +47,7 @@ package com.developmentarc.core.services.events
 		 */
 		public var result:Object;
 		
-		/** 
-		 * Error String used to describe what was the error that has occured.
-		 */
-		public var errorMessage:String;
-		
-		/**
+		/**		
 		 * Event that might have been dispatched by the encapsulated service. 
 		 */
 		public var originalEvent:Event;

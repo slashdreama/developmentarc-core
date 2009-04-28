@@ -28,6 +28,10 @@ package com.developmentarc.libtests.elements.service
 	import com.developmentarc.core.services.parsers.IParser;
 	import com.developmentarc.core.services.requests.IRequest;
 	
+	import flash.events.Event;
+	
+	import mx.rpc.events.FaultEvent;
+	
 	/**
 	 * Class provides a mock dispatcher for a request providing a generic
 	 * object which is duck typed to a TaskDO (name, description, completed.
