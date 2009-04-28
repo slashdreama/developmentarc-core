@@ -34,7 +34,7 @@ A Parser is responsible for translating raw data into application specific data.
 
 = !LifeCycle =
 
-SRD moves a particular Request through a series of phase that make up the life of that Request.  Below is a definition of each phase in order of it’s occurrence.  When the Request enters a new phase, a !RequestEvent will be dispatched from the Request with the type set to the phase.  This allows for application code to listen to various phase transitions and take the appropriate action.
+SRD moves a particular Request through a series of phase that make up the life of that Request.  Below is a definition of each phase in order of it’s occurrence.  When the Request enters a new phase, a RequestEvent will be dispatched from the Request with the type set to the phase.  This allows for application code to listen to various phase transitions and take the appropriate action.
 
 == Created ==
 
@@ -55,16 +55,16 @@ If a Dispatcher encounters problems and faults, the Request will enter a Failure
 
 == Parsing ==
 
-After data has returned, the !RequestDelegate will pass the raw data off to the Request’s Parser.  At this point the Request enters the "Parsing" phase, indicating the Request’s returned data is being translated from a raw form into an application specific format.
+After data has returned, the RequestDelegate will pass the raw data off to the Request’s Parser.  At this point the Request enters the "Parsing" phase, indicating the Request’s returned data is being translated from a raw form into an application specific format.
 
 
 == Complete ==
 
-Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the Request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the !RequestDelegate.
+Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the Request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the RequestDelegate.
 
 == Error ==
 
-If an error occurs during parsing of a result data, the Request will enter an "Error" phase and the lifecycle will halt. At this point the !RequestDelegate removes the Request from it’s internals.
+If an error occurs during parsing of a result data, the Request will enter an "Error" phase and the lifecycle will halt. At this point the RequestDelegate removes the Request from it’s internals.
 
 == Cancel ==
 
