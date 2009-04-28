@@ -24,6 +24,8 @@
  * ***** END MIT LICENSE BLOCK ***** */
  package com.developmentarc.core.services.requests
 {
+	import com.developmentarc.core.services.events.DispatcherEvent;
+	
 	import flash.events.IEventDispatcher;
 	
 	/**
@@ -137,9 +139,15 @@
 		function parsing():void;
 		
 		/**
-		 * Marks a request has errored either during the dispatch or during parsing.
+		 * Marks a request has errored during the dispatching of the request.
 		 */
-		function error(message:String):void;
+		function failure(originalEvent:DispatcherEvent):void;
+		
+		
+		/**
+		 * Marks a request has errored during parsing of the result raw data
+		 */
+		function error(originalError:Error):void;
 		
 		/**
 		 * Marks a request has completed its parsing and has saved it's data

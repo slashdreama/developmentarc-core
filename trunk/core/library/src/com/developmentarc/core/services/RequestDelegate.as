@@ -56,10 +56,13 @@ package com.developmentarc.core.services
 	 *   <li>RequestEvent.CREATED - When a request is instantiated, the first phase is created.</li>
 	 * 	 <li>RequestEvent.DISPATCHED - When a request has been dispatched to it's dispatcher.</li>
 	 *   <li>RequestEvent.RETURNED - A request enters the returned phase when the dispathcer has successfully returned data to the delegate.</li>
+	 * 	 <li>RequestEvent.FAILURE - A request enters this phase, when a dispatcher has faulted during the dispatching of the request. The request will be marked as a failure and will not continue. The 
+	 *    original DispatcherEvent will be included inside of the ResultEvent allowing for application diagnostic.</li>
 	 *   <li>RequestEvent.PARSING - Marked when the delegate has passed a request's raw data to the parser for processing.</li>
 	 *   <li>RequestEvent.COMPLETE - After data has been returned, parsed and saved via the request itself the request will be marked complet.</li>
+	 *   <li>RequestEvent.ERROR - If a parser errors during its processing the request will be marked as an error and will halt the lifecycle of the request. Inside of the ResultEvent that is dispatched from 
+	 *   the request will be the original Error allowing for all listeners to take appropriate action.</li>
 	 *   <li>RequestEvent.CANCEL - If a request is canceled at anypoint in the lifecycle, it will be marked as Canceled and will not continue.</li>
-	 *   <li>RequestEvent.ERROR - IF a dipatcher fails or a parser errors during its processing the request will be marked as an error and will halt the lifecycle of the request.</li>
 	 * </ul>
 	 * </p>
 	 * 
@@ -399,7 +402,7 @@ package com.developmentarc.core.services
 				data = parser.parse(event.result);
 			}
 			catch(err:Error) {
-				request.error(err.message);
+				request.error(err);
 				successfulParse = false;
 			}
 			// Only if request was successfully parsed
@@ -415,9 +418,8 @@ package com.developmentarc.core.services
 		}
 		
 		/**
-		 * Method handles fault event from IDispatcher indicating an error occured
-		 * while dispatching request.  Method will mark request as error and will remove from
-		 * delegation system.
+		 * Method handles fault event from IDispatcher indicating an failure occured
+		 * while dispatching the Request.  Method will mark request as a Failure and will remove from from the delegation system.
 		 * 
 		 * @param event DispatcherEvent from IDispatcher that failed.
 		 */
@@ -426,7 +428,7 @@ package com.developmentarc.core.services
 			var request:IRequest = _requests.getItem(event.uid);
 			
 			// Set phase to error
-			request.error(event.errorMessage);
+			request.failure(event);
 			
 			// Remove request
 			_requests.remove(event.uid);

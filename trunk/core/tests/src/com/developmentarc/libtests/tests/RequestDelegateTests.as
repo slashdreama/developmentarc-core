@@ -66,14 +66,14 @@ package com.developmentarc.libtests.tests
 		} 
 		
 		/**
-		 * Method verifies error handling from dispatcher.
+		 * Method verifies fault handling from dispatcher.
 		 */
-		 public function testRequestErrorInDispatcher():void {
+		 public function testRequestFailureInDispatcher():void {
 			// Create request
 			var request:IRequest = new TestRequest(FaultDispatcher,ResultParser);
 			
 			// Listen to request
-			request.addEventListener(RequestEvent.ERROR, addAsync(handleEvent, 1000), false, 0, true);
+			request.addEventListener(RequestEvent.FAILURE, addAsync(handleEvent, 1000), false, 0, true);
 			
 			// Start request
 			 request.start();
@@ -532,7 +532,7 @@ package com.developmentarc.libtests.tests
 			var faultRequest:TestRequest = TestRequest(successRequest.otherRequests.pop());
 			
 			// Verify both requests are successful
-			assertTrue("Failure request should have errored", faultRequest.phase == RequestEvent.ERROR);
+			assertTrue("Failure request should have errored", faultRequest.phase == RequestEvent.FAILURE);
 			assertTrue("Success request has completed", successRequest.phase == RequestEvent.COMPLETE);
 		}
 		public function handleOneErrorInParserOneSuccess(event:Event):void {
@@ -573,7 +573,7 @@ package com.developmentarc.libtests.tests
 			
 			assertTrue("First Success should have phase of Complete", successRequest1.phase == RequestEvent.COMPLETE);
 			assertTrue("Second Success should have phase of Complete", successRequest2.phase == RequestEvent.COMPLETE);
-			assertTrue("Error Request shoudl have Error phase", errorRequest.phase == RequestEvent.ERROR);
+			assertTrue("Error Request shoudl have Error phase", errorRequest.phase == RequestEvent.FAILURE);
 		}
 		
 		public function handleThreeRequestSuccessErrorInParserSuccess(event:Event):void {
@@ -613,7 +613,7 @@ package com.developmentarc.libtests.tests
 			
 			assertTrue("Success Request should have phase of Complete", successRequest.phase == RequestEvent.COMPLETE);
 			assertTrue("Parser Error Request should have phase of Error", parserErrorRequest1.phase == RequestEvent.ERROR);
-			assertTrue("Dispatcher  Error Request should have phase of Error", dispatcherErrorRequest.phase == RequestEvent.ERROR);
+			assertTrue("Dispatcher  Error Request should have phase of Error", dispatcherErrorRequest.phase == RequestEvent.FAILURE);
 		}
 		
 		public function handleThreeRequestErrorInDispatcherErrorInDispatcherSuccess(event:Event):void {
@@ -622,8 +622,8 @@ package com.developmentarc.libtests.tests
 			var dispatcherErrorRequest1:TestRequest = TestRequest(successRequest.otherRequests.pop());
 			
 			assertTrue("Success Request should have phase of Complete", successRequest.phase == RequestEvent.COMPLETE);
-			assertTrue("First Dispatcher Error Request should have phase of Error", dispatcherErrorRequest1.phase == RequestEvent.ERROR);
-			assertTrue("Second Dispatcher Error Request should have phase of Error", dispatcherErrorRequest2.phase == RequestEvent.ERROR);
+			assertTrue("First Dispatcher Error Request should have phase of Error", dispatcherErrorRequest1.phase == RequestEvent.FAILURE);
+			assertTrue("Second Dispatcher Error Request should have phase of Error", dispatcherErrorRequest2.phase == RequestEvent.FAILURE);
 		
 		}
 		

@@ -34,9 +34,8 @@ package com.developmentarc.core.services.dispatchers
 	[Event(name="dispatcherFault",type="com.developmentarc.core.services.events.DispatcherEvent")]
 	/**
 	 * <p>Class is the base for all dispatcher classes in the service layer.
-	 * The responsibility of the dispatcher is to take a given request and build a service request and execute a call
-	 * to a paticular data store. That data store is defined by the custom dispatcher class as is up to the developer to describe
-	 * inside of the class. </p>
+	 * The responsibility of the Dispatcher is to take a given Request and build a service or data store connection and execute the Request. 
+	 * That data store is defined by the extending dispatcher class.</p>
 	 * 
 	 * <p>A child class must define the dispatch and cancel methods.  The dispatch method is the gateway to executing a paticular request. 
 	 * The RequestDelegate will call this method passing in both the request and parser.  The child class will take the neccessary information out of both
