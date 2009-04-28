@@ -150,7 +150,6 @@ package com.developmentarc.core.services.dispatchers
 			// Mapping origin event to new event
 			dispatcherEvent.uid = event.token;
 			dispatcherEvent.originalEvent = event;
-			dispatcherEvent.errorMessage = event.fault.faultString;
 			dispatchEvent(dispatcherEvent);
 		}
 		

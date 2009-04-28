@@ -30,6 +30,7 @@ package com.developmentarc.libtests.tests
 	import com.developmentarc.core.services.requests.HTTPRequest;
 	import com.developmentarc.core.services.requests.IRequest;
 	import com.developmentarc.libtests.elements.service.FaultDispatcher;
+	import com.developmentarc.libtests.elements.service.FaultMockDispatcher;
 	import com.developmentarc.libtests.elements.service.FaultParser;
 	import com.developmentarc.libtests.elements.service.MockDispatcher;
 	import com.developmentarc.libtests.elements.service.ResultDelayDispatcher;
@@ -498,7 +499,20 @@ package com.developmentarc.libtests.tests
 			request.start();
 		}
 		
+		public function testAbstactMockDispatcherFault():void {
+			// Set Delegate Mode 
+			RequestDelegate.mode = RequestDelegate.MODE_MOCK;
+			
+			// Create requests
+			var request:TestRequest = new TestRequest(ResultDispatcher, ResultParser, AbstractRequest.MODE_MOCK, FaultMockDispatcher);
+			
+			// Listen to last request
+			request.addEventListener(RequestEvent.FAILURE, addAsync(handleAbstactMockDispatcherFault, 6000), false, 0, true);
+			
+			// Start requests
+			request.start();
 		
+		}
 // Event Method
 		public function handleEvent(event:Event):void {
 			// We were called.. nothing else to do
@@ -642,7 +656,10 @@ package com.developmentarc.libtests.tests
 			var task:TaskDO = TaskDO(TestRequest(event.currentTarget).data);
 			
 			assertTrue("Task name should be blank since we are using real dispatcher", task.name == null);
+		}
 		
+		public function handleAbstactMockDispatcherFault(event:Event):void {
+			// Just needs to fire. Nothing to test
 		}
 	}
 }

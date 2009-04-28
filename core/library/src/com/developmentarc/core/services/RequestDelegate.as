@@ -428,7 +428,7 @@ package com.developmentarc.core.services
 			var request:IRequest = _requests.getItem(event.uid);
 			
 			// Set phase to error
-			request.failure(event);
+			request.failure(event.originalEvent);
 			
 			// Remove request
 			_requests.remove(event.uid);
