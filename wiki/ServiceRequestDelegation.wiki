@@ -50,6 +50,8 @@ Once a Request has started and been dispatched by it’s defined Dispatcher, the
 
 The "Returned" phase indicates the Dispatcher has handled a successful response and the data is ready to be processed.
 
+== Failure ==
+If a Dispatcher encounters problems and faults, the Request will enter a Failure phase indicating there were issues with the dispatching.  At this point the Request will be halted and removed from the system.
 
 == Parsing ==
 
@@ -60,15 +62,15 @@ After data has returned, the !RequestDelegate will pass the raw data off to the 
 
 Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the Request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the !RequestDelegate.
 
+== Error ==
+
+If an error occurs during parsing of a result data, the Request will enter an "Error" phase and the lifecycle will halt. At this point the !RequestDelegate removes the Request from it’s internals.
 
 == Cancel ==
 
 If at any point during the lifecycle, a Request it stopped via Request.stop(), the Request will be marked as "Cancel" and the lifecycle will come to an end, removing it from the !RequestDelegate.
 
 
-== Error ==
-
-If a fault or error occurs during the dispatching or parsing of a Request, it will enter an "Error" phase and the lifecycle will halt. At this point the !RequestDelegate removes the Request from it’s internals.
 
 = How-to =
 
