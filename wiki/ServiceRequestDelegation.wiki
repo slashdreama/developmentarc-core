@@ -78,7 +78,7 @@ In our basic how-to we will explore the creation of a Request that needs to comm
 
 == Create a Parser ==
 
-The parser is responsible for taking raw data and translating it into an application specific format such as a set of Data Objects (DOs).   All parsers must implement the !IParser interface.  In our case we will extend !AbstractParser (which implements IParser) so we can define a result format.  A result format is required when defining a Parser used by an HTTPService and will be leveraged by the Dispatcher.  For this reason it is recommended that all Parsers extend !AbstractParser to gain this functionality.
+The parser is responsible for taking raw data and translating it into an application specific format such as a set of Data Objects (DOs).   All parsers must implement the IParser interface.  In our case we will extend !AbstractParser (which implements IParser) so we can define a result format.  A result format is required when defining a Parser used by an HTTPService and will be leveraged by the Dispatcher.  For this reason it is recommended that all Parsers extend !AbstractParser to gain this functionality.
 For our use case we will be receiving user data in xml and translating it into a single data object of type UserDO. First lets look at the xml and the data object
 
 
