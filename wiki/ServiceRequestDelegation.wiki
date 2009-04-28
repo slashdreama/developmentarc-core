@@ -74,7 +74,7 @@ If at any point during the lifecycle, a Request it stopped via Request.stop(), t
 
 = How-to =
 
-In our basic how-to we will explore the creation of a Request that needs to communicate with a standard HTTP service with an XML response.  To accomplish this we will be responsible for creating a new Request (based on HTTPRequest) and Parser.  Out-of-box we can leverage the HTTPRequestDispatcher, which encapsulates Flex’s !HTTPService and provides us with all the means necessary to execute our request with reuse of one !HTTPService.
+In our basic how-to we will explore the creation of a Request that needs to communicate with a standard HTTP service with an XML response.  To accomplish this we will be responsible for creating a new Request (based on HTTPRequest) and Parser.  Out-of-box we can leverage the HTTPRequestDispatcher, which encapsulates Flex’s HTTPService and provides us with all the means necessary to execute our request with reuse of one HTTPService.
 
 == Create a Parser ==
 
