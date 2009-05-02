@@ -38,14 +38,14 @@ package com.developmentarc.core.services.events
 	 */
 	public class RequestEvent extends Event
 	{
-		public static const CREATED:String = "requestCreated";
-		public static const DISPATCHED:String = "requestDispatched";
-		public static const RETURNED:String = "requestReturned";
-		public static const PARSING:String = "requestParsing";
-		public static const CANCEL:String = "requestCancel";
-		public static const FAILURE:String = "requestFailure";
-		public static const ERROR:String = "requestError";
-		public static const COMPLETE:String = "requestComplete";
+		public static const CREATED:String = "created";
+		public static const DISPATCHED:String = "dispatched";
+		public static const RETURNED:String = "returned";
+		public static const PARSING:String = "parsing";
+		public static const CANCEL:String = "cancel";
+		public static const FAILURE:String = "failure";
+		public static const ERROR:String = "error";
+		public static const COMPLETE:String = "complete";
 		
 		/**
 		 * Original Event. Used for type FAILURE
