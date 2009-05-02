@@ -1,85 +1,90 @@
-#summary The Service Request Delegation (SRD) layer of DevelopmentArc Core provides a componentized architecture to solving your application’s data access needs.
+#summary The Service Request Delegation (SRD) layer of DevelopmentArc Core provides a componentized architecture for solving your application’s data access needs.
 
 *NOTE:* SRD is scheduled for release in version .90.  
 
 = Introduction =
 
-The Service Request Delegation (SRD) layer of !DevelopmentArc<sup>TM</sup> Core provides a componentized architecture to solving your application’s data access needs.  The architecture breaks up your service layer into 4 distinct parts; Delegation, Requests, Dispatchers, and Parsers.   This model allows for a central theme of reuse throughout your application. 
-You will be able to combine Requests, Dispatchers, and Parsers in many different ways to solve various data communication and parsing needs that your application may encounter.   In one situation you may need to connect to a local database and retrieve and parse table data while other times the data store could be online via a Rest-ful API.  If in both cases your returning data is in a common format, the same parser could be reused to format your raw data into an application specific format. 
+The Service Request Delegation (SRD) layer of !DevelopmentArc<sup>TM</sup> Core provides a componentized architecture for solving your application’s data access needs.  The architecture breaks up your service layer into 4 distinct parts; Delegation, Requests, Dispatchers, and Parsers.   This model allows for a central theme of reuse throughout your application. 
+You will be able to combine Requests, Dispatchers, and Parsers in many different ways to solve various data communication and parsing needs that your application may encounter.   In one situation you may need to connect to a local database and retrieve and parse table data while other times the data store could be online via a Rest-ful API.  If in both cases your returning data is in a common format, the same parser could be reused to format your raw data into an application specific format.
 
+*NOTE:* The 0.9 version of the provided HTTP Dispatcher is Flex only.  The SRD architecture is pure !ActionScript 3.0, so that you can use the SRD in !ActionScript only and Flash Professional projects but the following examples and default use cases of loading data via HTTP request require the Flex HTTPService.  We plan to build and release more dispatchers with subsequent releases.
 
+== Why SRD? ==
+
+The SRD architecture came about to solve a common problem Flex developers face when developing applications.  Flex provides a robust set of data services to manage accessing multiple data stores (Remote Object, HTTPService, etc.) yet the developer has to wrap these data services in a lot of custom code to handle data retrieval, error handling and data parsing.  As application become more complex, data retrieval also grows in complexity. How does the application handle data queueing or can the app handle it at all?  How does the service layer provide updates on the current state of the data retrieval?  How should the application handle data errors and inform the rest of the system?
+
+At !DevelopmentArc we continually had to solve these problems when building Flex Applications and over time we focused on creating a system that both provides abstraction to the process of loading data and unifies the process so that a clear and repeatable pattern for data loading can be applied.  The SRD is designed to provide a simple, yet robust way of managing data loading in your application.  It is also designed to be easily integrated into other elements of Core, such as the Task System so that data calls can be queued, prioritized and canceled when no longer required.  The SRD also provides a clear set of phases the request go through so that your application can provide user feedback and make adjustments as the data is being retrieved and processed. SRD is also designed so that it can be integrated into existing 3rd party solutions, such as Adobe Cairngorm or Mate.  Many of these frameworks are designed to support messaging throughout your application but do not solve data retrieval in a constant or complete way.
+
+Another reason for SRD is creation of Mock data.  When developing applications we don't always have the benefit of live data for our data store.  To help support development the SRD provides a full Mock data system to allow developers to test their request and application with mock data and slowly integrate live data as it becomes available.  This is also a powerful system for QA testing to make sure the application handles bad data and states even though the live data is available.
 
 = Component Definitions =
 
-== Delegation ==
-
-The controller of the SRD is the !RequestDelegate.  This singleton class is responsible for moving a particular Request through the various phases of the framework’s life cycle. The class will tie together the Request, it's Dispatcher and Parser.  Posting or Retrieving data from the data store. Note: The application does not directly communicate with the !RequestDelegate. Communication is encapsulated inside of Request (!AbstractRequest) and invoked when the Request’s  start() and stop() methods are called.
-
-
 == Request ==
 
-A Request defines a particular instance for a unique request to a data store or web service. A Request will define all unique arguments for a request such as it’s uri (root url/database), source (api/table), type, and the dispatcher and parser that should be used to carry out the request invocation by the !RequestDelegate.  
+A Request object defines a particular instance for data retrieval from a data store or web service. A Request is responsible for defining all required arguments for retrieval such as the data's location (url/database), data path (uri/source/api/table), type of data (POST, AMF, etc.), and the SRD Dispatcher and SRD Parser that is used to carry out the request invocation.
 
+== Delegation ==
+
+The controller of the SRD is the !RequestDelegate.  This singleton class is responsible for moving a particular Request through the various phases of the SRD's life cycle. The class will tie together the Request, it's Dispatcher and Parser and handle posting or retrieving data from the data store or service. _Note_: The application does not directly communicate with the !RequestDelegate. Communication is encapsulated inside of Request (!AbstractRequest) and invoked when the Request’s start() and stop() methods are called.
 
 == Dispatcher ==
 
-The Dispatcher component is responsible for the actual communication with the defined service, which is linked by the Request.  Within SRD, the !RequestDelegate will only keep one Dispatcher of a particular class type.  On subsequent Requests the Dispatcher will be reused. 
+The Dispatcher component is responsible for the actual communication with the defined data store or service, which is defined by the Request.  Within SRD, the !RequestDelegate will only keep one Dispatcher instance of a particular class type to manage memory and performance.  On subsequent Requests the Dispatcher instance is reused. When designing custom dispatchers, keep this in mind.
 
 
 == Parser ==
 
-A Parser is responsible for translating raw data into application specific data.   The Parser does not store the data in the application. This is the responsibility of the Request.  By requiring the Request to store the translated data, we can keep Parsers generic enough to be reused by multiple requests.
-
+A Parser is responsible for translating raw data from the data store or service into application formatted data, such as converting XML into an !ActionScript Data Object.   The Parser does not store the data in the application, such as placing the data in a Model. This is the responsibility of the Request.  By requiring the Request to store the translated data, we can keep Parsers as generic utilities that can be reused by multiple Requests.
 
 
 = !LifeCycle =
 
-SRD moves a particular Request through a series of phase that make up the life of that Request.  Below is a definition of each phase in order of it’s occurrence.  When the Request enters a new phase, a !RequestEvent will be dispatched from the Request with the type set to the phase.  This allows for application code to listen to various phase transitions and take the appropriate action.
+SRD moves a particular Request through a series of phases that make up the life of that Request.  Below is a definition of each phase in order of it’s occurrence.  When the Request enters a new phase, a !RequestEvent is dispatched from the Request with the type set to the phase.  This allows for application code to listen to various phase transitions and take the appropriate action.
 
 == Created ==
 
-When a Request is first instantiated it will initially enter the “Created” phase. 
+When a Request is first instantiated it will initially enter the “Created” phase.  The Request dispatches the !RequestEvent.CREATED event. 
 
 
 == Dispatched ==
 
-Once a Request has started and been dispatched by it’s defined Dispatcher, the Request will enter this phase.  This "Dispatched" phase indicates a particular request is being executed.  
+Once a Request has started and been dispatched by it’s defined Dispatcher, the Request will enter the "Dispatched" phase.  This "Dispatched" phase indicates a particular request is being executed. The Request dispatches the !RequestEvent.DISPATCHED event. 
 
 
 == Returned ==
 
-The "Returned" phase indicates the Dispatcher has handled a successful response and the data is ready to be processed.
+The "Returned" phase indicates the Dispatcher has handled a successful response and the data is ready to be processed by the defined parser. The Request dispatches the !RequestEvent.RETURNED event. 
 
 == Failure ==
-If a Dispatcher encounters problems and faults, the Request will enter a Failure phase indicating there were issues with the dispatching of the Request.  At this point the Request will be halted and removed from the system.
+
+If a Dispatcher encounters problems and/or faults, the Request will enter the "Failure" phase indicating there were issues with the dispatching of the Request.  At this point the Request will be halted and removed from the system. The Request dispatches the !RequestEvent.FAILURE event which contains any error that the Dispatcher received or throws. 
 
 == Parsing ==
 
-After data has returned, the !RequestDelegate will pass the raw data off to the Request’s Parser.  At this point the Request enters the "Parsing" phase, indicating the Request’s returned data is being translated from a raw form into an application specific format.
+After data has returned, the !RequestDelegate will pass the raw data off to the Request’s defined Parser.  At this point the Request enters the "Parsing" phase, indicating the Request’s returned data is being translated from a raw form into an application specific format. The Request dispatches the !RequestEvent.PARSING event. 
 
 
 == Complete ==
 
-Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the Request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the !RequestDelegate.
+Upon a successful parsing of the raw data and saving of the new data inside the application (via the Request.saveData() method), the Request will be marked as "Complete". This phase indicates the Request has completed its lifecycle inside of the application and has been removed from the !RequestDelegate processing. The Request dispatches the !RequestEvent.COMPLETE event. 
 
 == Error ==
 
-If an error occurs during parsing of a result data, the Request will enter an "Error" phase and the lifecycle will halt. At this point the RequestDelegate removes the Request from it’s internals.
+If an error occurs during parsing of a result data, the Request will enter an "Error" phase and the Request's lifecycle will end. At this point the !RequestDelegate removes the Request from it’s internals. The Request dispatches the !RequestEvent.ERROR event. 
 
 == Cancel ==
 
-If at any point during the lifecycle, a Request it stopped via Request.stop(), the Request will be marked as "Cancel" and the lifecycle will come to an end, removing it from the !RequestDelegate.
+If at any point during the lifecycle, a Request it stopped via Request.stop(), the Request will be marked as "Canceled" and the lifecycle will come to an end, removing it from the !RequestDelegate. The Request dispatches the !RequestEvent.CANCEL event. 
 
 
 
 = How-to =
 
-In our basic how-to we will explore the creation of a Request that needs to communicate with a standard HTTP service with an XML response.  To accomplish this we will be responsible for creating a new Request (based on HTTPRequest) and Parser.  Out-of-box we can leverage the HTTPRequestDispatcher, which encapsulates Flex’s HTTPService and provides us with all the means necessary to execute our request with reuse of one HTTPService.
+In our basic how-to we will explore the creation of a Request that needs to communicate with a standard HTTP service with an XML response.  To accomplish this we will be responsible for creating a new Request (based on HTTPRequest) and Parser.  Out-of-box we can leverage the SRD HTTPRequestDispatcher, which encapsulates Flex’s HTTPService and provides us with all the means necessary to execute our request with reuse of a single Flex HTTPService instance.
 
 == Create a Parser ==
 
-The parser is responsible for taking raw data and translating it into an application specific format such as a set of Data Objects (DOs).   All parsers must implement the IParser interface.  In our case we will extend !AbstractParser (which implements IParser) so we can define a result format.  A result format is required when defining a Parser used by an HTTPService and will be leveraged by the Dispatcher.  For this reason it is recommended that all Parsers extend !AbstractParser to gain this functionality.
-For our use case we will be receiving user data in xml and translating it into a single data object of type UserDO. First lets look at the xml and the data object
+The parser is responsible for taking our service's raw data and translating it into an application specific format such as a set of Data Objects (DOs).   All parsers must implement the IParser interface.  In our case we will extend the SRD !AbstractParser (which implements IParser) so we can define a result format.  A result format is required when defining a Parser used by an HTTPService and will be leveraged by the Dispatcher.  The result format tells the Flex HTTPSerice how we want the data back, such as an ActionScript XML object, a String, a generic Object, an Array, etc.  For this reason it is recommended that all Parsers extend !AbstractParser to gain this functionality. For our use case we will be receiving user data in XML and translating it into a single data object of type UserDO. First lets look at the XML returned by the server and the data object we want to convert it into.
 
 
 === XML ===
@@ -122,9 +127,9 @@ package com.developmentarc.dataobjects
 
 }}}
 
-=== Parser ===
+=== The Parser ===
 
-Our parse class must override and define one method called parse(). This method is the meat of the class and does all the translation. In our case, we will convert the generic object provided into an XML instance and then parse it into a UserDO.
+Our parser class must override and define one method called parse(). This method is the meat of the class and does all the translation. In our case, we will convert the generic object provided via the Interface definition into an XML instance (which our Dispatcher is returning) and then parse it into a UserDO.  Notice that we define the result format in the constructor of the Parser.  Because we extend the !AbstractParser we can pass this value in.  Before our Dispatcher loads the data it check the !resultFormat property on the provide parser instance to determine how to format the data before sending it on.
 
 === !UserParser.as ===
 {{{
@@ -168,7 +173,7 @@ Notice each node of the xml is parsed (type converted if necessary) and then the
 
 Our Request will define a specific API for an HTTPService and will tie the required Dispatcher (HTTPServiceDispatcher), Parser (!UserParser) to itself for processing. 
 
-To help provide a standard API, !DevelopmentArc<sup>TM</sup> Core provides an HTTPRequest Class to assist in build all your HTTPService requests on top of. This class extends !AbstractRequest and adds to the constructor api to include properties specific to an HTTPService.
+To help provide a standard API, !DevelopmentArc<sup>TM</sup> Core provides an HTTPRequest Class to assist in building all your HTTPService requests on top of. This class extends !AbstractRequest and adds to the constructor arguments to include properties specific to an HTTPService.
 
 For our use case, we will be requesting data from !DevelopmentArc’s test service.   The full url will be 'http://test.developmentarc.com/users/1' (Note: The '1' is our user id and will be provided in the !UserRequest constructor).
  
@@ -182,11 +187,11 @@ Our constructor will take one parameters for the user id and the method itself w
 
 *Dispatcher Class* -  Class reference to the dispatcher used by this request. HTTPServiceDispatcher for our use case.
 
-*Parser Class* - Class reference to the parser used to translate raw data from the result of this request in to application specific data.  UserParser for our use case.
+*Parser Class* - Class reference to the parser used to translate raw data from the result of this request in to application specific data.  !UserParser for our use case.
 
 *Mode* - String defining if Request is in Mock or Live mode.  See Mock section below for details.
 
-*Mock Dispathcer Class* - Class reference to dispatcher that mocks data from a live API.  See Mock section below for details.
+*Mock Dispatcher Class* - Class reference to dispatcher that mocks data from a live API.  See Mock section below for details.
 
 === !UserRequest.as ===
 
@@ -467,4 +472,4 @@ Mock modes can be used to help speed up development.  We encourage you to discus
 
 == Example Code ==
 
-We have provided a Flex Project Archive [http://www.developmentarc.com/examples/Example-ServiceLayer/Example-ServiceLayer.zip here] of the above example.  Download and explore the features.  
+We have provided a Flex Project Archive [http://www.developmentarc.com/examples/Example-ServiceLayer/Example-ServiceLayer.zip here] of the above example.  Download and explore the features.
