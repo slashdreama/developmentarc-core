@@ -45,7 +45,7 @@ package com.developmentarc.core.actions
 	public class ActionDelegate extends EventDispatcher
 	{
 		private var _actions:HashTable;
-		private var _activeCommands:HashTable;
+		protected var activeCommands:HashTable;
 		
 		/**
 		 * Constructor. 
@@ -57,7 +57,7 @@ package com.developmentarc.core.actions
 			
 			// set up
 			_actions = new HashTable();
-			_activeCommands = new HashTable();
+			activeCommands = new HashTable();
 		}
 		
 		/**
@@ -161,7 +161,7 @@ package com.developmentarc.core.actions
 		 */
 		protected function registerCommands(action:IAction):void {
 			var commands:Array = action.commands;
-			_activeCommands.addItem(action, commands);
+			activeCommands.addItem(action, commands);
 			for each(var commandType:String in commands) {
 				EventBroker.subscribe(commandType, action.applyAction);
 			}
@@ -190,9 +190,9 @@ package com.developmentarc.core.actions
 		 */
 		protected function handleCommandChange(event:Event):void {
 			var action:IAction = IAction(event.currentTarget);
-			if(_activeCommands.containsKey(action)) {
+			if(activeCommands.containsKey(action)) {
 				// unregister previous commands
-				unregisterCommands(action, _activeCommands.getItem(action) as Array);
+				unregisterCommands(action, activeCommands.getItem(action) as Array);
 			}
 			registerCommands(action);
 		}

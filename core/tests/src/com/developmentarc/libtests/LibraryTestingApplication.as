@@ -32,6 +32,7 @@ package com.developmentarc.libtests
 	import com.developmentarc.libtests.tests.EventBrokerTests;
 	import com.developmentarc.libtests.tests.HTTPRequestDispatcherTests;
 	import com.developmentarc.libtests.tests.HashTableTests;
+	import com.developmentarc.libtests.tests.HistoryActionDelegateTests;
 	import com.developmentarc.libtests.tests.InstanceFactoryTests;
 	import com.developmentarc.libtests.tests.PriorityQueueTests;
 	import com.developmentarc.libtests.tests.QueueTests;
@@ -107,6 +108,7 @@ package com.developmentarc.libtests
 			suite.addTest( TestUtils.generateFullSuite(ActionDelegateTests) ); 
 			suite.addTest( TestUtils.generateFullSuite(HTTPRequestDispatcherTests) );
 			suite.addTest( TestUtils.generateFullSuite(RequestDelegateTests) );
+			suite.addTest( TestUtils.generateFullSuite(HistoryActionDelegateTests) );
 			//*/
 			
 			
