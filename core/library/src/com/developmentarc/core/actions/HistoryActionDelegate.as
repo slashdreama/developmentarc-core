@@ -26,6 +26,7 @@ package com.developmentarc.core.actions
 {
 	import com.developmentarc.core.actions.actions.IAction;
 	import com.developmentarc.core.actions.actions.IHistoryAction;
+	import com.developmentarc.core.actions.commands.AbstractHistoryCommand;
 	import com.developmentarc.core.actions.commands.HistoryCommand;
 	import com.developmentarc.core.datastructures.utils.HashTable;
 	import com.developmentarc.core.utils.EventBroker;
@@ -147,11 +148,15 @@ package com.developmentarc.core.actions
 				// apply action
 				action.applyAction(command);
 			}
-			// add command to undo stack
-			_undoCommandStack.push(command);
 			
-			// clear redo stack - its no longer relevent
-			_redoCommandStack = new Array();
+			// if command has history enabled
+			if(command is AbstractHistoryCommand && AbstractHistoryCommand(command).useHistory) {
+				// add command to undo stack
+				_undoCommandStack.push(command);
+				
+				// clear redo stack - its no longer relevent
+				_redoCommandStack = new Array();
+			}
 		}
 		
 // --------------
