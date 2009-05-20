@@ -29,6 +29,7 @@ package com.developmentarc.core.utils
 	
 	import flash.events.AsyncErrorEvent;
 	import flash.events.EventDispatcher;
+	import flash.events.SecurityErrorEvent;
 	import flash.events.StatusEvent;
 	import flash.net.LocalConnection;
 	import flash.net.registerClassAlias;
@@ -36,9 +37,29 @@ package com.developmentarc.core.utils
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
+	/**
+	* Dispatched when a connection error occurs within the local connection.  This is usually caused when
+	* the connection already exists.
+	*/
 	[Event(name="connectionError", type="com.developmentarc.core.utils.events.LocalConnectionEvent")]
+	/**
+	* Dispatched when a message is sent to another LCM instance and an Error occurs in that system.  This
+	* is usually caused by an unknown type, unknown method or the argument count for the target method
+	* is incorrect.
+	*/
 	[Event(name="sentMessageError", type="com.developmentarc.core.utils.events.LocalConnectionEvent")]
+	/**
+	* Dispatched when the local connection status is updated.
+	*/
 	[Event(name="statusMessage", type="com.developmentarc.core.utils.events.LocalConnectionEvent")]
+	/**
+	* Dispatched when a security error event is dispatched by the local connection.
+	*/
+	[Event(name="securityError",type="com.developmentarc.core.utils.events.LocalConnectionEvent")]
+	/**
+	* Dispatched when an error is dispatched by the local connection.
+	*/
+	[Event(name="sendError",type="com.developmentarc.core.utils.events.LocalConnectionEvent")]
 	/**
 	 * The LocalConnectionManager provides a simpler interface to the Flash LocalConnection that is designed to support
 	 * retention of Class type when communication with other ActionScript 3 Applications.  For Class retention to work
@@ -96,6 +117,7 @@ package com.developmentarc.core.utils
 			
 			connectionTarget = connTarget;
 			currentDomainList = domainList;
+			currentConnectionName = connectionName;
 			
 			if(!autoConnect) return;
 			
@@ -131,7 +153,7 @@ package com.developmentarc.core.utils
 			
 			connection.removeEventListener(AsyncErrorEvent.ASYNC_ERROR, handleAsyncEvent);
 			connection.removeEventListener(StatusEvent.STATUS, handleStatusEvent);
-			
+			connection.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecurityErrorEvent);
 			connection = undefined;
 		}
 		
@@ -183,6 +205,7 @@ package com.developmentarc.core.utils
 			// register events
 			connection.addEventListener(AsyncErrorEvent.ASYNC_ERROR, handleAsyncEvent);
 			connection.addEventListener(StatusEvent.STATUS, handleStatusEvent);
+			connection.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecurityErrorEvent);
 			
 			// we are set to autoconnect, make the connection
 			try
@@ -305,6 +328,7 @@ package com.developmentarc.core.utils
 			var lce:LocalConnectionEvent = new LocalConnectionEvent(LocalConnectionEvent.SENT_MESSAGE_ERROR);
 			lce.errorID = event.error.errorID;
 			lce.errorMessage = event.error.message + " on " + currentConnectionName;
+			lce.sourceEvent = event;
 			dispatchEvent(lce);
 		}
 		
@@ -321,6 +345,14 @@ package com.developmentarc.core.utils
 			lce.statusMessage = event.level + " on " + currentConnectionName;
 			lce.status = event.level;
 			lce.statusCode = event.code;
+			lce.sourceEvent = event;
+			dispatchEvent(lce);
+		}
+		
+		protected function handleSecurityErrorEvent(event:SecurityErrorEvent):void {
+			var lce:LocalConnectionEvent = new LocalConnectionEvent(LocalConnectionEvent.SECURITY_ERROR);
+			lce.errorMessage = event.text;
+			lce.sourceEvent = event;
 			dispatchEvent(lce);
 		}
 		
@@ -361,8 +393,17 @@ package com.developmentarc.core.utils
 					argList.push(item);
 				}
 			}
-			connection.send(target, "registerTypes", aliasList, currentConnectionName);
-			connection.send(target, "message", methodName, argList, currentConnectionName); 
+			try {
+				connection.send(target, "registerTypes", aliasList, currentConnectionName);
+				connection.send(target, "message", methodName, argList, currentConnectionName); 
+			} catch (e:Error) {
+				var event:LocalConnectionEvent = new LocalConnectionEvent(LocalConnectionEvent.SEND_ERROR);
+				event.errorID = e.errorID;
+				event.errorMessage = e.message;
+				event.status = e.name;
+				event.sourceError = e;
+				dispatchEvent(event);
+			}
 		}
 		
 	}

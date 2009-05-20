@@ -2,9 +2,14 @@
 <flexLibProperties version="1">
 <includeClasses>
 <classEntry path="com.developmentarc.core.actions.ActionDelegate"/>
+<classEntry path="com.developmentarc.core.actions.HistoryActionDelegate"/>
 <classEntry path="com.developmentarc.core.actions.actions.AbstractAction"/>
+<classEntry path="com.developmentarc.core.actions.actions.AbstractHistoryAction"/>
 <classEntry path="com.developmentarc.core.actions.actions.IAction"/>
+<classEntry path="com.developmentarc.core.actions.actions.IHistoryAction"/>
 <classEntry path="com.developmentarc.core.actions.commands.AbstractCommand"/>
+<classEntry path="com.developmentarc.core.actions.commands.AbstractHistoryCommand"/>
+<classEntry path="com.developmentarc.core.actions.commands.HistoryCommand"/>
 <classEntry path="com.developmentarc.core.controllers.SelectionController"/>
 <classEntry path="com.developmentarc.core.controllers.SelectionGroup"/>
 <classEntry path="com.developmentarc.core.controllers.interfaces.ISelectable"/>
