@@ -48,6 +48,7 @@ package com.developmentarc.core.actions.commands
 		 * PRIVATE VARIABLES
 		 */
 		private var _actionPropertiesState:HashTable;
+		private var __useHistory:Boolean;
 		
 		/**
 		 * Constructor.
@@ -55,11 +56,12 @@ package com.developmentarc.core.actions.commands
 		 * @param type The type of command.
 		 * 
 		 */
-		public function AbstractHistoryCommand(type:String)
+		public function AbstractHistoryCommand(type:String, useHistory:Boolean=true)
 		{
 			super(type);
 			
 			_actionPropertiesState = new HashTable();
+			__useHistory = useHistory;
 		}
 		
 		/**
@@ -93,6 +95,13 @@ package com.developmentarc.core.actions.commands
 			else {
 				return null;
 			}
+		}
+		
+		/**
+		 * Flag indicates if command can be kept for history in the history delegation system
+		 */ 
+		public function get useHistory():Boolean {
+			return __useHistory;
 		}
 
 	}

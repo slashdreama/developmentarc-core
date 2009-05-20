@@ -29,6 +29,7 @@ package com.developmentarc.libtests.tests
 	import com.developmentarc.actions.actiontypes.TestHistoryAction;
 	import com.developmentarc.actions.commands.BasicCommand;
 	import com.developmentarc.actions.commands.TestHistoryCommand;
+	import com.developmentarc.actions.commands.TestNoHistoryCommand;
 	import com.developmentarc.core.actions.HistoryActionDelegate;
 	import com.developmentarc.core.actions.actions.IAction;
 	import com.developmentarc.core.actions.commands.HistoryCommand;
@@ -283,13 +284,13 @@ package com.developmentarc.libtests.tests
 		 	
 		 	// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
-		 	action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(action);		 	
 		 	
 		 	
 		 	// dispatch command 1
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 			
 		 	 // verify action
@@ -311,13 +312,13 @@ package com.developmentarc.libtests.tests
 		 public function testTwoUndosWithOneAction():void {
 		 	// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
-		 	action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(action);		 	
 		 	
 		 	
 		 	// dispatch command 1
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 			// dispatch command 2
 			command.dispatch();
@@ -341,16 +342,16 @@ package com.developmentarc.libtests.tests
 		public function testBasicUndoWithTwoAction():void {
 			// create two actions same command
 		 	var firstAction:AdditionAction = new AdditionAction();
-		 	firstAction.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	firstAction.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(firstAction);
 			
 			var secondAction:AdditionAction = new AdditionAction();
-		 	secondAction.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	secondAction.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(secondAction);
 			
 		 	// dispatch command 1
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 
 		 	  // verify action First
@@ -376,15 +377,15 @@ package com.developmentarc.libtests.tests
 		 public function testTwoUndosWithTwoAction():void {
 		 	// create two actions same command
 		 	var firstAction:AdditionAction = new AdditionAction();
-		 	firstAction.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	firstAction.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(firstAction);
 			
 			var secondAction:AdditionAction = new AdditionAction();
-		 	secondAction.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	secondAction.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(secondAction);
 			
 		 	// dispatch command 1
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 			// dispatch command 2
 			command.dispatch();
@@ -413,11 +414,11 @@ package com.developmentarc.libtests.tests
 		 public function testUndoNewCommandUndoOneAction():void {
 		 	// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
-		 	action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(action);
 		 	
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 		 	// verify
 		 	assertTrue("The action does not have a value equal to 1", action.value == 1);
@@ -514,13 +515,13 @@ package com.developmentarc.libtests.tests
 	 	public function testBasicUndoToRedoToUndo():void {
 	 		// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
-		 	action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(action);		 	
 		 	
 		 	
 		 	// dispatch command 1
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 			
 		 	 // verify action
@@ -554,13 +555,13 @@ package com.developmentarc.libtests.tests
 		public function testCommand_Undo_Command_Redo():void {
 			// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
-		 	action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(action);		 	
 		 	
 		 	
 		 	// dispatch command 1
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 			
 		 	 // verify action
@@ -593,13 +594,13 @@ package com.developmentarc.libtests.tests
 		public function testTwoRedos():void {
 			// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
-		 	action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(action);		 	
 		 	
 		 	
 		 	// dispatch command
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 			// call the command again
 			command.dispatch();
@@ -629,13 +630,13 @@ package com.developmentarc.libtests.tests
 		public function testThreeRedosOnlyTwoCount():void {
 			// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
-		 	action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
 			_delegate.addAction(action);		 	
 		 	
 		 	
 		 	// dispatch command
 		 	// call the command
-			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
 			command.dispatch();
 			// call the command again
 			command.dispatch();
@@ -655,5 +656,28 @@ package com.developmentarc.libtests.tests
 		 	 assertTrue("The action does not have a value equal to 2", action.value == 2);
 		}
 		
+		/**
+		 * Method verifies that commands that are marked to NOT use history do not get triggered by an undo.
+		 */
+		public function testNoHistoryCommand():void {
+			// create one action same command
+		 	var action:AdditionAction = new AdditionAction();
+		 	action.addCommand(TestNoHistoryCommand.TYPE_NO_HISTORY);
+			_delegate.addAction(action);		 	
+			
+			// dispatch command
+			var command:TestNoHistoryCommand = new TestNoHistoryCommand(TestNoHistoryCommand.TYPE_NO_HISTORY);
+			command.dispatch();
+			
+			 // verify action
+		 	 assertTrue("The action does not have a value equal to 1", action.value == 1);
+		 	 
+		 	 // dispatch undo twice
+		 	 var undoCommand:HistoryCommand = new HistoryCommand(HistoryCommand.UNDO);
+		 	 undoCommand.dispatch();
+		 	 
+		 	// verify action
+		 	 assertTrue("The action does not have a value equal to 1", action.value == 1);
+		}
 	}
 }
