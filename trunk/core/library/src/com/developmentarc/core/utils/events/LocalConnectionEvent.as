@@ -32,7 +32,7 @@ package com.developmentarc.core.utils.events
 	 * are dispatched by the Flash LocalConnection.
 	 * 
 	 * @author jpolanco
-	 * @version 0.1
+	 * @version 1.0
 	 */
 	public class LocalConnectionEvent extends Event
 	{
@@ -40,19 +40,29 @@ package com.developmentarc.core.utils.events
 		* Dispatched when the LocalConnectionManager can not connect to the requested application name.  This is usually
 		* caused by another application already connected via the provided name.
 		*/
-		static public const CONNECTION_ERROR:String = "CONNECTION_ERROR";
+		static public const CONNECTION_ERROR:String = "connectionError";
 		
 		/**
 		* When a message can not be sent properly by the LocalConnectionManager this error is dispatched.  If the error
 		* is caused by a callback from another application using the LCM protocol then the event will contain details
 		* about the cause of the error.
 		*/
-		static public const SENT_MESSAGE_ERROR:String = "SENT_MESSAGE_ERROR";
+		static public const SENT_MESSAGE_ERROR:String = "sentMessageError";
 		
 		/**
 		* Dispatched when a status message has been sent.
 		*/
-		static public const STATUS_MESSAGE:String = "STATUS_MESSAGE";
+		static public const STATUS_MESSAGE:String = "statusMessage";
+		
+		/**
+		* Dispatched when a security event error is dispatched from the local connection instance.
+		*/
+		static public const SECURITY_ERROR:String = "securityError";
+		
+		/**
+		* Dispatched when a send message fails.
+		*/
+		static public const SEND_ERROR:String = "sendError";
 		
 		/**
 		* Contains the error message that has been generated or received.
@@ -78,6 +88,16 @@ package com.developmentarc.core.utils.events
 		* Contains the status code for a status message.
 		*/
 		public var statusCode:String;
+		
+		/**
+		 * Stores the source event for debugging purposes. 
+		 */
+		public var sourceEvent:Event;
+		
+		/**
+		 * Stores the source Error for debugging purposes. 
+		 */
+		public var sourceError:Error;
 		
 		/**
 		 * Constructor.  Same as the base Event Class.
