@@ -1,3 +1,27 @@
+/* ***** BEGIN MIT LICENSE BLOCK *****
+ * 
+ * Copyright (c) 2009 DevelopmentArc LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ *
+ * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.core.actions
 {
 	import com.developmentarc.core.actions.actions.IAction;
@@ -8,6 +32,32 @@ package com.developmentarc.core.actions
 	
 	import flash.events.Event;
 	
+	/**
+	 * <p>Class is used as the action delegate when history management is neccessary. 
+	 * This delegation system supports undo and redo. When a command is executed
+	 * the command will be stored inside of a undo stack to allow for the command and it's associated
+	 * actions to be reversed. When a command is 'undone' the command will be popped from
+	 * the stack and all actions associated with the command will have it's undo() method invoked.
+	 * </p>
+	 * <p>It is the responsibility of the Action to define the operation to undo it's actions when applyAction() was
+	 * originally called.</p>
+	 * 
+	 * <p>When a command is 'undone' it will be added to the redo stack allow for it's original operation to be reapplied. Similar to
+	 * the undo operation, it is up to the Action to define it's redo() method.</p>
+	 * 
+	 * <p>To use this sytem, all actions must implement IHistoryAction or extend from AbstractHistoryAction (recommended) and commands must
+	 * extend AbstractHistoryCommand</p>
+	 * 
+	 * By default the delegate system will listen to HistoryCommand.UNDO and 
+	 * HistoryCommand.REDO events to trigger the undo and redo operations. Developers can override any anypoint via the undoCommands and redoCommands properties on this class.
+	 * 
+	 * 
+	 * @see com.developmentarc.core.actions.actions.IHistoryAction
+	 * @see com.developmentarc.core.actions.commands
+	 * 
+	 * 
+	 * @author Aaron Pedersen
+	 */ 
 	public class HistoryActionDelegate extends ActionDelegate
 	{
 		
@@ -16,6 +66,7 @@ package com.developmentarc.core.actions
 		 */
 		private var _undoCommandStack:Array;
 		private var _redoCommandStack:Array;
+
 		/*
 		 * PROTECTED VARIABLES
 		 */ 
@@ -80,6 +131,14 @@ package com.developmentarc.core.actions
 			}
 		}
 		
+		/**
+		 * Method handles events that trigger a command to be executed. This method w
+		 * will determine all associated actions and invoke each's applyAction method.
+		 * After all have been executed, the command will be added to the undo stack and
+		 * the redo stack will be cleared.
+		 * 
+		 * @param command Command event that was broadcasted.
+		 */
 		protected function handleCommand(command:Event):void {
 			// get actions
 			var actions:HashTable = commandToActionMap.getItem(command.type);
