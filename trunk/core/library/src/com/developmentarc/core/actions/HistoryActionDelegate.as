@@ -159,6 +159,13 @@ package com.developmentarc.core.actions
 			}
 		}
 		
+		/**
+		 * Method clears history inside of delegate.
+		 */
+		public function clearHistory():void {
+			_undoCommandStack = new Array();
+			_redoCommandStack = new Array();
+		}
 // --------------
 // UNDO 
 // --------------		
