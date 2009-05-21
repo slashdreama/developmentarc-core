@@ -679,5 +679,35 @@ package com.developmentarc.libtests.tests
 		 	// verify action
 		 	 assertTrue("The action does not have a value equal to 1", action.value == 1);
 		}
+		
+		public function testClearHistory():void {
+			// create one action same command
+		 	var action:AdditionAction = new AdditionAction();
+		 	action.addCommand(TestHistoryCommand.TYPE_FIRST);
+			_delegate.addAction(action);		 	
+		 	
+		 	
+		 	// dispatch command
+		 	// call the command
+			var command:TestHistoryCommand = new TestHistoryCommand(TestHistoryCommand.TYPE_FIRST);
+			command.dispatch();
+			// call the command again
+			command.dispatch();
+			
+			// verify action
+		 	 assertTrue("The action does not have a value equal to 2", action.value == 2);
+		 	 
+		 	 
+		 	 // clear delegate
+		 	 _delegate.clearHistory();
+		 	 
+		 	 // dispatch undo twice
+		 	 var undoCommand:HistoryCommand = new HistoryCommand(HistoryCommand.UNDO);
+		 	 undoCommand.dispatch();
+		 	 undoCommand.dispatch();
+		 	 
+		 	 // verify action
+		 	 assertTrue("The action does not have a value equal to 2", action.value == 2);
+		}
 	}
 }
