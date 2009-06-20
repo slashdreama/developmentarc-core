@@ -11,7 +11,7 @@ The !EventBroker class itself is implemented as a Singleton Facade, with four pu
 Events passed through the system must extend the Event class.  Throughout our examples below we will leverage an event class defined as !CustomEvent.  If custom data is not required, a class can simple leverage the Event class passing in a custom event type.   
 
 {{{
-  public class LoadingEvent extends Event {
+  public class CustomEvent extends Event {
       public static var EVENT_TYPE:String = "CUSTOM_EVENT";
       
       // Custom data
