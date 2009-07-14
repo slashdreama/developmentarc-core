@@ -29,6 +29,7 @@ package com.developmentarc.libtests
 	import com.developmentarc.libtests.tests.ActionDelegateTests;
 	import com.developmentarc.libtests.tests.AdjustableDateTests;
 	import com.developmentarc.libtests.tests.BrowserLocationUtilTest;
+	import com.developmentarc.libtests.tests.DataMappingTests;
 	import com.developmentarc.libtests.tests.EventBrokerTests;
 	import com.developmentarc.libtests.tests.HTTPRequestDispatcherTests;
 	import com.developmentarc.libtests.tests.HashTableTests;
@@ -70,6 +71,8 @@ package com.developmentarc.libtests
 		private var actionDelegateTests:ActionDelegateTests;
 		private var httpDispatcherTest:HTTPRequestDispatcherTests;
 		private var requestDelegateTest:RequestDelegateTests;
+		private var historyDelegatTest:HistoryActionDelegateTests;
+		private var dataMappingTest:DataMappingTests;
 		
 		public function LibraryTestingApplication()
 		{
@@ -109,6 +112,7 @@ package com.developmentarc.libtests
 			suite.addTest( TestUtils.generateFullSuite(HTTPRequestDispatcherTests) );
 			suite.addTest( TestUtils.generateFullSuite(RequestDelegateTests) );
 			suite.addTest( TestUtils.generateFullSuite(HistoryActionDelegateTests) );
+			suite.addTest( TestUtils.generateFullSuite(DataMappingTests) );
 			//*/
 			
 			

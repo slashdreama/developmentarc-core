@@ -13,6 +13,7 @@
 <application path="LCMTestPanel.mxml"/>
 <application path="devarc_core_tests.mxml"/>
 <application path="CommandActionPanel.mxml"/>
+<application path="DataMappingTest.mxml"/>
 </applications>
 <modules/>
 <buildCSSFiles/>
