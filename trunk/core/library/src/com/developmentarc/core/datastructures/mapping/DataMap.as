@@ -276,6 +276,7 @@ package com.developmentarc.core.datastructures.mapping
 						// set the data
 						if(inst.hasOwnProperty(instance.property)) {
 							// see if we have a complex property
+							if(instance.complexProperty && !data.hasOwnProperty(instance.complexProperty)) continue;
 							var subdata:* = (instance.complexProperty) ? data[instance.complexProperty] : data;
 							inst[instance.property] = (target.useDataWrapper) ? new MapDataWrapper(type, subdata, parameters) : subdata;
 						}
