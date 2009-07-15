@@ -39,7 +39,7 @@ package com.developmentarc.libtests.tests
 	 * The data mapping tests are used to verify that the DataMap and
 	 * dependent classes function correctly.
 	 *  
-	 * @author James Polanc
+	 * @author James Polanco
 	 * 
 	 */
 	public class DataMappingTests extends TestCase
@@ -348,6 +348,55 @@ package com.developmentarc.libtests.tests
 			assertTrue("The complex linkage did not bind foo to inst1.", mapItemOne.targetOne == "hello");
 			assertTrue("The complex linkage did not bind foo to inst2.", mapItemOne.targetTwo == "goodbye");
 			assertTrue("The complex linkage did not bind foo to inst3.", mapItemTwo.targetOne == "jinks");
+		}
+		
+		/**
+		 * Verify that we an incrementally update instances
+		 * that rely on the complex data object. 
+		 * 
+		 */		
+		public function testComplexObjectMissingItem():void {
+			// create the instances
+			var inst1:MapInstance = new MapInstance();
+			inst1.classType = MapItemOne;
+			inst1.property = "targetOne";
+			inst1.complexProperty = "foo";
+			
+			var inst2:MapInstance = new MapInstance();
+			inst2.classType = MapItemOne;
+			inst2.property = "targetTwo";
+			inst2.complexProperty = "bar";
+			
+			var inst3:MapInstance = new MapInstance();
+			inst3.classType = MapItemTwo;
+			inst3.property = "targetOne";
+			inst3.complexProperty = "baz";
+			
+			// create the target
+			var target:MapTarget = new MapTarget();
+			target.type = TEST_ONE;	
+			target.instances = [inst1, inst2, inst3];
+			
+			// create the map
+			var map:DataMap = createDataMap(target);
+			
+			// create the instance
+			var mapItemOne:MapItemOne = new MapItemOne();
+			var mapItemTwo:MapItemTwo = new MapItemTwo();
+						
+			// call save() and verify value
+			var data:Object = {foo: "hello", bar: "goodbye", baz: "jinks"};
+			DataMap.save(TEST_ONE, data);
+			assertTrue("The complex linkage did not bind foo to inst1.", mapItemOne.targetOne == "hello");
+			assertTrue("The complex linkage did not bind bar to inst2.", mapItemOne.targetTwo == "goodbye");
+			assertTrue("The complex linkage did not bind baz to inst3", mapItemTwo.targetOne == "jinks");
+			
+			// update a subset of the data
+			data = {foo: "goodbye", bar: "hello"};
+			DataMap.save(TEST_ONE, data);
+			assertTrue("The complex linkage did not bind foo to inst1.", mapItemOne.targetOne == "goodbye");
+			assertTrue("The complex linkage did not bind bar to inst2.", mapItemOne.targetTwo == "hello");
+			assertTrue("The complex linkage did not update mapItemTwo.targetOne", mapItemTwo.targetOne == "jinks");
 		}
 		
 		/**
