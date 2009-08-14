@@ -166,6 +166,42 @@ package com.developmentarc.core.actions
 			_undoCommandStack = new Array();
 			_redoCommandStack = new Array();
 		}
+		
+		/**
+		 * The number of commands currently in undo stack.
+		 *
+		 */
+		public function get undoStackLength():int {
+			return _undoCommandStack.length;
+		}
+		
+		/**
+		 * The number of commands currently in redo stack.
+		 *
+		 */
+		public function get redoStackLength():int {
+			return _redoCommandStack.length;
+		}
+		
+		/**
+		 * Provides a clone of the current Undo stack.
+		 *  
+		 * @return A clone Array of the undo stack.
+		 * 
+		 */
+		public function getUndoStackClone():Array {
+			return _undoCommandStack.concat([]);
+		}
+		
+		/**
+		 * Provides a clone of the current Redo stack.
+		 *  
+		 * @return A clone Array of the undo stack.
+		 * 
+		 */
+		public function getRedoStackClone():Array {
+			return _redoCommandStack.concat([]);
+		}
 // --------------
 // UNDO 
 // --------------		
