@@ -84,6 +84,13 @@ package com.developmentarc.core.services.requests
 		private var __showBusyCursor:Boolean;
 		
 		/**
+		 * @private
+		 * Optional header data object to be applied to the service request object upon
+		 * dispatching.
+		 */		
+		private var __header:Object;
+		
+		/**
 		 * Constructor
 		 * 
 		 * @param type String used to define a specific type this request will be. HTTPRequest does not use this. Extend to implement usage.
@@ -137,5 +144,18 @@ package com.developmentarc.core.services.requests
 			return __showBusyCursor;
 		}
 		
+		/**
+		 * Defines the optional header object that should be applied to
+		 * the HTTPService upon dispatching.  This is useful for setting non-standard
+		 * header information for authentication or other server requirements.
+		 * 
+		 */		
+		public function get headers():Object {
+			return __header
+		}
+		
+		public function set headers(value:Object):void {
+			__header = value;
+		}
 	}
 }

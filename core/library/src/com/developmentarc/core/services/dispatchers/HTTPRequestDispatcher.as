@@ -96,6 +96,7 @@ package com.developmentarc.core.services.dispatchers
 			service.method = HTTPRequest(request).method;
 			service.contentType = HTTPRequest(request).contentType;
 			service.url = request.uri + request.source;
+			if(HTTPRequest(request).headers) service.headers = HTTPRequest(request).headers;
 			
 			if(service.method == HTTPRequest.METHOD_GET) {
 				// Build query string key / value pairs
