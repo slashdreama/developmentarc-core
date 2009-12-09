@@ -26,6 +26,7 @@ package com.developmentarc.libtests.tests
 {
 	import com.developmentarc.core.datastructures.mapping.DataMap;
 	import com.developmentarc.core.datastructures.mapping.MapInstance;
+	import com.developmentarc.core.datastructures.mapping.MapStore;
 	import com.developmentarc.core.datastructures.mapping.MapTarget;
 	import com.developmentarc.libtests.elements.datamapping.ClearDataMap;
 	import com.developmentarc.libtests.elements.datamapping.MapItemOne;
@@ -580,6 +581,207 @@ package com.developmentarc.libtests.tests
 			}
 			
 			assertTrue("The DataMap did not throw an error for an undefined type.", errorThown);
+		}
+		
+		/**
+		 * Verifies that creating a data store and saving data to the 
+		 * map before other instances are created, does store the data
+		 * and apply it when an instance is added. 
+		 * 
+		 */	
+		
+		public function testDataStoreWithNoInstance():void {
+			// create the instance
+			var inst:MapInstance = new MapInstance();
+			inst.classType = MapItemOne;
+			inst.property = "targetOne";
+			
+			// create the store
+			var store:MapStore = new MapStore();
+			
+			// create the target
+			var target:MapTarget = new MapTarget();
+			target.type = TEST_ONE;	
+			target.instances = inst;
+			target.store = store;
+			
+			// create the map
+			var map:DataMap = createDataMap(target);
+			
+			// call save() and verify value
+			var data:String = "hello";
+			DataMap.save(TEST_ONE, data);
+			
+			// create the instance
+			var mapItemOne:MapItemOne = new MapItemOne();
+			
+			// verify that the data was set on creation
+			assertTrue("The data was not saved in the targetOne property correctly.", data == mapItemOne.targetOne);
+		}
+		
+		/**
+		 * Verifies that an instance can be provided as a target for the
+		 * store to save data on. This verifies that the data is pulled from
+		 * the instance not the internal store. 
+		 * 
+		 */				
+		public function testDataStoreWithInstance():void {
+			// create the instance
+			var inst:MapInstance = new MapInstance();
+			inst.classType = MapItemOne;
+			inst.property = "targetOne";
+			
+			// create the store
+			var store:MapStore = new MapStore();
+			
+			// set data prior to the instance
+			
+			// create the target
+			var target:MapTarget = new MapTarget();
+			target.type = TEST_ONE;	
+			target.instances = inst;
+			target.store = store;
+			
+			// create the map
+			var map:DataMap = createDataMap(target);
+			
+			// call save() and verify value
+			var data:String = "goodbye";
+			DataMap.save(TEST_ONE, data);
+			
+			// create an instance
+			store.instance = {foo: null};
+			store.property = "foo";
+			
+			// resave data
+			// call save() and verify value
+			data = "hello";
+			DataMap.save(TEST_ONE, data);
+			
+			
+			// create the instance
+			var mapItemOne:MapItemOne = new MapItemOne();
+			
+			// verify that the data was set on creation
+			assertTrue("The data was not saved in the targetOne property correctly.", data == mapItemOne.targetOne);
+		}
+		
+		/**
+		 * Verifies that when loading data from the store when data wrapping
+		 * is enabled, that the data wrapper syntax is preserved. 
+		 * 
+		 */		
+		public function testStoreWithDataWrapper():void {
+			// create the instance
+			var inst:MapInstance = new MapInstance();
+			inst.classType = MapItemOne;
+			inst.property = "data";
+			
+			// create the store
+			var store:MapStore = new MapStore();
+			
+			// create the target
+			var target:MapTarget = new MapTarget();
+			target.useDataWrapper = true;
+			target.type = TEST_ONE;	
+			target.instances = inst;
+			target.store = store;
+			
+			// create the map
+			var map:DataMap = createDataMap(target);
+			
+			// call save() and verify value
+			var data:String = "hello";
+			DataMap.save(TEST_ONE, data, {update: true});
+			
+			// create the instance
+			var mapItemOne:MapItemOne = new MapItemOne();
+			
+			assertTrue("The wrapper type was not defined.", mapItemOne.wrapperType == TEST_ONE);
+			assertTrue("The data was not set correctly in the wrapper.", mapItemOne.wrapperData == data);
+			assertTrue("The wrapper parameters were not defined correctly.", mapItemOne.wrapperParams.hasOwnProperty("update"));
+		}
+		
+		/**
+		 * Verifies that the store can support complex objects
+		 * syntax and pass the data properly to the object during
+		 * registration. 
+		 * 
+		 */		
+		public function testStoreWithComplexObject():void {
+			// create the instances
+			var inst1:MapInstance = new MapInstance();
+			inst1.classType = MapItemOne;
+			inst1.property = "targetOne";
+			inst1.complexProperty = "foo";
+			
+			var inst2:MapInstance = new MapInstance();
+			inst2.classType = MapItemOne;
+			inst2.property = "targetTwo";
+			inst2.complexProperty = "bar";
+			
+			var inst3:MapInstance = new MapInstance();
+			inst3.classType = MapItemTwo;
+			inst3.property = "targetOne";
+			inst3.complexProperty = "baz";
+			
+			// create the target
+			var target:MapTarget = new MapTarget();
+			target.type = TEST_ONE;	
+			target.instances = [inst1, inst2, inst3];
+			target.store = new MapStore();
+			
+			// create the map
+			var map:DataMap = createDataMap(target);
+						
+			// call save() and verify value
+			var data:Object = {foo: "hello", bar: "goodbye", baz: "jinks"};
+			DataMap.save(TEST_ONE, data);
+			
+			// create the instance
+			var mapItemOne:MapItemOne = new MapItemOne();
+			var mapItemTwo:MapItemTwo = new MapItemTwo();
+			
+			assertTrue("The complex linkage did not bind foo to inst1.", mapItemOne.targetOne == "hello");
+			assertTrue("The complex linkage did not bind foo to inst2.", mapItemOne.targetTwo == "goodbye");
+			assertTrue("The complex linkage did not bind foo to inst3.", mapItemTwo.targetOne == "jinks");
+		}
+		
+		/**
+		 * Verifies that trying to save data to the store using an instance
+		 * but not having a property set throws an error. 
+		 * 
+		 */		
+		public function testStoreWithMissingProperty():void {
+			var store:MapStore = new MapStore();
+			store.instance = {foo: "bar"};
+			
+			var errorThown:Boolean = false;
+			try {
+				store.saveData("foo", "bar");
+			} catch (e:Error) {
+				errorThown = true;
+			}
+			assertTrue("The DataStore did not throw an error for an undefined property.", errorThown);
+		}
+		
+		/**
+		 * Verifies that trying to save data to the store using an instance
+		 * but not having a value property name throws an error. 
+		 * 
+		 */		
+		public function testStoreWithInvalidProperty():void {
+			var store:MapStore = new MapStore();
+			store.instance = new MapItemOne();
+			store.property = "foobar";
+			
+			var errorThown:Boolean = false;
+			try {
+				store.saveData("foo", "bar");
+			} catch (e:Error) {
+				errorThown = true;
+			}
+			assertTrue("The DataStore did not throw an error for an invalid property.", errorThown);
 		}
 		
 		/**
