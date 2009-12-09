@@ -26,37 +26,53 @@ package com.developmentarc.core.datastructures.mapping
 {
 	import mx.core.IMXMLObject;
 	
-	/**
-	 * The MapTarget defines the relationship between the type of data (identifier)
-	 * and the subsciber/clients that get the data pushed to them.  When a DataMap
-	 * is created a set of MapTargets are created defining a type (how to indentify/assign data)
-	 * and a set of MapInstances that correspond to the client instance to push to.  These
-	 * MapTargets are used as a lookup system to match listeners to their data.
-	 * 
-	 * @author James Polanco
-	 * 
-	 */
-	public class MapTarget implements IMXMLObject
-	{
+	public class MapStore implements IMXMLObject
+	{	
 		/**
-		 * Defines if the child instances should have their data
-		 * wrapped in a MapDataWrapper.  If this is set to true then
-		 * the corresponding property type should expect a MapDataWrapper.
-		 * 
-		 * <p>This wrapping is done dynamkically at the time of data
-		 * push and is used to provide additional information.</p> 
-		 */
-		public var useDataWrapper:Boolean = false;
+		 * Stores the optional parameter set proivded during the data
+		 * save for data wrapping.  This is not required for the data
+		 * to be saved, but enables the ability for the system to pass
+		 * this on when new clients are registered. 
+		 */		
+		public var dataParameters:Object;
+		
+		public var dataType:String;
+		
+		// used to store data when an instance is not provided
+		private var _internalStore:*;
 		
 		/**
 		 * Constructor. 
 		 * 
-		 */
-		public function MapTarget()
+		 */		
+		public function MapStore()
 		{
 		}
 		
 		/* PUBLIC ACCESSORS */
+		
+		// public accessor for instance
+		private var _instance:Object;
+		
+		public function get instance():Object {
+			return _instance;
+		}
+		
+		public function set instance(value:Object):void {
+			_instance = value;
+		}
+		
+		// public accessor for property
+		private var _property:String;
+		
+		public function get property():String {
+			return _property;
+		}
+		
+		public function set property(value:String):void {
+			_property = value;
+		}
+		
 		
 		// public accessor for id
 		private var _id:String;
@@ -98,57 +114,9 @@ package com.developmentarc.core.datastructures.mapping
 			_document = value;
 		}
 		
-		// public accessor for type
-		private var _type:String;
-		
-		/**
-		 * The type defines when the map target's instances should be processed
-		 * passing in the type of data.
-		 */
-		public function get type():String {
-			return _type;
-		}
-		
-		public function set type(value:String):void {
-			_type = value;
-		}
-		
-		// public accessor for instances
-		private var _instances:Object;
-		
-		/**
-		 * The instances define how he data is mapped to an
-		 * instance and the property used.
-		 */
-		public function get instances():Object {
-			return _instances;
-		}
-		
-		public function set instances(value:Object):void {
-			_instances = value;
-		}
-		
-		// public accessor for stores
-		private var _store:MapStore;
-		
-		/**
-		 * Defines the map store for the instance. Stores provide the
-		 * ability to save data that has been pushed through the map
-		 * and then pass this data on to a new instance when it registers
-		 * to the DataMap.
-		 */
-		public function get store():MapStore {
-			return _store;
-		}
-		
-		public function set store(value:MapStore):void {
-			_store = value;
-		}
-		
-		
 		/* PUBLIC METHODS */
 		/**
-		 * Called when the MapTarget is initialized via MXML. 
+		 * Called when the MapStore is initialized via MXML. 
 		 * @param document The current document.
 		 * @param id The MXML defined id.
 		 * 
@@ -156,6 +124,41 @@ package com.developmentarc.core.datastructures.mapping
 		public function initialized(document:Object, id:String):void {
 			this.document = document;
 			this.id = id;
+		}
+		
+		public function saveData(type:String, data:*, parameters:Object = null):void {
+			this.dataType = type;
+			this.dataParameters = parameters;
+			
+			if(_instance) {
+				// we have an instance
+				if(!_property) throw new Error("A property was not assigned to the data map store instance for: " + _instance);
+				if(_instance.hasOwnProperty(_property)) {
+					_instance[_property] = data;
+				} else {
+					throw new Error("The property "+ _property +" does not exist on the target instance assigned in the data map store.");
+				}
+			} else {
+				// save on our own property
+				_internalStore = data;
+			}
+		}
+		
+		public function getData():* {
+			var out:*;
+			if(_instance) {
+				// get the value out of the store
+				if(!_property) throw new Error("A property was not assigned to the data map store instance for: " + _instance);
+				if(_instance.hasOwnProperty(_property)) {
+					out = _instance[_property];
+				} else {
+					throw new Error("The property "+ _property +" does not exist on the target instance assigned in the data map store.");
+				}
+			} else {
+				// get the data from the internal store
+				out = _internalStore;
+			}
+			return out;
 		}
 
 	}
