@@ -79,6 +79,14 @@ package com.developmentarc.core.datastructures.mapping
 				table.addItem(client, true);
 				_clients.addItem(className, table);
 			}
+			
+			// get the instances for client
+			if(!_instances) return;
+			var insts:Array = _instances.getAllKeys();
+			var len:int = insts.length;
+			for(var i:uint = 0; i < len; i++) {
+				DataMap(insts[i])._applyStoreData(client);
+			}
 		}
 		
 		/**
@@ -227,6 +235,48 @@ package com.developmentarc.core.datastructures.mapping
 			_instances.addItem(this, true);
 		}
 		
+		protected function _applyStoreData(client:Object):void {
+			// make sure we have targets
+			if(!_targets) return;
+			
+			// get all the targets
+			var targetList:Array = (_targets is Array) ? _targets as Array : [_targets];
+			var len:int = targetList.length;
+			var target:MapTarget;
+			var clientClassName:String = getQualifiedClassName(client);
+			
+			for(var i:uint = 0; i < len; i++) {
+				target = targetList[i];
+				
+				// see if we have a store, if not skip
+				if(target.store) {
+					var store:MapStore = target.store;
+					// get all the instances
+					var instances:Array = (target.instances is Array) ? target.instances as Array : [target.instances];
+					
+					// cycle through and see if we have a match
+					var instLen:int = instances.length;
+					for(var ii:uint = 0; ii < instLen; ii++) {
+						var instance:MapInstance = MapInstance(instances[ii]);
+						if(!instance.classType) throw Error("The classType for a MapInstance was not defined.  Verify that all MapInstances have a classType defined.");
+						if(!instance.property) throw Error("The property for a MapInstance was not defined.  Verify that all MapInstances have a property defined.");
+						
+						var instClassName:String = getQualifiedClassName(instance.classType);
+						if(instClassName == clientClassName) {
+							// pass the store data to the client
+							var data:* = target.store.getData();
+							if(client.hasOwnProperty(instance.property)) {
+								// see if we have a complex property
+								if(instance.complexProperty && !data.hasOwnProperty(instance.complexProperty)) continue;
+								var subdata:* = (instance.complexProperty) ? data[instance.complexProperty] : data;
+								client[instance.property] = (target.useDataWrapper) ? new MapDataWrapper(store.dataType, subdata, store.dataParameters) : subdata;
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		/**
 		 * Instance implementation of the save() method.
 		 *  
@@ -247,7 +297,7 @@ package com.developmentarc.core.datastructures.mapping
 				var t:MapTarget = targetList[i];
 				// check for undefined types
 				if(!t.type) throw Error("The type for a MapTarget was not defined.  Make sure that all Map Targets type's are defined.");
-				if(t.type == type) {
+				if(t.type === type) {
 					target = t;
 					break;
 				} 
@@ -255,6 +305,14 @@ package com.developmentarc.core.datastructures.mapping
 			
 			// matching target not found
 			if(!target) return;
+			
+			// save the data in the store
+			if(target.store) {
+				target.store.saveData(type, data, parameters);
+			}
+			
+			// see if any clients have registered, if not then get out
+			if(!_clients) return;
 			
 			// apply client data
 			var instances:Array = (target.instances is Array) ? target.instances as Array : [target.instances];
