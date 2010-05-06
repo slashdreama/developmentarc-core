@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* ***** BEGIN MIT LICENSE BLOCK *****
+* 
+* Copyright (c) 2010 DevelopmentArc LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*
+*
+* ***** END MIT LICENSE BLOCK ***** */
+-->
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:cad="com.developmentarc.webservice.cad.*"
+			   minWidth="955" minHeight="600" >
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+
+
+	<fx:Script>
+		<![CDATA[
+			import com.developmentarc.webservice.cad.commands.WebserviceCommand;
+			
+			protected function getWeather(event:MouseEvent):void
+			{
+				var command:WebserviceCommand = new WebserviceCommand(WebserviceCommand.GET_WEATHER);
+				command.zipcode = uint(zip_code.text);
+				command.dispatch();
+			}
+
+			protected function throw_fault_clickHandler(event:MouseEvent):void
+			{
+				new WebserviceCommand(WebserviceCommand.THROW_ERROR).dispatch();
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<cad:CADConfig id="cad_configuration" />
+	</fx:Declarations>
+	
+	<s:HGroup paddingTop="10" paddingLeft="10">
+		<s:Button label="get weather for zipcode:" click="getWeather(event)" />
+		<s:TextInput id="zip_code" text="92115" />
+	</s:HGroup>
+	<s:Button id="throw_fault" label="throw fault" click="throw_fault_clickHandler(event)" />
+	
+</s:Application>
