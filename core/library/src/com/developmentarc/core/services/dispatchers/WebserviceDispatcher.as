@@ -175,6 +175,14 @@ package com.developmentarc.core.services.dispatchers
 			dispatchEvent(dispatcherEvent);
 		}
 		
+		/**
+		 * Method handles service faults, usually created by a down server, invalid path
+		 * or some other kind of fatal error.  This method clears all the instances of the requests
+		 * and marks them as errored.
+		 * 
+		 * @param event The dispatched service event.
+		 * 
+		 */		
 		protected function handleServiceFault(event:FaultEvent):void {
 			// we have a service fault, error out all the requests
 			var service:WebService = WebService(event.currentTarget);
