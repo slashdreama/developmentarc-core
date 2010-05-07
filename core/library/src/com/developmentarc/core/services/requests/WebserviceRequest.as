@@ -82,8 +82,8 @@ package com.developmentarc.core.services.requests
 		 * @param methodName The operation name to call on the service.
 		 * @param requestData The data to pass to the service (Object or XML)
 		 * @param parserClass The parser class used to format the data on return.
-		 * @param mode Defines if the service is live or mock.
-		 * @param mockClass The class used to generated mock data.
+		 * @param mode Defines if the service is live or mock.	
+		 * @param mockClass The class used to generate mock data.
 		 * 
 		 */		
 		public function WebserviceRequest(type:String, 
