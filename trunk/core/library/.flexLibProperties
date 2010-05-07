@@ -1,57 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<flexLibProperties version="1">
-<includeClasses>
-<classEntry path="com.developmentarc.core.utils.logging.ExternalInterfaceDebugLogger"/>
-<classEntry path="com.developmentarc.core.controllers.SelectionController"/>
-<classEntry path="com.developmentarc.core.datastructures.mapping.MapDataWrapper"/>
-<classEntry path="com.developmentarc.core.services.dispatchers.IDispatcher"/>
-<classEntry path="com.developmentarc.core.controllers.interfaces.ISelectable"/>
-<classEntry path="com.developmentarc.core.datastructures.mapping.MapTarget"/>
-<classEntry path="com.developmentarc.core.services.RequestDelegate"/>
-<classEntry path="com.developmentarc.core.utils.SingletonFactory"/>
-<classEntry path="com.developmentarc.core.utils.LocalConnectionManager"/>
-<classEntry path="com.developmentarc.core.actions.commands.AbstractCommand"/>
-<classEntry path="com.developmentarc.core.actions.commands.HistoryCommand"/>
-<classEntry path="com.developmentarc.core.services.dispatchers.HTTPRequestDispatcher"/>
-<classEntry path="com.developmentarc.core.utils.EventBroker"/>
-<classEntry path="com.developmentarc.core.services.requests.HTTPRequest"/>
-<classEntry path="com.developmentarc.core.tasks.tasks.ITask"/>
-<classEntry path="com.developmentarc.core.services.parsers.IParser"/>
-<classEntry path="com.developmentarc.core.actions.commands.AbstractHistoryCommand"/>
-<classEntry path="com.developmentarc.core.services.dispatchers.AbstractDispatcher"/>
-<classEntry path="com.developmentarc.core.services.events.RequestEvent"/>
-<classEntry path="com.developmentarc.core.datastructures.mapping.MapInstance"/>
-<classEntry path="com.developmentarc.core.utils.InstanceFactory"/>
-<classEntry path="com.developmentarc.core.actions.actions.IHistoryAction"/>
-<classEntry path="com.developmentarc.core.tasks.groups.TaskGroup"/>
-<classEntry path="com.developmentarc.core.actions.ActionDelegate"/>
-<classEntry path="com.developmentarc.core.tasks.tasks.AbstractTask"/>
-<classEntry path="com.developmentarc.core.services.mocks.IMockDispatcher"/>
-<classEntry path="com.developmentarc.core.utils.AdjustableDate"/>
-<classEntry path="com.developmentarc.core.utils.BrowserLocationUtil"/>
-<classEntry path="com.developmentarc.core.datastructures.mapping.MapStore"/>
-<classEntry path="com.developmentarc.core.utils.events.LocalConnectionEvent"/>
-<classEntry path="com.developmentarc.core.tasks.TaskController"/>
-<classEntry path="com.developmentarc.core.actions.HistoryActionDelegate"/>
-<classEntry path="com.developmentarc.core.datastructures.utils.HashTable"/>
-<classEntry path="com.developmentarc.core.datastructures.utils.Queue"/>
-<classEntry path="com.developmentarc.core.datastructures.utils.PriorityQueue"/>
-<classEntry path="com.developmentarc.core.utils.logging.ClassDebugLogger"/>
-<classEntry path="com.developmentarc.core.actions.actions.AbstractHistoryAction"/>
-<classEntry path="com.developmentarc.core.controllers.SelectionGroup"/>
-<classEntry path="com.developmentarc.core.services.mocks.AbstractMockDispatcher"/>
-<classEntry path="com.developmentarc.core.datastructures.mapping.DataMap"/>
-<classEntry path="com.developmentarc.core.utils.logging.DebugMessage"/>
-<classEntry path="com.developmentarc.core.actions.actions.IAction"/>
-<classEntry path="com.developmentarc.core.services.requests.IRequest"/>
-<classEntry path="com.developmentarc.core.services.requests.AbstractRequest"/>
-<classEntry path="com.developmentarc.core.services.events.DispatcherEvent"/>
-<classEntry path="com.developmentarc.core.actions.actions.AbstractAction"/>
-<classEntry path="com.developmentarc.core.utils.logging.DebugLogger"/>
-<classEntry path="com.developmentarc.core.tasks.events.TaskEvent"/>
-<classEntry path="com.developmentarc.core.services.parsers.AbstractParser"/>
-<classEntry path="com.developmentarc.core.tasks.groups.ITaskGroup"/>
-</includeClasses>
-<includeResources/>
-<namespaceManifests/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" version="1">
+  <includeClasses>
+    <classEntry path="com.developmentarc.core.utils.logging.ExternalInterfaceDebugLogger"/>
+    <classEntry path="com.developmentarc.core.controllers.SelectionController"/>
+    <classEntry path="com.developmentarc.core.datastructures.mapping.MapDataWrapper"/>
+    <classEntry path="com.developmentarc.core.services.dispatchers.IDispatcher"/>
+    <classEntry path="com.developmentarc.core.controllers.interfaces.ISelectable"/>
+    <classEntry path="com.developmentarc.core.datastructures.mapping.MapTarget"/>
+    <classEntry path="com.developmentarc.core.services.RequestDelegate"/>
+    <classEntry path="com.developmentarc.core.utils.SingletonFactory"/>
+    <classEntry path="com.developmentarc.core.utils.LocalConnectionManager"/>
+    <classEntry path="com.developmentarc.core.actions.commands.AbstractCommand"/>
+    <classEntry path="com.developmentarc.core.actions.commands.HistoryCommand"/>
+    <classEntry path="com.developmentarc.core.services.dispatchers.HTTPRequestDispatcher"/>
+    <classEntry path="com.developmentarc.core.utils.EventBroker"/>
+    <classEntry path="com.developmentarc.core.services.requests.HTTPRequest"/>
+    <classEntry path="com.developmentarc.core.tasks.tasks.ITask"/>
+    <classEntry path="com.developmentarc.core.services.parsers.IParser"/>
+    <classEntry path="com.developmentarc.core.actions.commands.AbstractHistoryCommand"/>
+    <classEntry path="com.developmentarc.core.services.dispatchers.AbstractDispatcher"/>
+    <classEntry path="com.developmentarc.core.services.events.RequestEvent"/>
+    <classEntry path="com.developmentarc.core.datastructures.mapping.MapInstance"/>
+    <classEntry path="com.developmentarc.core.utils.InstanceFactory"/>
+    <classEntry path="com.developmentarc.core.actions.actions.IHistoryAction"/>
+    <classEntry path="com.developmentarc.core.tasks.groups.TaskGroup"/>
+    <classEntry path="com.developmentarc.core.actions.ActionDelegate"/>
+    <classEntry path="com.developmentarc.core.tasks.tasks.AbstractTask"/>
+    <classEntry path="com.developmentarc.core.services.mocks.IMockDispatcher"/>
+    <classEntry path="com.developmentarc.core.utils.AdjustableDate"/>
+    <classEntry path="com.developmentarc.core.utils.BrowserLocationUtil"/>
+    <classEntry path="com.developmentarc.core.datastructures.mapping.MapStore"/>
+    <classEntry path="com.developmentarc.core.utils.events.LocalConnectionEvent"/>
+    <classEntry path="com.developmentarc.core.tasks.TaskController"/>
+    <classEntry path="com.developmentarc.core.actions.HistoryActionDelegate"/>
+    <classEntry path="com.developmentarc.core.datastructures.utils.HashTable"/>
+    <classEntry path="com.developmentarc.core.datastructures.utils.Queue"/>
+    <classEntry path="com.developmentarc.core.datastructures.utils.PriorityQueue"/>
+    <classEntry path="com.developmentarc.core.utils.logging.ClassDebugLogger"/>
+    <classEntry path="com.developmentarc.core.actions.actions.AbstractHistoryAction"/>
+    <classEntry path="com.developmentarc.core.controllers.SelectionGroup"/>
+    <classEntry path="com.developmentarc.core.services.mocks.AbstractMockDispatcher"/>
+    <classEntry path="com.developmentarc.core.datastructures.mapping.DataMap"/>
+    <classEntry path="com.developmentarc.core.utils.logging.DebugMessage"/>
+    <classEntry path="com.developmentarc.core.actions.actions.IAction"/>
+    <classEntry path="com.developmentarc.core.services.requests.IRequest"/>
+    <classEntry path="com.developmentarc.core.services.requests.AbstractRequest"/>
+    <classEntry path="com.developmentarc.core.services.events.DispatcherEvent"/>
+    <classEntry path="com.developmentarc.core.actions.actions.AbstractAction"/>
+    <classEntry path="com.developmentarc.core.utils.logging.DebugLogger"/>
+    <classEntry path="com.developmentarc.core.tasks.events.TaskEvent"/>
+    <classEntry path="com.developmentarc.core.services.parsers.AbstractParser"/>
+    <classEntry path="com.developmentarc.core.tasks.groups.ITaskGroup"/>
+    <classEntry path="com.developmentarc.core.services.dispatchers.WebserviceDispatcher"/>
+    <classEntry path="com.developmentarc.core.services.requests.WebserviceRequest"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
 </flexLibProperties>
