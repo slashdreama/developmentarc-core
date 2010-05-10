@@ -258,20 +258,22 @@ package com.developmentarc.core.datastructures.mapping
 					var instLen:int = instances.length;
 					for(var ii:uint = 0; ii < instLen; ii++) {
 						var instance:MapInstance = MapInstance(instances[ii]);
-						if(!instance.classType) throw Error("The classType for a MapInstance was not defined.  Verify that all MapInstances have a classType defined.");
-						if(!instance.property) throw Error("The property for a MapInstance was not defined.  Verify that all MapInstances have a property defined.");
-						
-						var instClassName:String = getQualifiedClassName(instance.classType);
-						if(instClassName == clientClassName) {
-							// pass the store data to the client
-							var data:* = target.store.getData();
-							if(client.hasOwnProperty(instance.property)) {
-								// see if we have a complex property
-								if(instance.complexProperty && !data.hasOwnProperty(instance.complexProperty)) continue;
-								var subdata:* = (instance.complexProperty) ? data[instance.complexProperty] : data;
-								client[instance.property] = (target.useDataWrapper) ? new MapDataWrapper(store.dataType, subdata, store.dataParameters) : subdata;
+						if(instance) {
+							if(!instance.classType) throw Error("The classType for a MapInstance was not defined.  Verify that all MapInstances have a classType defined.");
+							if(!instance.property) throw Error("The property for a MapInstance was not defined.  Verify that all MapInstances have a property defined.");
+							
+							var instClassName:String = getQualifiedClassName(instance.classType);
+							if(instClassName == clientClassName) {
+								// pass the store data to the client
+								var data:* = target.store.getData();
+								if(client.hasOwnProperty(instance.property)) {
+									// see if we have a complex property
+									if(instance.complexProperty && !data.hasOwnProperty(instance.complexProperty)) continue;
+									var subdata:* = (instance.complexProperty) ? data[instance.complexProperty] : data;
+									client[instance.property] = (target.useDataWrapper) ? new MapDataWrapper(store.dataType, subdata, store.dataParameters) : subdata;
+								}
 							}
-						}
+						}						
 					}
 				}
 			}
@@ -319,24 +321,26 @@ package com.developmentarc.core.datastructures.mapping
 			var iLen:int = instances.length;
 			for(var ii:uint = 0; ii < iLen; ii++) {
 				var instance:MapInstance = MapInstance(instances[ii]);
-				// check that its a valid instance
-				if(!instance.classType) throw Error("The classType for a MapInstance was not defined.  Verify that all MapInstances have a classType defined.");
-				if(!instance.property) throw Error("The property for a MapInstance was not defined.  Verify that all MapInstances have a property defined.");
-				var className:String = getQualifiedClassName(instance.classType);
-				// see of we have any clients for this type
-				if(_clients.containsKey(className)) {
-					// we do, apply the data
-					var clients:Array = HashTable(_clients.getItem(className)).getAllKeys();
-					var cLen:int = clients.length;
-					// loop over instances
-					for(var iii:uint = 0; iii < cLen; iii++) {
-						var inst:Object = clients[iii];
-						// set the data
-						if(inst.hasOwnProperty(instance.property)) {
-							// see if we have a complex property
-							if(instance.complexProperty && !data.hasOwnProperty(instance.complexProperty)) continue;
-							var subdata:* = (instance.complexProperty) ? data[instance.complexProperty] : data;
-							inst[instance.property] = (target.useDataWrapper) ? new MapDataWrapper(type, subdata, parameters) : subdata;
+				if(instance) {
+					// check that its a valid instance
+					if(!instance.classType) throw Error("The classType for a MapInstance was not defined.  Verify that all MapInstances have a classType defined.");
+					if(!instance.property) throw Error("The property for a MapInstance was not defined.  Verify that all MapInstances have a property defined.");
+					var className:String = getQualifiedClassName(instance.classType);
+					// see of we have any clients for this type
+					if(_clients.containsKey(className)) {
+						// we do, apply the data
+						var clients:Array = HashTable(_clients.getItem(className)).getAllKeys();
+						var cLen:int = clients.length;
+						// loop over instances
+						for(var iii:uint = 0; iii < cLen; iii++) {
+							var inst:Object = clients[iii];
+							// set the data
+							if(inst.hasOwnProperty(instance.property)) {
+								// see if we have a complex property
+								if(instance.complexProperty && !data.hasOwnProperty(instance.complexProperty)) continue;
+								var subdata:* = (instance.complexProperty) ? data[instance.complexProperty] : data;
+								inst[instance.property] = (target.useDataWrapper) ? new MapDataWrapper(type, subdata, parameters) : subdata;
+							}
 						}
 					}
 				}
