@@ -110,6 +110,7 @@ package com.developmentarc.core.services.dispatchers
 			
 			var operation:Operation = Operation(service.getOperation(wsr.methodName));
 			operation.request = wsr.requestData;
+			if(wsr.header) operation.addHeader(wsr.header);
 			operation.addEventListener(FaultEvent.FAULT, handleFault, false, 0, true);
 			operation.addEventListener(ResultEvent.RESULT, handleResult, false, 0, true);
 			

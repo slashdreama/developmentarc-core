@@ -27,6 +27,7 @@ package com.developmentarc.core.services.requests
 	import com.developmentarc.core.services.dispatchers.WebserviceDispatcher;
 	
 	import mx.rpc.AsyncToken;
+	import mx.rpc.soap.SOAPHeader;
 
 	/**
 	 * The WebserviceRequest is the base class for creating calls to the webservices
@@ -67,6 +68,12 @@ package com.developmentarc.core.services.requests
 		 * to the server as is by the operation. 
 		 */		
 		public var requestData:Object;
+		
+		/**
+		 * Defines the SOAP header to be used for the request's operation.  This enables
+		 * a custom header data for authentication and QName support. 
+		 */		
+		public var header:SOAPHeader;
 		
 		/**
 		 * The assigned async token to the request once the send() method is called
