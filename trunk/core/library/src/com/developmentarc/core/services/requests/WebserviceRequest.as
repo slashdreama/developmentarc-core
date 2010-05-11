@@ -73,7 +73,7 @@ package com.developmentarc.core.services.requests
 		 * Defines the SOAP header to be used for the request's operation.  This enables
 		 * a custom header data for authentication and QName support. 
 		 */		
-		public var header:SOAPHeader;
+		public var headers:Array;
 		
 		/**
 		 * The assigned async token to the request once the send() method is called
@@ -102,7 +102,7 @@ package com.developmentarc.core.services.requests
 										  mockClass:Class=null) {
 			
 			super(type, wsdl, methodName, WebserviceDispatcher, parserClass, mode, mockClass);
-			
+			headers = new Array();
 			this.requestData = requestData;
 
 		}
