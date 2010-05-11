@@ -34,6 +34,7 @@ package com.developmentarc.core.services.dispatchers
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.Operation;
+	import mx.rpc.soap.SOAPHeader;
 	import mx.rpc.soap.WebService;
 
 	/**
@@ -110,7 +111,13 @@ package com.developmentarc.core.services.dispatchers
 			
 			var operation:Operation = Operation(service.getOperation(wsr.methodName));
 			operation.request = wsr.requestData;
-			if(wsr.header) operation.addHeader(wsr.header);
+			
+			if(wsr.headers.length > 0) {
+				for each(var header:SOAPHeader in wsr.headers) {
+					operation.addHeader(header);
+				}
+			}
+			
 			operation.addEventListener(FaultEvent.FAULT, handleFault, false, 0, true);
 			operation.addEventListener(ResultEvent.RESULT, handleResult, false, 0, true);
 			
