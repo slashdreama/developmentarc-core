@@ -217,8 +217,6 @@ package com.developmentarc.core.services.dispatchers
 		protected function handleResult(event:ResultEvent):void
 		{
 			var operation:Operation = Operation(event.currentTarget);
-			operation.removeEventListener(FaultEvent.FAULT, handleFault);
-			operation.removeEventListener(ResultEvent.RESULT, handleResult);
 			
 			clearServiceIfRequired(WebService(operation.service), event.token.message.messageId, event.token);
 			
