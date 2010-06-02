@@ -24,22 +24,27 @@
  * ***** END MIT LICENSE BLOCK ***** */
 package com.developmentarc.debugloggerpanel
 {
-	import com.developmentarc.debugloggerpanel.dataobjects.ConnectionDO;
-	import com.developmentarc.debugloggerpanel.models.DataModel;
+	import com.developmentarc.airutils.WindowApplicationManager;
 	import com.developmentarc.core.datastructures.utils.HashTable;
 	import com.developmentarc.core.utils.LocalConnectionManager;
 	import com.developmentarc.core.utils.events.LocalConnectionEvent;
 	import com.developmentarc.core.utils.logging.DebugLogger;
 	import com.developmentarc.core.utils.logging.DebugMessage;
+	import com.developmentarc.debugloggerpanel.dataobjects.ConnectionDO;
+	import com.developmentarc.debugloggerpanel.models.DataModel;
 	
 	import flash.desktop.InteractiveIcon;
 	import flash.display.Bitmap;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Button;
 	import mx.controls.CheckBox;
 	import mx.controls.ComboBox;
+	import mx.controls.DataGrid;
 	import mx.controls.TextArea;
+	import mx.controls.TextInput;
 	import mx.core.WindowedApplication;
+	import mx.formatters.DateFormatter;
 
 	/**
 	 * The DebugLoggerWindowedApplication is the backing Application class for
@@ -61,23 +66,36 @@ package com.developmentarc.debugloggerpanel
 		[Bindable] public var status_field:TextArea;
 		[Bindable] public var filter_list:ComboBox;
 		[Bindable] public var cache_message_toggle:CheckBox;
+		[Bindable] public var search_text:TextInput;
+		[Bindable] public var message_text:TextArea;
+		[Bindable] public var message_list:DataGrid;
+		[Bindable] public var toggle_text_button:Button;
 		
 		/* PROTECTED PROPERTIES */
 		protected var connection:LocalConnectionManager;
 		protected var model:DataModel;
+		protected var dateFormatter:DateFormatter;
 		
 		/* PRIVATE PROPERTES */
 		private var _connected:Boolean = false;
 		private var _currentConnectedApps:HashTable;
+		private var _windowManager:WindowApplicationManager;
 		
 		public function DebugLoggerWindowedApplication()
 		{
 			super();
+			construct();
+		}
+		
+		protected function construct():void {
+			_windowManager = new WindowApplicationManager(this, "com.developmentarc.debugloggerpanel");
 			debugMessages = new Array();
 			filteredMessageList = new ArrayCollection();
 			_currentConnectedApps = new HashTable();
 			model = DataModel.instance;
 			defineFilters();
+			dateFormatter = new DateFormatter();
+			dateFormatter.formatString = "J:NN:SS";
 		}
 		
 		protected function defineFilters():void
@@ -108,6 +126,8 @@ package com.developmentarc.debugloggerpanel
 			
 		}
 		
+		private var _lastCount:uint = 0;
+		
 		public function debugMessageSent(msg:DebugMessage):void
 		{
 			if(!_connected)
@@ -127,10 +147,12 @@ package com.developmentarc.debugloggerpanel
 				if(cache_message_toggle && cache_message_toggle.selected)
 				{
 					if(filteredMessageList.length >= maxMessages) filteredMessageList.removeItemAt(0);
-					filteredMessageList.addItem(msg);	
+					filteredMessageList.addItem(msg);
+					message_text.text += generateMessageString(msg);
 				} else if(msg.type != DebugMessage.SYSTEM_MESSAGE) {
 					if(filteredMessageList.length >= maxMessages) filteredMessageList.removeItemAt(0);
 					filteredMessageList.addItem(msg);
+					message_text.text += generateMessageString(msg);
 				}
 				
 			}
@@ -172,11 +194,86 @@ package com.developmentarc.debugloggerpanel
 			}
 		}
 		
+		private var _previousSearchLength:int;
+		
+		public function searchText():void {
+			if(search_text.length >= 3) {
+				filterMessages();
+			}
+			
+			if(_previousSearchLength >= 3 && search_text.length < 3) {
+				filterMessages();
+			}
+			
+			_previousSearchLength = search_text.length;
+		}
+		
 		public function filterMessages():void
 		{
+			 var messages:ArrayCollection = buildFilterArray();
+			 var searchString:String = search_text.text.toLowerCase();
+			 var list:Array;
+			 if(searchString.length >= 3) {
+				 // filter out messages
+				 var newList:ArrayCollection = new ArrayCollection();
+				 list = messages.toArray();
+				 for each(var item:DebugMessage in list) {
+					 var msg:String = item.message.toLocaleLowerCase();
+					 
+					 if(msg.indexOf(searchString) != -1) {
+						 // push this message
+						 newList.addItem(item);
+					 }
+				 }
+				 
+				 messages = newList;
+			 }
+			 
+			 filteredMessageList = messages;
+			 
+			 // print messages to text area
+			 message_text.text = "";
+			 list = filteredMessageList.toArray();
+			 var len:int = list.length;
+			 for(var i:uint = 0; i < len; i++) {
+				 message_text.text += generateMessageString(DebugMessage(list[i]));
+			 }
+		}
+		
+		private var _showingText:Boolean = false;
+		
+		public function toggleUIDisplay():void {
+			if(_showingText) {
+				// show list
+				message_list.visible = true;
+				message_text.visible = false;
+				message_list.includeInLayout = true;
+				message_text.includeInLayout = false;
+				toggle_text_button.label = resourceManager.getString('strings', 'ui_show_text');
+				_showingText = false;
+			} else {
+				// show text
+				message_list.visible = false;
+				message_text.visible = true;
+				message_list.includeInLayout = false;
+				message_text.includeInLayout = true;
+				_showingText = true;
+				toggle_text_button.label = resourceManager.getString('strings', 'ui_show_list');
+			}
+		}
+		
+		protected function generateMessageString(message:DebugMessage):String {
+			var out:String = dateFormatter.format(message.time) + "." + message.time.milliseconds + "\t\t" + message.message + "\t\t";
+			if(message.className) out += message.className + "\t\t";
+			if(message.methodName) out += message.methodName;
+			out += "\r";
+			return out;
+		}
+		
+		protected function buildFilterArray():ArrayCollection {
 			var level:Number = filter_list.selectedItem.value;
-			filteredMessageList.removeAll();
 			var len:int = debugMessages.length;
+			var filterArrary:ArrayCollection = new ArrayCollection();
 			for(var i:uint; i < len; i++)
 			{
 				var msg:DebugMessage = DebugMessage(debugMessages[i]);
@@ -184,13 +281,14 @@ package com.developmentarc.debugloggerpanel
 				{
 					if(cache_message_toggle && cache_message_toggle.selected)
 					{
-						filteredMessageList.addItem(msg);	
+						filterArrary.addItem(msg);	
 					} else if(msg.type != DebugMessage.SYSTEM_MESSAGE) {
-						filteredMessageList.addItem(msg);
+						filterArrary.addItem(msg);
 					}
 					
 				}
 			}
+			return filterArrary;
 		}
 		
 		protected function handleConnectionEvent(event:LocalConnectionEvent):void
