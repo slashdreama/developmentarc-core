@@ -69,6 +69,9 @@ package com.developmentarc.core.services.dispatchers
 		 */		
 		protected var activeOperations:HashTable;
 		
+		/**
+		 * Defines the active requests and their token pair. 
+		 */
 		protected var activeRequests:HashTable;
 		
 		/**
@@ -167,16 +170,31 @@ package com.developmentarc.core.services.dispatchers
 		 */
 		protected function handleFault(event:FaultEvent):void
 		{
-			// this is a service level fault, ignore the operation fault
-			if(!event.token) return;
-			
 			var operation:Operation = Operation(event.currentTarget);
-			operation.removeEventListener(FaultEvent.FAULT, handleFault);
-			operation.removeEventListener(ResultEvent.RESULT, handleResult);
+			var dispatcherEvent:DispatcherEvent = new DispatcherEvent(DispatcherEvent.FAULT);
+			
+			// this is a service level fault, ignore the operation fault
+			if(!event.token) {
+				// we have either a service fault or a operation fault
+				var list:Array = findOpertationRequests(operation);
+				for each(var request:WebserviceRequest in list) {
+					var token:AsyncToken = findRequestToken(request, WebService(operation.service).wsdl);
+					if(token) {
+						// dispatch the fault for each request
+						dispatcherEvent = new DispatcherEvent(DispatcherEvent.FAULT);
+						dispatcherEvent.uid = token;
+						dispatcherEvent.originalEvent = event;
+						dispatchEvent(dispatcherEvent);
+						
+						clearServiceIfRequired(WebService(operation.service), token.message.messageId, token);
+					}
+				}
+				return;
+			};
 			
 			clearServiceIfRequired(WebService(operation.service), event.token.message.messageId, event.token);
 			
-			var dispatcherEvent:DispatcherEvent = new DispatcherEvent(DispatcherEvent.FAULT);
+			
 			// Mapping origin event to new event
 			dispatcherEvent.uid = event.token;
 			dispatcherEvent.originalEvent = event;
@@ -230,6 +248,7 @@ package com.developmentarc.core.services.dispatchers
 			dispatchEvent(dispatcherEvent);
 		}
 		
+		
 		/**
 		 * Used to track the current operation and its associated calls based
 		 * on the async token.  This allows the dispatcher to determine when and
@@ -241,12 +260,12 @@ package com.developmentarc.core.services.dispatchers
 		 */		
 		protected function trackOperation(operation:Operation, token:AsyncToken, request:IRequest):void {
 			// track the operations
+			var table:HashTable = new HashTable();
 			var wsdl:String = WebService(operation.service).wsdl;
 			if(activeOperations.containsKey(wsdl)) {
-				HashTable(activeOperations.getItem(wsdl)).addItem(token.message.messageId, true);
+				HashTable(activeOperations.getItem(wsdl)).addItem(token.message.messageId, request);
 			} else {
-				var table:HashTable = new HashTable();
-				table.addItem(token.message.messageId, true);
+				table.addItem(token.message.messageId, request);
 				activeOperations.addItem(wsdl, table);
 			}
 			
@@ -258,6 +277,55 @@ package com.developmentarc.core.services.dispatchers
 				tableRequest.addItem(token, request);
 				activeRequests.addItem(wsdl, tableRequest);
 			}
+		}
+		
+		/**
+		 * Looks up an operation and returns a list of all the active requests being
+		 * handled by the operation.
+		 *  
+		 * @param operation The operation to lookup.
+		 * @return An array of requests.
+		 * 
+		 */
+		protected function findOpertationRequests(operation:Operation):Array {
+			var list:Array = new Array();
+			
+			// get all the active requests for the operations wsdl
+			var wsdl:String = WebService(operation.service).wsdl;
+			if(activeOperations.containsKey(wsdl)) {
+				var requestList:Array = HashTable(activeOperations.getItem(wsdl)).getAllItems();
+				for each(var request:WebserviceRequest in requestList) {
+					if(request.methodName == operation.name) {
+						list.push(request);
+					}
+				}
+			}
+			
+			return list;
+		}
+		
+		/**
+		 * Looks up a request's token.
+		 *  
+		 * @param request The request to lookup.
+		 * @param wsdl The target WSDL path.
+		 * @return The request's async token.
+		 * 
+		 */		
+		protected function findRequestToken(request:WebserviceRequest, wsdl:String):AsyncToken {
+			var token:AsyncToken;
+			if(activeRequests.containsKey(wsdl)) {
+				var table:HashTable = HashTable(activeRequests.getItem(wsdl));
+				var tokens:Array = table.getAllKeys();
+				var len:int = tokens.length;
+				for(var i:uint = 0; i < len; i++) {
+					if(table.getItem(tokens[i]) == request) {
+						token = tokens[i];
+						break;
+					}
+				}
+			}
+			return token;
 		}
 		
 		/**
@@ -285,6 +353,7 @@ package com.developmentarc.core.services.dispatchers
 			
 			// clean up the requests
 			var requests:HashTable = HashTable(activeRequests.getItem(wsdl));
+			
 			if(token){ requests.remove(token); } else { requests.removeAll(); }
 			if(requests.isEmpty) {
 				activeRequests.remove(wsdl);
