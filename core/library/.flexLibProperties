@@ -53,6 +53,8 @@
     <classEntry path="com.developmentarc.core.tasks.groups.ITaskGroup"/>
     <classEntry path="com.developmentarc.core.services.dispatchers.WebserviceDispatcher"/>
     <classEntry path="com.developmentarc.core.services.requests.WebserviceRequest"/>
+    <classEntry path="com.developmentarc.core.actions.commands.ChangeHistoryContextCommand"/>
+    <classEntry path="com.developmentarc.core.actions.data.HistoryContext"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

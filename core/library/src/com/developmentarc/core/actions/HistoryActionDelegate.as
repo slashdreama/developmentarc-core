@@ -27,7 +27,9 @@ package com.developmentarc.core.actions
 	import com.developmentarc.core.actions.actions.IAction;
 	import com.developmentarc.core.actions.actions.IHistoryAction;
 	import com.developmentarc.core.actions.commands.AbstractHistoryCommand;
+	import com.developmentarc.core.actions.commands.ChangeHistoryContextCommand;
 	import com.developmentarc.core.actions.commands.HistoryCommand;
+	import com.developmentarc.core.actions.data.HistoryContext;
 	import com.developmentarc.core.datastructures.utils.HashTable;
 	import com.developmentarc.core.utils.EventBroker;
 	
@@ -61,34 +63,61 @@ package com.developmentarc.core.actions
 	 */ 
 	public class HistoryActionDelegate extends ActionDelegate
 	{
-		
-		/*
-		 * PRIVATE VARIABLES 
-		 */
-		private var _undoCommandStack:Array;
-		private var _redoCommandStack:Array;
-
 		/*
 		 * PROTECTED VARIABLES
 		 */ 
 		protected var commandToActionMap:HashTable;
 		
+		/**
+		 * Contains the all contexts within the application.
+		 */		
+		protected var contextList:HashTable;
+		
+		/**
+		 * Constructor. 
+		 * 
+		 */		
 		public function HistoryActionDelegate()
 		{
 			super();
-			init();	
+			construct();	
 		}
 		
-		private function init():void {
+		private var _currentContext:HistoryContext;
+		
+		/**
+		 * Contains the current history context being used by the
+		 * application.
+		 */	
+		protected function get currentContext():HistoryContext
+		{
+			return _currentContext;
+		}
+
+		protected function set currentContext(value:HistoryContext):void
+		{
+			_currentContext = value;
+		}
+
+		/**
+		 * Helper method that is called during construction.  This configures
+		 * the class and allows for Flash Player to JIT the method. 
+		 * 
+		 */		
+		protected function construct():void {
 			commandToActionMap = new HashTable();
 			// set default undo event
 			undoCommands = [HistoryCommand.UNDO];
 			// set default redo event
 			redoCommands = [HistoryCommand.REDO];	
-					
-			// create inital stacks
-			_undoCommandStack = new Array();
-			_redoCommandStack = new Array();
+			// set default conect command
+			contextCommands = [ChangeHistoryContextCommand.CHANGE_CONTEXT];
+			
+			// create default context
+			currentContext = new HistoryContext(ChangeHistoryContextCommand.DEFAULT_CONTEXT, true);
+			contextList = new HashTable();
+			contextList.addItem(currentContext.id, currentContext);
+			
 		}
 		/**
 		 * Registers the Action's commands via the EventBroker.
@@ -152,19 +181,31 @@ package com.developmentarc.core.actions
 			// if command has history enabled
 			if(command is AbstractHistoryCommand && AbstractHistoryCommand(command).useHistory) {
 				// add command to undo stack
-				_undoCommandStack.push(command);
+				currentContext.undoStack.push(command);
 				
 				// clear redo stack - its no longer relevent
-				_redoCommandStack = new Array();
+				currentContext.redoStack = new Array();
 			}
 		}
 		
 		/**
-		 * Method clears history inside of delegate.
+		 * Method clears current context history inside of delegate.
 		 */
 		public function clearHistory():void {
-			_undoCommandStack = new Array();
-			_redoCommandStack = new Array();
+			currentContext.undoStack = [];
+			currentContext.redoStack = [];
+		}
+		
+		/**
+		 * Clears all of the history stacks from the contexts. 
+		 * 
+		 */		
+		public function clearAllHistory():void {
+			var contexts:Array = contextList.getAllItems();
+			for each(var item:HistoryContext in contexts) {
+				item.undoStack = [];
+				item.redoStack = [];
+			}
 		}
 		
 		/**
@@ -172,7 +213,7 @@ package com.developmentarc.core.actions
 		 *
 		 */
 		public function get undoStackLength():int {
-			return _undoCommandStack.length;
+			return currentContext.undoStack.length;
 		}
 		
 		/**
@@ -180,7 +221,7 @@ package com.developmentarc.core.actions
 		 *
 		 */
 		public function get redoStackLength():int {
-			return _redoCommandStack.length;
+			return currentContext.redoStack.length;
 		}
 		
 		/**
@@ -190,7 +231,7 @@ package com.developmentarc.core.actions
 		 * 
 		 */
 		public function getUndoStackClone():Array {
-			return _undoCommandStack.concat([]);
+			return currentContext.undoStack.slice();
 		}
 		
 		/**
@@ -200,7 +241,7 @@ package com.developmentarc.core.actions
 		 * 
 		 */
 		public function getRedoStackClone():Array {
-			return _redoCommandStack.concat([]);
+			return currentContext.redoStack.concat([]);
 		}
 // --------------
 // UNDO 
@@ -251,10 +292,10 @@ package com.developmentarc.core.actions
 		 * @param command Undo event
 		 */
 		protected function handleUndoCommand(command:Event):void {
-			if(_undoCommandStack.length == 0) return;
+			if(currentContext.undoStack.length == 0) return;
 			
 			// remove command from undo stack
-			var command:Event = _undoCommandStack.pop() as Event;
+			var command:Event = currentContext.undoStack.pop() as Event;
 			// get actions
 			var actions:HashTable = commandToActionMap.getItem(command.type);
 			
@@ -266,7 +307,7 @@ package com.developmentarc.core.actions
 					action.undo(command);
 				}
 				// add to redo stack
-				_redoCommandStack.push(command);
+				currentContext.redoStack.push(command);
 			}
 		}
 // --------------
@@ -318,10 +359,10 @@ package com.developmentarc.core.actions
 		 * @param command Undo event
 		 */
 		protected function handleRedoCommand(command:Event):void {
-			if(_redoCommandStack.length == 0) return;
+			if(currentContext.redoStack.length == 0) return;
 			
 			// remove command from redo stack
-			var command:Event = _redoCommandStack.pop() as Event;
+			var command:Event = currentContext.redoStack.pop() as Event;
 			// get actions
 			var actions:HashTable = commandToActionMap.getItem(command.type);
 			
@@ -333,8 +374,88 @@ package com.developmentarc.core.actions
 					action.redo(command);
 				}
 				// add to undo stack
-				_undoCommandStack.push(command);
+				currentContext.undoStack.push(command);
 			}
+		}
+		
+		/*
+		 * CONTEXT
+		 */
+		
+		private var _contextCommands:Array;
+		
+		/**
+		 * Defines the list of context commands types that are used to
+		 * change the current history stack context.  By default the
+		 * list contains the ChangeHistoryContextCommand.CHANGE_CONTEXT
+		 * is dispatched through the EventBroker.
+		 * 
+		 */		
+		public function get contextCommands():Array {
+			return _contextCommands;
+		}
+		
+		public function set contextCommands(value:Array):void {
+			if(_contextCommands) {
+				unregisterContextCommands();
+			}
+			
+			_contextCommands = value;
+			if(_contextCommands && _contextCommands.length > 0) registerContextCommands();
+		}
+		
+		/* 
+		 * Called to register all the command types defined for the history context
+		 * changes.
+		 */
+		private function registerContextCommands():void {
+			for each(var commandType:String in _contextCommands) {
+				EventBroker.subscribe(commandType, handleChangeContextCommand);
+			}
+		}
+		
+		/* 
+		* Called to unregister all the command types defined for the history context
+		* changes.
+		*/
+		private function unregisterContextCommands():void {
+			for each(var commandType:String in _contextCommands) {
+				EventBroker.unsubscribe(commandType, handleChangeContextCommand);
+			}
+		}
+		
+		/**
+		 * When a registered changed history command is dispatched, this method
+		 * processes the command and switches the current context to the request
+		 * context.
+		 *  
+		 * @param command
+		 * 
+		 */		
+		protected function handleChangeContextCommand(command:ChangeHistoryContextCommand):void {
+			// look at the current context, clear if required (default is always kept)
+			if(currentContext.id != ChangeHistoryContextCommand.DEFAULT_CONTEXT && !currentContext.saveStack) {
+				currentContext.redoStack = [];
+				currentContext.undoStack = [];
+			}
+			
+			// get the new context
+			var newContext:HistoryContext;
+			if(contextList.containsKey(command.context)) {
+				// get the conext from the stack
+				newContext = contextList.getItem(command.context);
+				if(newContext.id != ChangeHistoryContextCommand.DEFAULT_CONTEXT && command.clearStack) {
+					// reset the stack
+					newContext.redoStack = [];
+					newContext.undoStack = [];
+				}
+			} else {
+				// create a new conext from this
+				newContext = new HistoryContext(command.context, command.saveStack);
+				contextList.addItem(newContext.id, newContext);
+			}
+			
+			currentContext = newContext;
 		}
 	}	
 }
