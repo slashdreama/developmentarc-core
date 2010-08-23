@@ -26,12 +26,15 @@ package com.developmentarc.libtests.tests
 {
 	import com.developmentarc.actions.actiontypes.AdditionAction;
 	import com.developmentarc.actions.actiontypes.AutomateBasicAction;
+	import com.developmentarc.actions.actiontypes.ContextAction;
 	import com.developmentarc.actions.actiontypes.TestHistoryAction;
 	import com.developmentarc.actions.commands.BasicCommand;
+	import com.developmentarc.actions.commands.ContextCommand;
 	import com.developmentarc.actions.commands.TestHistoryCommand;
 	import com.developmentarc.actions.commands.TestNoHistoryCommand;
 	import com.developmentarc.core.actions.HistoryActionDelegate;
 	import com.developmentarc.core.actions.actions.IAction;
+	import com.developmentarc.core.actions.commands.ChangeHistoryContextCommand;
 	import com.developmentarc.core.actions.commands.HistoryCommand;
 	
 	import flexunit.framework.TestCase;
@@ -55,7 +58,10 @@ package com.developmentarc.libtests.tests
 				_delegate.removeAction(action);
 			}
 			
+			_delegate.clearAllHistory();
 			_delegate.undoCommands = [];
+			_delegate.redoCommands = [];
+			_delegate.contextCommands = [];
 		}
 		/**
 		 * Verifies that adding an Action to the delegate regiseters the
@@ -680,6 +686,11 @@ package com.developmentarc.libtests.tests
 		 	 assertTrue("The action does not have a value equal to 1", action.value == 1);
 		}
 		
+		/**
+		 * Used to test the history stack by clearing it and making sure the commands
+		 * are truly let go.
+		 * 
+		 */		
 		public function testClearHistory():void {
 			// create one action same command
 		 	var action:AdditionAction = new AdditionAction();
@@ -709,5 +720,191 @@ package com.developmentarc.libtests.tests
 		 	 // verify action
 		 	 assertTrue("The action does not have a value equal to 2", action.value == 2);
 		}
+		
+		/**
+		 * Used to test switching of the undo/redo history context.  The test
+		 * first adds commands to the default stack, then switches to another
+		 * context, adds more commands, switches back to the original context
+		 * and then undo's redos in the original context. 
+		 * 
+		 */		
+		public function testSwtichingOfContext():void {
+			// create an action
+			var action:ContextAction = new ContextAction();
+			action.addCommand(ContextCommand.BASIC_CONTEXT);
+			_delegate.addAction(action);
+			
+			// create a command for the first context
+			var firstCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "firstCommand");
+			// call the command twice
+			firstCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'firstCommand'", action.lastValue == "firstCommand");
+			
+			// create a second command for the first context
+			var secondCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "secondCommand");
+			// call the command twice
+			secondCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			
+			// switch context
+			var fooContext:ChangeHistoryContextCommand = new ChangeHistoryContextCommand(ChangeHistoryContextCommand.CHANGE_CONTEXT, "foo");
+			fooContext.dispatch();
+			
+			// create a first command for the second context
+			var thirdCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "thirdCommand");
+			// call the command twice
+			thirdCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'thirdCommand'", action.lastValue == "thirdCommand");
+			
+			// create a second command for the second context
+			var fourthCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "fourthCommand");
+			// call the command twice
+			fourthCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'fourthCommand'", action.lastValue == "fourthCommand");
+			
+			// switch back to the default context
+			var defaultContext:ChangeHistoryContextCommand = new ChangeHistoryContextCommand();
+			defaultContext.dispatch();
+			
+			// undo
+			var undoCommand:HistoryCommand = new HistoryCommand(HistoryCommand.UNDO);
+			undoCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			
+			undoCommand.dispatch();
+			assertTrue("The action does not have a value of 'firstCommand'", action.lastValue == "firstCommand");
+			
+			// should stay the same, nothing left in the stack
+			undoCommand.dispatch();
+			assertTrue("The action does not have a value of 'firstCommand'", action.lastValue == "firstCommand");
+			
+			// redo
+			var redoCommand:HistoryCommand = new HistoryCommand(HistoryCommand.REDO);
+			redoCommand.dispatch();
+			
+			assertTrue("The action does not have a value of 'firstCommand'", action.lastValue == "firstCommand");
+			redoCommand.dispatch();
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			redoCommand.dispatch();
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			
+			// switch context back, undo multiple times, it should stay at second
+			fooContext.dispatch();
+			undoCommand.dispatch();
+			undoCommand.dispatch();
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			redoCommand.dispatch();
+			redoCommand.dispatch();
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+		}
+		
+		/**
+		 * Used to test that switching context and keeping the save state of the new context
+		 * to make sure the context is not cleared when the user switches back and forth from
+		 * the default context to the other context.
+		 * 
+		 */		
+		public function testSwtichContextSaveStack():void {
+			// create an action
+			var action:ContextAction = new ContextAction();
+			action.addCommand(ContextCommand.BASIC_CONTEXT);
+			_delegate.addAction(action);
+			
+			// create a command for the first context
+			var firstCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "firstCommand");
+			// call the command twice
+			firstCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'firstCommand'", action.lastValue == "firstCommand");
+			// switch context, save the stack
+			var fooContext:ChangeHistoryContextCommand = new ChangeHistoryContextCommand(ChangeHistoryContextCommand.CHANGE_CONTEXT, "foo");
+			fooContext.saveStack = true;
+			fooContext.dispatch();
+			
+			// create a second command for the first context
+			var secondCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "secondCommand");
+			// call the command twice
+			secondCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			
+			// create a first command for the second context
+			var thirdCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "thirdCommand");
+			// call the command twice
+			thirdCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'thirdCommand'", action.lastValue == "thirdCommand");
+			
+			// undo
+			var undoCommand:HistoryCommand = new HistoryCommand(HistoryCommand.UNDO);
+			undoCommand.dispatch();
+			undoCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			
+			// redo
+			var redoCommand:HistoryCommand = new HistoryCommand(HistoryCommand.REDO);
+			redoCommand.dispatch();
+			redoCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'thirdCommand'", action.lastValue == "thirdCommand");
+			
+			// switch back to the default context
+			var defaultContext:ChangeHistoryContextCommand = new ChangeHistoryContextCommand();
+			defaultContext.dispatch();
+			undoCommand.dispatch();
+			
+			assertTrue("The action does not have a value of 'firstCommand'", action.lastValue == "firstCommand");
+			
+			// switch back to false, undo twice to get back to second
+			fooContext.dispatch();
+			undoCommand.dispatch();
+			undoCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'secondCommand'", action.lastValue == "secondCommand");
+			
+			// redo to get back to third
+			redoCommand.dispatch();
+			redoCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'thirdCommand'", action.lastValue == "thirdCommand");
+			
+			// create a thrid command for the second context
+			var fourthCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "fourthCommand");
+			// call the command
+			fourthCommand.dispatch();
+			
+			// make sure the value is corrext
+			assertTrue("The action does not have a value of 'fourthCommand'", action.lastValue == "fourthCommand");
+			
+			// swtich to context and clear it
+			fooContext.saveStack = true;
+			fooContext.clearStack = true;
+			fooContext.dispatch();
+			
+			// stack is now clear, should no longer undo
+			undoCommand.dispatch();
+			undoCommand.dispatch();
+			
+			assertTrue("The action does not have a value of 'fourthCommand'", action.lastValue == "fourthCommand");
+		}
+		
 	}
 }
