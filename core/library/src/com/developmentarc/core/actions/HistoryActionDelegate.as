@@ -29,6 +29,7 @@ package com.developmentarc.core.actions
 	import com.developmentarc.core.actions.commands.AbstractHistoryCommand;
 	import com.developmentarc.core.actions.commands.ChangeHistoryContextCommand;
 	import com.developmentarc.core.actions.commands.HistoryCommand;
+	import com.developmentarc.core.actions.commands.RemoveHistoryContentCommand;
 	import com.developmentarc.core.actions.data.HistoryContext;
 	import com.developmentarc.core.datastructures.utils.HashTable;
 	import com.developmentarc.core.utils.EventBroker;
@@ -110,6 +111,8 @@ package com.developmentarc.core.actions
 			undoCommands = [HistoryCommand.UNDO];
 			// set default redo event
 			redoCommands = [HistoryCommand.REDO];	
+			// set default remove commands
+			removeHistoryCommands = [RemoveHistoryContentCommand.REMOVE_HISTORY_CONTENT];
 			// set default conect command
 			contextCommands = [ChangeHistoryContextCommand.CHANGE_CONTEXT];
 			
@@ -377,10 +380,92 @@ package com.developmentarc.core.actions
 				currentContext.undoStack.push(command);
 			}
 		}
+
+// --------------
+// REMOVE HISTORY
+// -------------- 
 		
-		/*
-		 * CONTEXT
+		private var __removeHistoryCommands:Array;
+		
+		/**
+		 * A set of commands that are used to clear elements from
+		 * the history stack.
 		 */
+		public function get removeHistoryCommands():Array {
+			return __removeHistoryCommands;
+		}
+		
+		public function set removeHistoryCommands(commands:Array):void {
+			if(__removeHistoryCommands) {
+				// unregister undo commands
+				unregisterRemoveHistoryCommands();
+			}
+			__removeHistoryCommands = commands;
+			
+			registerRemoveHistoryCommands();
+		}
+		
+		/**
+		 * Method unsubscribes from all commands currently subscribed to.
+		 */
+		private function unregisterRemoveHistoryCommands():void {
+			for each(var commandType:String in removeHistoryCommands) {
+				EventBroker.unsubscribe(commandType, handleRemoveHistoryCommand);
+			}
+		}
+		/**
+		 * Methdod subscribes to all commands currently held in history list.
+		 */
+		private function registerRemoveHistoryCommands():void {
+			for each(var commandType:String in removeHistoryCommands) {
+				EventBroker.subscribe(commandType, handleRemoveHistoryCommand);
+			}
+		}
+		
+		/**
+		 * Used to process the undo and redo stack for the current context and removes
+		 * the items provided in the command.
+		 *  
+		 * @param command
+		 * 
+		 */		
+		protected function handleRemoveHistoryCommand(command:RemoveHistoryContentCommand):void {
+
+			// remove from the undo stack
+			removeItems(currentContext.undoStack, command.contentList);
+
+			// remove from the redo stack
+			removeItems(currentContext.redoStack, command.contentList);
+		}
+		
+		/**
+		 * Used to remove items from the target list.
+		 * 
+		 * @param target The array to remove items from.
+		 * @param list The list of items that should be removed from the target.
+		 * 
+		 */		
+		protected function removeItems(target:Array, list:Array):void {
+			var targetLength:int = target.length - 1;
+			var removeLength:int = list.length;
+			
+			for(var i:int = targetLength; i > -1; i--) {
+				var item:Object = target[i];
+				
+				// loop through our remove list
+				for(var ii:uint = 0; ii < removeLength; ii++) {
+					if(item == list[ii]) {
+						// remove the item from the undo stack
+						target.splice(i, 1);
+						break;
+					}
+				}
+			}
+		}
+		
+// --------------
+// CONTEXT
+// --------------	
 		
 		private var _contextCommands:Array;
 		
@@ -433,6 +518,9 @@ package com.developmentarc.core.actions
 		 * 
 		 */		
 		protected function handleChangeContextCommand(command:ChangeHistoryContextCommand):void {
+			// make sure we aren't already in the context
+			if(currentContext.id == command.context) return;
+			
 			// look at the current context, clear if required (default is always kept)
 			if(currentContext.id != ChangeHistoryContextCommand.DEFAULT_CONTEXT && !currentContext.saveStack) {
 				currentContext.redoStack = [];
