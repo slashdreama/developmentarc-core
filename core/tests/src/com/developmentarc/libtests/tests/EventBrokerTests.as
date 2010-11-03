@@ -371,6 +371,8 @@ package com.developmentarc.libtests.tests
 			// Subscribe
 			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodOne);
 			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodTwo);
+			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodOne, CONTEXT_ONE); // custom
+			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodTwo, CONTEXT_ONE); // custom
 			
 			// create three objects
 			var subscriber1:EventSubscriber = new EventSubscriber();
@@ -389,11 +391,74 @@ package com.developmentarc.libtests.tests
 			
 			// broadcast and verify that the count is correct
 			EventBroker.broadcast(new Event(BASIC_EVENT_TYPE));
+			EventBroker.broadcast(new Event(BASIC_EVENT_TYPE), CONTEXT_ONE);
 			
 			assertTrue("Method count should be 0.", methodCount == 0);
 			assertTrue("subscriber1: Method count should be 0.", subscriber1.callCount == 0);
 			assertTrue("subscriber2: Method count should be 0.", subscriber2.callCount == 0);
 			assertTrue("subscriber3: Method count should be 0.", subscriber3.callCount == 0);
+		}
+		
+		private static const CONTEXT_ONE:String = "com.developmentarc.context.one";
+		
+		/**
+		 * Used to verify that subscriptions are truly contextualized within the event broker. 
+		 * 
+		 */
+		public function testBasicContextSeperation():void {
+			// Subscribe to different context
+			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodOne); // default
+			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodOne, CONTEXT_ONE); // custom
+			
+			// broadcast, using the default context
+			EventBroker.broadcast(new Event(BASIC_EVENT_TYPE));
+			
+			// verify the call count was one
+			assertTrue("Method count should be 1.", methodCount == 1);
+			
+			// broadcast, using the costom context
+			EventBroker.broadcast(new Event(BASIC_EVENT_TYPE), CONTEXT_ONE);
+			
+			// verify the call count was two
+			assertTrue("Method count should be 2.", methodCount == 2);
+		}
+
+		/**
+		 * Verifies that unsubscribing by context removes the target subscriber correctly. 
+		 * 
+		 */		
+		public function testBasicContextRemoval():void {
+			// Subscribe to different context
+			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodOne, CONTEXT_ONE); // custom
+			
+			// unsubscribe context
+			EventBroker.unsubscribe(BASIC_EVENT_TYPE, validMethodOne, CONTEXT_ONE);
+			
+			// broadcast, using the default context
+			EventBroker.broadcast(new Event(BASIC_EVENT_TYPE), CONTEXT_ONE);
+			
+			// verify the call count was zero
+			assertTrue("Method count should be 0.", methodCount == 0);
+		}
+		
+		/**
+		 * Verifies that removal is context seperated. 
+		 * 
+		 */		
+		public function testBasicContextRemovalWithExistingContext():void {
+			// Subscribe to different context
+			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodOne); // default
+			EventBroker.subscribe(BASIC_EVENT_TYPE, validMethodOne, CONTEXT_ONE); // custom
+			
+			// unsubscribe context
+			EventBroker.unsubscribe(BASIC_EVENT_TYPE, validMethodOne, CONTEXT_ONE);
+			
+			// broadcast, using the default context
+			EventBroker.broadcast(new Event(BASIC_EVENT_TYPE));
+			EventBroker.broadcast(new Event(BASIC_EVENT_TYPE), CONTEXT_ONE);
+			
+			// verify the call count was zero
+			assertTrue("Method count should be 1.", methodCount == 1);
 		}
 		
 		/* PRIVATE TEST METHODS */
