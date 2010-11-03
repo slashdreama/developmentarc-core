@@ -135,7 +135,7 @@ package com.developmentarc.core.actions
 				if(!commandToActionMap.containsKey(commandType)) {
 					commandToActionMap.addItem(commandType, new HashTable());
 					// subsribe if this is a new command
-					EventBroker.subscribe(commandType, handleCommand);
+					EventBroker.subscribe(commandType, handleCommand, commandContext);
 				}
 				
 				var actions:HashTable = commandToActionMap.getItem(commandType);
@@ -159,7 +159,7 @@ package com.developmentarc.core.actions
 					// remove command from map
 					commandToActionMap.remove(commandType);
 					// unsubscribe from command
-					EventBroker.unsubscribe(commandType, handleCommand);
+					EventBroker.unsubscribe(commandType, handleCommand, commandContext);
 				}
 			}
 		}
@@ -276,7 +276,7 @@ package com.developmentarc.core.actions
 		 */
 		private function unregisterUndoCommands():void {
 			for each(var commandType:String in undoCommands) {
-				EventBroker.unsubscribe(commandType, handleUndoCommand);
+				EventBroker.unsubscribe(commandType, handleUndoCommand, commandContext);
 			}
 		}
 		/**
@@ -284,7 +284,7 @@ package com.developmentarc.core.actions
 		 */
 		private function registerUndoCommands():void {
 			for each(var commandType:String in undoCommands) {
-				EventBroker.subscribe(commandType, handleUndoCommand);
+				EventBroker.subscribe(commandType, handleUndoCommand, commandContext);
 			}
 		}
 		
@@ -343,7 +343,7 @@ package com.developmentarc.core.actions
 		 */
 		private function unregisterRedoCommands():void {
 			for each(var commandType:String in redoCommands) {
-				EventBroker.unsubscribe(commandType, handleRedoCommand);
+				EventBroker.unsubscribe(commandType, handleRedoCommand, commandContext);
 			}
 		}
 		/**
@@ -351,7 +351,7 @@ package com.developmentarc.core.actions
 		 */
 		private function registerRedoCommands():void {
 			for each(var commandType:String in redoCommands) {
-				EventBroker.subscribe(commandType, handleRedoCommand);
+				EventBroker.subscribe(commandType, handleRedoCommand, commandContext);
 			}
 		}
 		
@@ -410,7 +410,7 @@ package com.developmentarc.core.actions
 		 */
 		private function unregisterRemoveHistoryCommands():void {
 			for each(var commandType:String in removeHistoryCommands) {
-				EventBroker.unsubscribe(commandType, handleRemoveHistoryCommand);
+				EventBroker.unsubscribe(commandType, handleRemoveHistoryCommand, commandContext);
 			}
 		}
 		/**
@@ -418,7 +418,7 @@ package com.developmentarc.core.actions
 		 */
 		private function registerRemoveHistoryCommands():void {
 			for each(var commandType:String in removeHistoryCommands) {
-				EventBroker.subscribe(commandType, handleRemoveHistoryCommand);
+				EventBroker.subscribe(commandType, handleRemoveHistoryCommand, commandContext);
 			}
 		}
 		
@@ -495,7 +495,7 @@ package com.developmentarc.core.actions
 		 */
 		private function registerContextCommands():void {
 			for each(var commandType:String in _contextCommands) {
-				EventBroker.subscribe(commandType, handleChangeContextCommand);
+				EventBroker.subscribe(commandType, handleChangeContextCommand, commandContext);
 			}
 		}
 		
@@ -505,7 +505,7 @@ package com.developmentarc.core.actions
 		*/
 		private function unregisterContextCommands():void {
 			for each(var commandType:String in _contextCommands) {
-				EventBroker.unsubscribe(commandType, handleChangeContextCommand);
+				EventBroker.unsubscribe(commandType, handleChangeContextCommand, commandContext);
 			}
 		}
 		

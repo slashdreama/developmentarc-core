@@ -95,6 +95,28 @@ package com.developmentarc.core.actions
 			registerActions(_actions.getAllKeys());
 		}
 		
+		private var _commandContext:String = EventBroker.EVENT_BROKER_DEFAULT_CONTEXT;
+		
+		/**
+		 * Defines the context used for the action system instance.  This allows a CAD configuration
+		 * to define a unique context that will then register and bind all the commands to the the
+		 * define context.
+		 * 
+		 */		
+		public function get commandContext():String { return _commandContext; }
+		public function set commandContext(value:String):void {
+			// make sure context is valid
+			if(!value || value.length < 1) value = EventBroker.EVENT_BROKER_DEFAULT_CONTEXT;
+			
+			if(_commandContext != value) {
+				// remove all the actions
+				unregisterActions(_actions.getAllKeys());
+				_commandContext = value;
+				// register the current actions to the new context
+				registerActions(_actions.getAllKeys());
+			}
+		}
+		
 		/**
 		 * Used to add a single action to to the ActionDelegate.
 		 *  
@@ -163,7 +185,7 @@ package com.developmentarc.core.actions
 			var commands:Array = action.commands;
 			activeCommands.addItem(action, commands);
 			for each(var commandType:String in commands) {
-				EventBroker.subscribe(commandType, action.applyAction);
+				EventBroker.subscribe(commandType, action.applyAction, _commandContext);
 			}
 		}
 		
@@ -175,7 +197,7 @@ package com.developmentarc.core.actions
 		 */
 		protected function unregisterCommands(action:IAction, commands:Array):void {
 			for each(var commandType:String in commands) {
-				EventBroker.unsubscribe(commandType, action.applyAction);
+				EventBroker.unsubscribe(commandType, action.applyAction, _commandContext);
 			}
 		}
 		

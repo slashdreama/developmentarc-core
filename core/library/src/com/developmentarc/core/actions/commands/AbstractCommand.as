@@ -38,14 +38,21 @@ package com.developmentarc.core.actions.commands
 	public class AbstractCommand extends Event
 	{
 		/**
+		 * Defines the EventBroker context used when dispatching the command through
+		 * the system. 
+		 */		
+		public var commandContext:String;
+		
+		/**
 		 * Constructor.
 		 *  
 		 * @param type The type of command.
 		 * 
 		 */
-		public function AbstractCommand(type:String)
+		public function AbstractCommand(type:String, context:String = EventBroker.EVENT_BROKER_DEFAULT_CONTEXT)
 		{
 			super(type, false, false);
+			this.commandContext = context;
 		}
 		
 		/**
@@ -54,7 +61,7 @@ package com.developmentarc.core.actions.commands
 		 * 
 		 */
 		public function dispatch():void {
-			EventBroker.broadcast(this);
+			EventBroker.broadcast(this, commandContext);
 		}
 		
 	}
