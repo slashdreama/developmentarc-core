@@ -25,6 +25,7 @@
 package com.developmentarc.actions.commands
 {
 	import com.developmentarc.core.actions.commands.AbstractCommand;
+	import com.developmentarc.core.utils.EventBroker;
 
 	public class BasicCommand extends AbstractCommand
 	{
@@ -34,9 +35,9 @@ package com.developmentarc.actions.commands
 		
 		public var passed:Boolean = false;
 		
-		public function BasicCommand(type:String)
+		public function BasicCommand(type:String, context:String = EventBroker.EVENT_BROKER_DEFAULT_CONTEXT)
 		{
-			super(type);
+			super(type, context);
 		}
 		
 	}

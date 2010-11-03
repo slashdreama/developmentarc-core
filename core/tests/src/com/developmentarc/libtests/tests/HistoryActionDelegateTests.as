@@ -886,7 +886,7 @@ package com.developmentarc.libtests.tests
 			// make sure the value is corrext
 			assertTrue("The action does not have a value of 'thirdCommand'", action.lastValue == "thirdCommand");
 			
-			// create a thrid command for the second context
+			// create a fourth command for the second context
 			var fourthCommand:ContextCommand = new ContextCommand(ContextCommand.BASIC_CONTEXT, "fourthCommand");
 			// call the command
 			fourthCommand.dispatch();
@@ -895,6 +895,7 @@ package com.developmentarc.libtests.tests
 			assertTrue("The action does not have a value of 'fourthCommand'", action.lastValue == "fourthCommand");
 			
 			// swtich to context and clear it
+			defaultContext.dispatch();
 			fooContext.saveStack = true;
 			fooContext.clearStack = true;
 			fooContext.dispatch();
