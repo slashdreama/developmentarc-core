@@ -189,5 +189,69 @@ package com.developmentarc.libtests.tests
 			// verify that the action has been update
 			assertTrue("The Action was not called.", action.passed);
 		}
+		
+		/**
+		 * Verifies that actions and commands are bound in the delgate via
+		 * a context.
+		 * 
+		 */
+		public function testBasicActionContextualRegisteration():void {
+			var delegate:ActionDelegate = new ActionDelegate();
+			delegate.commandContext = "foo";
+			
+			// add an action and then call it
+			var action:AutomateBasicAction = new AutomateBasicAction();
+			action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+			delegate.addAction(action);
+			
+			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND, "foo");
+			command.passed = true;
+			command.dispatch();
+			
+			// verify that the action has been update
+			assertTrue("The Action was not called.", action.passed);
+		}
+		
+		/**
+		 * Verifies that having multiple delages sperated by context allows
+		 * for unique broadcasting of commands.
+		 * 
+		 */
+		public function testMutlipleActionContextualRegisteration():void {
+			var baseDelegate:ActionDelegate = new ActionDelegate();
+			
+			var fooDelegate:ActionDelegate = new ActionDelegate();
+			fooDelegate.commandContext = "foo";
+			
+			// add an action to the base delegate context
+			var action:AutomateBasicAction = new AutomateBasicAction();
+			action.addCommand(BasicCommand.MY_BASIC_COMMAND);
+			baseDelegate.addAction(action);
+			
+			// add an action to the foo delegate context
+			var action2:AutomateBasicAction = new AutomateBasicAction();
+			action2.addCommand(BasicCommand.MY_BASIC_COMMAND);
+			fooDelegate.addAction(action2);
+			
+			// call the base context
+			var command:BasicCommand = new BasicCommand(BasicCommand.MY_BASIC_COMMAND);
+			command.passed = true;
+			command.dispatch();
+			
+			// verify that the action has been update
+			assertTrue("The default Action was not called.", action.passed);
+			assertFalse("The context Action was called.", action2.passed);
+			
+			// reset action passed
+			action.passed = false;
+			
+			// change the command's context and redispatch
+			command.commandContext = "foo";
+			command.dispatch();
+			
+			// verify that the action has been update
+			assertFalse("The default Action was called.", action.passed);
+			assertTrue("The context Action was not called.", action2.passed);
+		}
 	}
 }
